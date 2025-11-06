@@ -1,0 +1,69 @@
+# ============================================
+# SIGIMED - Variables de Entorno para Vercel
+# ============================================
+#
+# INSTRUCCIONES:
+# 1. Ve a tu proyecto en Vercel Dashboard
+# 2. Settings → Environment Variables
+# 3. Copia y pega cada variable (una por una)
+# 4. Selecciona todos los entornos (Production, Preview, Development)
+# ============================================
+
+# Variable 1: Supabase URL
+VITE_SUPABASE_URL
+https://cyslhzynfuetthxngpoy.supabase.co
+
+# Variable 2: Supabase Anon Key (Public)
+VITE_SUPABASE_ANON_KEY
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5c2xoenluZnVldHRoeG5ncG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0NTEzMzEsImV4cCI6MjA3ODAyNzMzMX0.ZFYYLFp37YYQFGGeEJi6vbrjB3gisaGqivLRLsvaIeY
+
+# Variable 3: App Name
+VITE_APP_NAME
+SIGIMED
+
+# Variable 4: App Version
+VITE_APP_VERSION
+2.0
+
+# Variable 5: Environment
+NODE_ENV
+production
+
+# ============================================
+# FORMATO ALTERNATIVO (Copiar todo de una vez)
+# ============================================
+# Para usar con Vercel CLI o importación masiva:
+
+VITE_SUPABASE_URL="https://cyslhzynfuetthxngpoy.supabase.co"
+VITE_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5c2xoenluZnVldHRoeG5ncG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0NTEzMzEsImV4cCI6MjA3ODAyNzMzMX0.ZFYYLFp37YYQFGGeEJi6vbrjB3gisaGqivLRLsvaIeY"
+VITE_APP_NAME="SIGIMED"
+VITE_APP_VERSION="2.0"
+NODE_ENV="production"
+
+# ============================================
+# NOTAS IMPORTANTES:
+# ============================================
+#
+# ✅ SEGURO PARA EXPONER:
+# - VITE_SUPABASE_URL (URL pública del proyecto)
+# - VITE_SUPABASE_ANON_KEY (Key pública con RLS)
+# - Variables VITE_* (se incluyen en el bundle del cliente)
+#
+# ⚠️ NUNCA EXPONER EN FRONTEND:
+# - SUPABASE_SERVICE_ROLE_KEY (solo para backend/server)
+# - Database passwords
+# - API keys privadas
+#
+# 📌 CONFIGURACIÓN ADICIONAL EN VERCEL:
+# - Build Command: npm run build
+# - Output Directory: dist
+# - Install Command: npm install
+# - Node Version: 18.x o superior
+#
+# 🔗 VERIFICACIÓN POST-DEPLOY:
+# 1. Verifica que el sitio carga correctamente
+# 2. Prueba el login con usuarios de prueba
+# 3. Verifica conexión a Supabase en la consola del navegador
+# 4. Prueba las operaciones CRUD básicas
+#
+# ============================================
