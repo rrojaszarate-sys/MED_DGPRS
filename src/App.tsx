@@ -3,10 +3,12 @@ import { LoginPage } from './pages/LoginPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { InventoryPage } from './pages/InventoryPage'
 import { AlertasPage } from './pages/AlertasPage'
+import { AdminPage } from './pages/AdminPage'
 import { AuthProvider } from './context/AuthContext'
 import { CentroProvider } from './context/CentroContext'
 import { ToastProvider } from './components/ui/Toast'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
+import { RoleGuard } from './components/auth/RoleGuard'
 import { MainLayout } from './components/layout/MainLayout'
 
 function App() {
@@ -40,6 +42,16 @@ function App() {
                   <MainLayout>
                     <AlertasPage />
                   </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/admin" element={
+                <ProtectedRoute>
+                  <RoleGuard allowedRoles={['super_admin', 'admin_center']}>
+                    <MainLayout>
+                      <AdminPage />
+                    </MainLayout>
+                  </RoleGuard>
                 </ProtectedRoute>
               } />
 

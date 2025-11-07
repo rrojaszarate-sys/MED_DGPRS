@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   Package,
   Bell,
-  Users,
   LogOut,
   Settings
 } from 'lucide-react'
@@ -111,7 +110,7 @@ export function MainLayout({ children }: MainLayoutProps) {
               )
             })}
 
-            {user?.role === 'super_admin' && adminNavigation.map((item) => {
+            {(user?.role === 'super_admin' || user?.role === 'admin_center') && adminNavigation.map((item) => {
               const Icon = item.icon
               const active = isActive(item.href)
               return (

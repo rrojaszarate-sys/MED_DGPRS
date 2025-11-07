@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import { useRealtime } from './useRealtime'
 import type { Alert } from '../types'
 
 export function useAlertas(centroId?: string) {
@@ -12,6 +13,46 @@ export function useAlertas(centroId?: string) {
       fetchAlertas()
     }
   }, [centroId])
+
+  // Real-time subscriptions for alerts
+  useRealtime({
+    table: 'alertas_medicamentos',
+    filter: centroId ? `centro_id=eq.${centroId}` : undefined,
+    onInsert: async (newAlert: Alert) => {
+      // Fetch full alert with medication data
+      const { data } = await supabase
+        .from('alertas_medicamentos')
+        .select('*, medicamento:medications(*)')
+        .eq('id', newAlert.id)
+        .single()
+
+      if (data && (!centroId || data.centro_id === centroId) && !data.resuelta) {
+        setAlertas((prev) => [data, ...prev])
+      }
+    },
+    onUpdate: async (updatedAlert: Alert) => {
+      // Fetch full alert with medication data
+      const { data } = await supabase
+        .from('alertas_medicamentos')
+        .select('*, medicamento:medications(*)')
+        .eq('id', updatedAlert.id)
+        .single()
+
+      if (data) {
+        if (data.resuelta) {
+          // Remove resolved alerts
+          setAlertas((prev) => prev.filter((a) => a.id !== data.id))
+        } else {
+          setAlertas((prev) =>
+            prev.map((a) => (a.id === data.id ? data : a))
+          )
+        }
+      }
+    },
+    onDelete: (deletedAlert: Alert) => {
+      setAlertas((prev) => prev.filter((a) => a.id !== deletedAlert.id))
+    }
+  })
 
   async function fetchAlertas() {
     try {

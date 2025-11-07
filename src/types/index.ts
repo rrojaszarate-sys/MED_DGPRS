@@ -18,6 +18,16 @@ export interface HealthCenter {
   is_active: boolean
 }
 
+export interface MedicationCatalog {
+  id: string
+  nombre: string
+  formula_activa: string
+  descripcion?: string
+  categoria?: string
+  is_active: boolean
+  created_at: string
+}
+
 export interface Medication {
   id: string
   center_id: string

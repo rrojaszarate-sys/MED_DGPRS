@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { Plus, Search, Filter, Download } from 'lucide-react'
+import { Plus, Search, Filter, Download, FileText, FileSpreadsheet } from 'lucide-react'
 import { useCentro } from '../context/CentroContext'
 import { useMedicamentos } from '../hooks/useMedicamentos'
 import { Button } from '../components/ui/Button'
-import { Input } from '../components/ui/Input'
 import { MedicamentoTable } from '../components/inventory/MedicamentoTable'
 import { MedicamentoFormModal } from '../components/inventory/MedicamentoFormModal'
 import { useToast } from '../components/ui/Toast'
+import { exportMedicationsPDF, exportMedicationsExcel } from '../utils/exportUtils'
 import type { Medication } from '../types'
 
 export function InventoryPage() {
@@ -16,6 +16,7 @@ export function InventoryPage() {
   const [editingMedicamento, setEditingMedicamento] = useState<Medication | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterEstado, setFilterEstado] = useState<string>('all')
+  const [showExportMenu, setShowExportMenu] = useState(false)
   const toast = useToast()
 
   // Filtrar medicamentos
@@ -73,6 +74,18 @@ export function InventoryPage() {
     }
   }
 
+  const handleExportPDF = () => {
+    exportMedicationsPDF(filteredMedicamentos, centroSeleccionado?.name)
+    toast.success('Reporte PDF generado exitosamente')
+    setShowExportMenu(false)
+  }
+
+  const handleExportExcel = () => {
+    exportMedicationsExcel(filteredMedicamentos, centroSeleccionado?.name)
+    toast.success('Reporte Excel generado exitosamente')
+    setShowExportMenu(false)
+  }
+
   if (!centroSeleccionado) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -128,9 +141,34 @@ export function InventoryPage() {
           <Button variant="outline" size="sm" icon={<Filter className="h-4 w-4" />}>
             Más Filtros
           </Button>
-          <Button variant="outline" size="sm" icon={<Download className="h-4 w-4" />}>
-            Exportar
-          </Button>
+          <div className="relative">
+            <Button
+              variant="outline"
+              size="sm"
+              icon={<Download className="h-4 w-4" />}
+              onClick={() => setShowExportMenu(!showExportMenu)}
+            >
+              Exportar
+            </Button>
+            {showExportMenu && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                <button
+                  onClick={handleExportPDF}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg"
+                >
+                  <FileText className="h-4 w-4" />
+                  Exportar como PDF
+                </button>
+                <button
+                  onClick={handleExportExcel}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg"
+                >
+                  <FileSpreadsheet className="h-4 w-4" />
+                  Exportar como Excel
+                </button>
+              </div>
+            )}
+          </div>
           <div className="ml-auto text-sm text-gray-600">
             {filteredMedicamentos.length} de {medicamentos.length} medicamentos
           </div>

@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { AlertCircle, CheckCircle, Clock, TrendingUp, Award } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { AlertCircle, CheckCircle, Clock, TrendingUp, Award, Download, FileText, FileSpreadsheet } from 'lucide-react'
 import { useCentro } from '../context/CentroContext'
 import { useAlertas } from '../hooks/useAlertas'
 import { useAuth } from '../context/AuthContext'
@@ -7,6 +7,7 @@ import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { Badge } from '../components/ui/Badge'
 import { useToast } from '../components/ui/Toast'
+import { exportAlertsPDF, exportAlertsExcel } from '../utils/exportUtils'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
@@ -24,6 +25,7 @@ export function AlertasPage() {
     generarAlertas
   } = useAlertas(centroSeleccionado?.id)
   const toast = useToast()
+  const [showExportMenu, setShowExportMenu] = useState(false)
 
   useEffect(() => {
     if (centroSeleccionado) {
@@ -47,6 +49,18 @@ export function AlertasPage() {
     }
   }
 
+  const handleExportPDF = () => {
+    exportAlertsPDF(alertas, centroSeleccionado?.name)
+    toast.success('Reporte de alertas PDF generado exitosamente')
+    setShowExportMenu(false)
+  }
+
+  const handleExportExcel = () => {
+    exportAlertsExcel(alertas, centroSeleccionado?.name)
+    toast.success('Reporte de alertas Excel generado exitosamente')
+    setShowExportMenu(false)
+  }
+
   if (!centroSeleccionado) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -65,9 +79,38 @@ export function AlertasPage() {
           <h1 className="text-3xl font-bold text-gray-900">Sistema de Alertas Gamificado 🎮</h1>
           <p className="text-gray-600 mt-1">{centroSeleccionado.name}</p>
         </div>
-        <Button onClick={() => generarAlertas()} variant="outline">
-          Actualizar Alertas
-        </Button>
+        <div className="flex gap-2">
+          <div className="relative">
+            <Button
+              variant="outline"
+              icon={<Download className="h-5 w-5" />}
+              onClick={() => setShowExportMenu(!showExportMenu)}
+            >
+              Exportar
+            </Button>
+            {showExportMenu && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                <button
+                  onClick={handleExportPDF}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg"
+                >
+                  <FileText className="h-4 w-4" />
+                  Exportar como PDF
+                </button>
+                <button
+                  onClick={handleExportExcel}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg"
+                >
+                  <FileSpreadsheet className="h-4 w-4" />
+                  Exportar como Excel
+                </button>
+              </div>
+            )}
+          </div>
+          <Button onClick={() => generarAlertas()} variant="outline">
+            Actualizar Alertas
+          </Button>
+        </div>
       </div>
 
       {/* KPI Cards */}

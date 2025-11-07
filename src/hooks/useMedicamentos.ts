@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import { useRealtime } from './useRealtime'
 import type { Medication } from '../types'
 
 export function useMedicamentos(centroId?: string) {
@@ -12,6 +13,27 @@ export function useMedicamentos(centroId?: string) {
       fetchMedicamentos()
     }
   }, [centroId])
+
+  // Real-time subscriptions
+  useRealtime({
+    table: 'medications',
+    filter: centroId ? `center_id=eq.${centroId}` : undefined,
+    onInsert: (newMed: Medication) => {
+      if (!centroId || newMed.center_id === centroId) {
+        setMedicamentos((prev) => [newMed, ...prev])
+      }
+    },
+    onUpdate: (updatedMed: Medication) => {
+      if (!centroId || updatedMed.center_id === centroId) {
+        setMedicamentos((prev) =>
+          prev.map((med) => (med.id === updatedMed.id ? updatedMed : med))
+        )
+      }
+    },
+    onDelete: (deletedMed: Medication) => {
+      setMedicamentos((prev) => prev.filter((med) => med.id !== deletedMed.id))
+    }
+  })
 
   async function fetchMedicamentos() {
     try {

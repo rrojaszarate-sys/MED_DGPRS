@@ -134,7 +134,9 @@ export function MedicamentoTable({ medicamentos, loading, onEdit, onDelete }: Me
                   onClick={() => onDelete(medicamento.id)}
                   icon={<Trash2 className="h-4 w-4 text-red-600" />}
                   className="text-red-600 hover:bg-red-50"
-                />
+                >
+                  Eliminar
+                </Button>
               </div>
             </TableCell>
           </TableRow>
