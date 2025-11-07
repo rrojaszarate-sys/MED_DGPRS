@@ -54,6 +54,40 @@ export interface Alert {
   medicamento?: Medication
 }
 
+export interface BatchMovement {
+  id: string
+  medication_id: string
+  tipo_movimiento: 'entrada' | 'salida' | 'ajuste' | 'vencimiento' | 'merma' | 'transferencia_salida' | 'transferencia_entrada' | 'devolucion' | 'destruccion'
+  cantidad: number
+  cantidad_anterior: number
+  cantidad_posterior: number
+  centro_origen_id?: string
+  centro_destino_id?: string
+  motivo: string
+  observaciones?: string
+  usuario_responsable: string
+  created_at: string
+  metadata?: Record<string, any>
+}
+
+export interface AuditLog {
+  id: string
+  user_id?: string
+  user_email?: string
+  user_name?: string
+  action_type: 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'LOGIN' | 'LOGOUT' | 'EXPORT' | 'IMPORT' | 'ADJUST' | 'TRANSFER'
+  entity_type: 'medication' | 'user' | 'center' | 'transfer' | 'batch' | 'catalog'
+  entity_id?: string
+  entity_name?: string
+  old_values?: Record<string, any>
+  new_values?: Record<string, any>
+  changes_summary?: string
+  result?: 'success' | 'failed' | 'partial'
+  severity?: 'low' | 'medium' | 'high' | 'critical'
+  metadata?: Record<string, any>
+  created_at: string
+}
+
 export interface AuthContextType {
   user: User | null
   loading: boolean
