@@ -59,4 +59,5 @@ export interface AuthContextType {
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
+  devModeLogin?: (mockUser: User) => Promise<void>
 }

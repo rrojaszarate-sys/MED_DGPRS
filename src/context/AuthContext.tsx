@@ -64,8 +64,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
   }
 
+  // DEV MODE: Permite login directo con perfil mock (sin Supabase Auth)
+  async function devModeLogin(mockUser: User) {
+    setUser(mockUser)
+    setLoading(false)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signOut, devModeLogin }}>
       {children}
     </AuthContext.Provider>
   )
