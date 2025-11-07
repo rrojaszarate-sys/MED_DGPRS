@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { LoginPage } from './pages/LoginPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { InventoryPage } from './pages/InventoryPage'
+import { AlertasPage } from './pages/AlertasPage'
 import { AuthProvider } from './context/AuthContext'
 import { CentroProvider } from './context/CentroContext'
 import { ToastProvider } from './components/ui/Toast'
@@ -30,6 +31,14 @@ function App() {
                 <ProtectedRoute>
                   <MainLayout>
                     <InventoryPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/alertas" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <AlertasPage />
                   </MainLayout>
                 </ProtectedRoute>
               } />
