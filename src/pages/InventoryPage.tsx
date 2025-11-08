@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Plus, Search, Filter, Download, FileText, FileSpreadsheet } from 'lucide-react'
+import { Plus, Search, Filter, Download, FileText, FileSpreadsheet, Upload } from 'lucide-react'
 import { useCentro } from '../context/CentroContext'
 import { useMedicamentos } from '../hooks/useMedicamentos'
 import { Button } from '../components/ui/Button'
 import { MedicamentoTable } from '../components/inventory/MedicamentoTable'
 import { MedicamentoFormModal } from '../components/inventory/MedicamentoFormModal'
+import { ImportMedications } from '../components/inventory/ImportMedications'
 import { useToast } from '../components/ui/Toast'
 import { exportMedicationsPDF, exportMedicationsExcel } from '../utils/exportUtils'
 import type { Medication } from '../types'
@@ -13,6 +14,7 @@ export function InventoryPage() {
   const { centroSeleccionado } = useCentro()
   const { medicamentos, loading, createMedicamento, updateMedicamento, deleteMedicamento } = useMedicamentos(centroSeleccionado?.id)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showImportModal, setShowImportModal] = useState(false)
   const [editingMedicamento, setEditingMedicamento] = useState<Medication | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterEstado, setFilterEstado] = useState<string>('all')
@@ -102,9 +104,18 @@ export function InventoryPage() {
           <h1 className="text-3xl font-bold text-gray-900">Inventario de Medicamentos</h1>
           <p className="text-gray-600 mt-1">{centroSeleccionado.name}</p>
         </div>
-        <Button onClick={handleCreate} icon={<Plus className="h-5 w-5" />}>
-          Agregar Medicamento
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            onClick={() => setShowImportModal(true)}
+            icon={<Upload className="h-5 w-5" />}
+            variant="outline"
+          >
+            Importar
+          </Button>
+          <Button onClick={handleCreate} icon={<Plus className="h-5 w-5" />}>
+            Agregar Medicamento
+          </Button>
+        </div>
       </div>
 
       {/* Filters and Search */}
@@ -183,13 +194,33 @@ export function InventoryPage() {
         onDelete={handleDelete}
       />
 
-      {/* Modal */}
+      {/* Modal de Formulario */}
       <MedicamentoFormModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleSubmit}
         medicamento={editingMedicamento}
       />
+
+      {/* Modal de Importación */}
+      {showImportModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold">Importación Masiva de Medicamentos</h2>
+              <button
+                onClick={() => setShowImportModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <span className="text-2xl">&times;</span>
+              </button>
+            </div>
+            <div className="p-6">
+              <ImportMedications />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

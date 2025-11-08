@@ -5,7 +5,8 @@ import {
   Package,
   Bell,
   LogOut,
-  Settings
+  Settings,
+  FileText
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { CentroSelector } from '../dashboard/CentroSelector'
@@ -23,6 +24,7 @@ export function MainLayout({ children }: MainLayoutProps) {
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Inventario', href: '/inventario', icon: Package },
     { name: 'Alertas', href: '/alertas', icon: Bell },
+    { name: 'Reportes', href: '/reportes', icon: FileText },
   ]
 
   const adminNavigation = [

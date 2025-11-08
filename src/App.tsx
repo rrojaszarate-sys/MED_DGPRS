@@ -4,6 +4,7 @@ import { DashboardPage } from './pages/DashboardPage'
 import { InventoryPage } from './pages/InventoryPage'
 import { AlertasPage } from './pages/AlertasPage'
 import { AdminPage } from './pages/AdminPage'
+import { ReportsPage } from './pages/ReportsPage'
 import { AuthProvider } from './context/AuthContext'
 import { CentroProvider } from './context/CentroContext'
 import { ToastProvider } from './components/ui/Toast'
@@ -41,6 +42,14 @@ function App() {
                 <ProtectedRoute>
                   <MainLayout>
                     <AlertasPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/reportes" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ReportsPage />
                   </MainLayout>
                 </ProtectedRoute>
               } />
