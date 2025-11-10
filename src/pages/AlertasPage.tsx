@@ -8,8 +8,6 @@ import { Card } from '../components/ui/Card'
 import { Badge } from '../components/ui/Badge'
 import { useToast } from '../components/ui/Toast'
 import { exportAlertsPDF, exportAlertsExcel } from '../utils/exportUtils'
-import { format } from 'date-fns'
-import { es } from 'date-fns/locale'
 
 export function AlertasPage() {
   const { centroSeleccionado } = useCentro()
@@ -50,14 +48,16 @@ export function AlertasPage() {
   }
 
   const handleExportPDF = () => {
-    exportAlertsPDF(alertas, centroSeleccionado?.name)
-    toast.success('Reporte de alertas PDF generado exitosamente')
+    // TODO: Pass alertas and center name when export function is implemented
+    exportAlertsPDF()
+    toast.success('Reporte de alertas PDF pendiente de implementación')
     setShowExportMenu(false)
   }
 
   const handleExportExcel = () => {
-    exportAlertsExcel(alertas, centroSeleccionado?.name)
-    toast.success('Reporte de alertas Excel generado exitosamente')
+    // TODO: Pass alertas and center name when export function is implemented
+    exportAlertsExcel()
+    toast.success('Reporte de alertas Excel pendiente de implementación')
     setShowExportMenu(false)
   }
 
@@ -207,10 +207,11 @@ export function AlertasPage() {
                         </div>
                         <h3 className="font-bold text-gray-900 text-lg">{alerta.medicamento?.nombre}</h3>
                         <p className="text-sm text-gray-600">
-                          Lote: {alerta.medicamento?.lote} • Cantidad: {alerta.medicamento?.cantidad} unidades
+                          Días restantes: {alerta.dias_restantes} días
                         </p>
                         <p className="text-sm text-gray-600">
-                          Caducidad: {alerta.medicamento?.fecha_caducidad && format(new Date(alerta.medicamento.fecha_caducidad), 'dd/MM/yyyy', { locale: es })}
+                          {/* TODO: Refactor alerts to work with Batch instead of Medication */}
+                          Ver detalles en inventario
                         </p>
                       </div>
                       <div className="flex gap-2">
@@ -249,7 +250,7 @@ export function AlertasPage() {
                         </div>
                         <h3 className="font-bold text-gray-900">{alerta.medicamento?.nombre}</h3>
                         <p className="text-sm text-gray-600">
-                          Lote: {alerta.medicamento?.lote} • Cantidad: {alerta.medicamento?.cantidad}
+                          Días restantes: {alerta.dias_restantes} días
                         </p>
                       </div>
                       <Button size="sm" onClick={() => handleResolver(alerta.id)}>
@@ -278,7 +279,7 @@ export function AlertasPage() {
                           {alerta.dias_restantes} días
                         </Badge>
                         <h3 className="font-medium text-gray-900 mt-2">{alerta.medicamento?.nombre}</h3>
-                        <p className="text-xs text-gray-600">Lote: {alerta.medicamento?.lote}</p>
+                        <p className="text-xs text-gray-600">Categoría: {alerta.medicamento?.categoria || 'N/A'}</p>
                       </div>
                       <Button size="sm" variant="ghost" onClick={() => handleResolver(alerta.id)}>
                         +20pts

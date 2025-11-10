@@ -5,7 +5,13 @@ import {
   Package,
   Bell,
   LogOut,
-  Settings
+  Settings,
+  FileText,
+  Truck,
+  TrendingUp,
+  FileCheck,
+  Building2,
+  MapPin
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { CentroSelector } from '../dashboard/CentroSelector'
@@ -22,11 +28,17 @@ export function MainLayout({ children }: MainLayoutProps) {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Inventario', href: '/inventario', icon: Package },
+    { name: 'Proveedores', href: '/proveedores', icon: Truck },
+    { name: 'Contratos', href: '/contratos', icon: FileCheck },
+    { name: 'Movimientos', href: '/movimientos', icon: TrendingUp },
     { name: 'Alertas', href: '/alertas', icon: Bell },
+    { name: 'Reportes', href: '/reportes', icon: FileText },
   ]
 
   const adminNavigation = [
     { name: 'Administración', href: '/admin', icon: Settings },
+    { name: 'Instituciones', href: '/instituciones', icon: Building2 },
+    { name: 'Centros', href: '/centros', icon: MapPin },
   ]
 
   const isActive = (path: string) => location.pathname === path

@@ -4,6 +4,12 @@ import { DashboardPage } from './pages/DashboardPage'
 import { InventoryPage } from './pages/InventoryPage'
 import { AlertasPage } from './pages/AlertasPage'
 import { AdminPage } from './pages/AdminPage'
+import { ReportsPage } from './pages/ReportsPage'
+import { SuppliersPage } from './pages/SuppliersPage'
+import { MovementsPage } from './pages/MovementsPage'
+import { ContractsPage } from './pages/ContractsPage'
+import { InstitutionsPage } from './pages/InstitutionsPage'
+import { HealthCentersPage } from './pages/HealthCentersPage'
 import { AuthProvider } from './context/AuthContext'
 import { CentroProvider } from './context/CentroContext'
 import { ToastProvider } from './components/ui/Toast'
@@ -45,11 +51,63 @@ function App() {
                 </ProtectedRoute>
               } />
 
+              <Route path="/reportes" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ReportsPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/proveedores" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <SuppliersPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/movimientos" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <MovementsPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/contratos" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ContractsPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
               <Route path="/admin" element={
                 <ProtectedRoute>
                   <RoleGuard allowedRoles={['super_admin', 'admin_center']}>
                     <MainLayout>
                       <AdminPage />
+                    </MainLayout>
+                  </RoleGuard>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/instituciones" element={
+                <ProtectedRoute>
+                  <RoleGuard allowedRoles={['super_admin', 'admin_center']}>
+                    <MainLayout>
+                      <InstitutionsPage />
+                    </MainLayout>
+                  </RoleGuard>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/centros" element={
+                <ProtectedRoute>
+                  <RoleGuard allowedRoles={['super_admin', 'admin_center']}>
+                    <MainLayout>
+                      <HealthCentersPage />
                     </MainLayout>
                   </RoleGuard>
                 </ProtectedRoute>

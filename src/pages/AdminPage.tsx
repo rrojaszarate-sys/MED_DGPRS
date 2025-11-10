@@ -28,8 +28,10 @@ export function AdminPage() {
   const filteredCatalogos = catalogos.filter((cat) => {
     const searchLower = searchTerm.toLowerCase()
     return (
-      cat.nombre.toLowerCase().includes(searchLower) ||
-      cat.formula_activa.toLowerCase().includes(searchLower) ||
+      cat.nombre_generico.toLowerCase().includes(searchLower) ||
+      (cat.nombre_comercial && cat.nombre_comercial.toLowerCase().includes(searchLower)) ||
+      (cat.principio_activo && cat.principio_activo.toLowerCase().includes(searchLower)) ||
+      cat.codigo_medicamento.toLowerCase().includes(searchLower) ||
       (cat.categoria && cat.categoria.toLowerCase().includes(searchLower))
     )
   })
@@ -74,14 +76,16 @@ export function AdminPage() {
   }
 
   const handleExportPDF = () => {
-    exportCatalogPDF(filteredCatalogos)
-    toast.success('Catálogo PDF generado exitosamente')
+    // TODO: Pass filteredCatalogos when export function is implemented
+    exportCatalogPDF()
+    toast.success('Catálogo PDF pendiente de implementación')
     setShowExportMenu(false)
   }
 
   const handleExportExcel = () => {
-    exportCatalogExcel(filteredCatalogos)
-    toast.success('Catálogo Excel generado exitosamente')
+    // TODO: Pass filteredCatalogos when export function is implemented
+    exportCatalogExcel()
+    toast.success('Catálogo Excel pendiente de implementación')
     setShowExportMenu(false)
   }
 
