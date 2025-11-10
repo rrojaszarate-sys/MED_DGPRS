@@ -88,16 +88,14 @@
 
 ---
 
-### FASE 6: Instituciones y Centros (20 min)
-**Archivos a crear:**
-- [ ] `src/hooks/useInstitutions.ts`
-- [ ] `src/pages/InstitutionsPage.tsx`
-- [ ] `src/hooks/useHealthCenters.ts`
-- [ ] `src/pages/HealthCentersPage.tsx`
-
-**Formularios simples con:**
-- Instituciones: nombre, clave, tipo
-- Centros: name, code, address, city, region, phone, email, responsible_name, institucion_id
+### FASE 6: Instituciones y Centros (20 min) - ✅ COMPLETADA
+**Archivos creados:**
+- [x] `src/types/index.ts` - Agregada interfaz Institucion
+- [x] `src/hooks/useInstituciones.ts` - Hook CRUD completo
+- [x] `src/hooks/useCentros.ts` - Actualizado con CRUD completo
+- [x] `src/pages/InstitutionsPage.tsx` - Página con modal inline
+- [x] `src/pages/HealthCentersPage.tsx` - Página con modal inline
+- [x] Rutas y navegación agregadas (protegidas con RoleGuard admin)
 
 ---
 
@@ -157,12 +155,12 @@
 | 3. Lotes | 30 min | ✅ COMPLETO |
 | 4. Movimientos | 20 min | ✅ COMPLETO |
 | 5. Contratos | 45 min | ✅ COMPLETO |
-| 6. Instituciones/Centros | 20 min | ⏳ Pendiente |
+| 6. Instituciones/Centros | 20 min | ✅ COMPLETO |
 | 7. Dashboards | 30 min | ⏳ Pendiente |
 | 8. Reportes | 20 min | ⏳ Pendiente |
 | 9. Secundarios | 30 min | ⏳ Pendiente |
 | 10. Verificación | 15 min | ⏳ Pendiente |
-| **TOTAL** | **4h 20min** | **50% completo** |
+| **TOTAL** | **4h 20min** | **60% completo** |
 
 ---
 
@@ -180,5 +178,5 @@ Al completar todas las fases:
 
 ---
 
-**✅ FASES 1-5 COMPLETADAS (50% del sistema)**
-**🔄 INICIANDO FASE 6: Instituciones y Centros de Salud...**
+**✅ FASES 1-6 COMPLETADAS (60% del sistema)**
+**🔄 INICIANDO FASE 7: Dashboards con gráficas...**

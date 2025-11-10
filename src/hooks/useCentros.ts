@@ -1,26 +1,50 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import { useRealtime } from './useRealtime'
 import type { HealthCenter } from '../types'
 
-export function useCentros() {
+export function useCentros(includeInactive = false) {
   const [centros, setCentros] = useState<HealthCenter[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchCentros()
-  }, [])
+  }, [includeInactive])
+
+  // Real-time subscriptions
+  useRealtime({
+    table: 'health_centers',
+    onInsert: (newCenter: HealthCenter) => {
+      if (includeInactive || newCenter.is_active) {
+        setCentros((prev) => [newCenter, ...prev])
+      }
+    },
+    onUpdate: (updatedCenter: HealthCenter) => {
+      setCentros((prev) =>
+        prev.map((c) => (c.id === updatedCenter.id ? updatedCenter : c))
+      )
+    },
+    onDelete: (deletedCenter: HealthCenter) => {
+      setCentros((prev) => prev.filter((c) => c.id !== deletedCenter.id))
+    }
+  })
 
   async function fetchCentros() {
     try {
       setLoading(true)
       setError(null)
 
-      const { data, error: fetchError } = await supabase
+      let query = supabase
         .from('health_centers')
         .select('*')
-        .eq('is_active', true)
         .order('name')
+
+      if (!includeInactive) {
+        query = query.eq('is_active', true)
+      }
+
+      const { data, error: fetchError } = await query
 
       if (fetchError) throw fetchError
       setCentros(data || [])
@@ -32,10 +56,66 @@ export function useCentros() {
     }
   }
 
+  async function createCentro(centro: Omit<HealthCenter, 'id'>) {
+    try {
+      const { data, error: createError } = await supabase
+        .from('health_centers')
+        .insert([centro])
+        .select()
+        .single()
+
+      if (createError) throw createError
+
+      setCentros((prev) => [data, ...prev])
+      return { data, error: null }
+    } catch (err: any) {
+      return { data: null, error: err.message }
+    }
+  }
+
+  async function updateCentro(id: string, updates: Partial<HealthCenter>) {
+    try {
+      const { data, error: updateError } = await supabase
+        .from('health_centers')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single()
+
+      if (updateError) throw updateError
+
+      setCentros((prev) =>
+        prev.map((c) => (c.id === id ? data : c))
+      )
+      return { data, error: null }
+    } catch (err: any) {
+      return { data: null, error: err.message }
+    }
+  }
+
+  async function deleteCentro(id: string) {
+    try {
+      const { error: deleteError } = await supabase
+        .from('health_centers')
+        .delete()
+        .eq('id', id)
+
+      if (deleteError) throw deleteError
+
+      setCentros((prev) => prev.filter((c) => c.id !== id))
+      return { error: null }
+    } catch (err: any) {
+      return { error: err.message }
+    }
+  }
+
   return {
     centros,
     loading,
     error,
-    refresh: fetchCentros
+    refresh: fetchCentros,
+    createCentro,
+    updateCentro,
+    deleteCentro
   }
 }

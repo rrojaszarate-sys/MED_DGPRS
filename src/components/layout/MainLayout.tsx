@@ -9,7 +9,9 @@ import {
   FileText,
   Truck,
   TrendingUp,
-  FileCheck
+  FileCheck,
+  Building2,
+  MapPin
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { CentroSelector } from '../dashboard/CentroSelector'
@@ -35,6 +37,8 @@ export function MainLayout({ children }: MainLayoutProps) {
 
   const adminNavigation = [
     { name: 'Administración', href: '/admin', icon: Settings },
+    { name: 'Instituciones', href: '/instituciones', icon: Building2 },
+    { name: 'Centros', href: '/centros', icon: MapPin },
   ]
 
   const isActive = (path: string) => location.pathname === path
