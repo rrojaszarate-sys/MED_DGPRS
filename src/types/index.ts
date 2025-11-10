@@ -20,12 +20,22 @@ export interface HealthCenter {
 
 export interface MedicationCatalog {
   id: string
-  nombre: string
-  formula_activa: string
-  descripcion?: string
+  codigo_medicamento: string
+  nombre_generico: string
+  nombre_comercial?: string
+  principio_activo?: string
+  forma_farmaceutica?: string
+  via_administracion?: string
+  concentracion?: string
+  unidad_medida?: string
   categoria?: string
+  requiere_receta: boolean
+  controlado: boolean
+  temperatura_almacenamiento?: string
+  observaciones?: string
   is_active: boolean
   created_at: string
+  updated_at: string
 }
 
 export interface Medication {
