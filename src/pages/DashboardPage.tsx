@@ -252,7 +252,7 @@ export function DashboardPage() {
                 fill="#8884d8"
                 dataKey="value"
               >
-                {stockPorEstado.map((entry, index) => (
+                {stockPorEstado.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

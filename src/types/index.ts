@@ -191,3 +191,11 @@ export interface AuthContextType {
   signOut: () => Promise<void>
   devModeLogin?: (mockUser: User) => Promise<void>
 }
+
+export interface CentroContextType {
+  centroSeleccionado: HealthCenter | null
+  setCentroSeleccionado: (centro: HealthCenter | null) => void
+  centros: HealthCenter[]
+  loading: boolean
+  refresh: () => Promise<void>
+}

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Search, Filter, Download, FileText, FileSpreadsheet, Edit, TrendingUp } from 'lucide-react'
+import { Plus, Search, Edit, TrendingUp } from 'lucide-react'
 import { useCentro } from '../context/CentroContext'
 import { useBatches } from '../hooks/useBatches'
 import { Button } from '../components/ui/Button'

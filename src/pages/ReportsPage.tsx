@@ -80,11 +80,13 @@ export function ReportsPage() {
   };
 
   const handleExportPDF = () => {
-    exportMedicationsPDF(reportData, `Reporte - ${centroSeleccionado?.name}`);
+    // TODO: Pass reportData and center name when export functions are implemented
+    exportMedicationsPDF();
   };
 
   const handleExportExcel = () => {
-    exportMedicationsExcel(reportData, `Reporte - ${centroSeleccionado?.name}`);
+    // TODO: Pass reportData and center name when export functions are implemented
+    exportMedicationsExcel();
   };
 
   if (!centroSeleccionado) {

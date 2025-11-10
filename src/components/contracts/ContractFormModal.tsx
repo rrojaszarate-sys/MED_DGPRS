@@ -14,7 +14,7 @@ interface ContractFormModalProps {
   onClose: () => void
   onSubmit: (
     contract: Omit<Contract, 'id' | 'created_at'>,
-    items: Omit<ContractItem, 'id' | 'contract_id' | 'created_at'>[]
+    items: Omit<ContractItem, 'contract_id' | 'created_at'>[]
   ) => Promise<void>
   contract?: Contract | null
 }
@@ -34,7 +34,7 @@ export function ContractFormModal({ isOpen, onClose, onSubmit, contract }: Contr
     observaciones: ''
   })
 
-  const [items, setItems] = useState<Omit<ContractItem, 'id' | 'contract_id' | 'created_at'>[]>([])
+  const [items, setItems] = useState<Omit<ContractItem, 'contract_id' | 'created_at'>[]>([])
   const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
@@ -51,9 +51,10 @@ export function ContractFormModal({ isOpen, onClose, onSubmit, contract }: Contr
         observaciones: contract.observaciones || ''
       })
 
-      // Set items
+      // Set items (keep id for existing items)
       if (contract.items) {
         setItems(contract.items.map(item => ({
+          id: item.id,
           medication_catalog_id: item.medication_catalog_id,
           cantidad_comprometida: item.cantidad_comprometida,
           precio_unitario: item.precio_unitario,
@@ -292,7 +293,7 @@ export function ContractFormModal({ isOpen, onClose, onSubmit, contract }: Contr
 
             <ContractItemsTable
               items={items}
-              onItemsChange={setItems}
+              onItemsChange={(newItems) => setItems(newItems as Omit<ContractItem, 'contract_id' | 'created_at'>[])}
               medications={catalogos}
               centers={centros}
             />

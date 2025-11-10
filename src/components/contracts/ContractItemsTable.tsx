@@ -5,6 +5,7 @@ import { Input } from '../ui/Input'
 import type { ContractItem, MedicationCatalog, HealthCenter } from '../../types'
 
 interface ContractItemData extends Omit<ContractItem, 'id' | 'contract_id' | 'created_at'> {
+  id?: string // Optional id for existing items
   tempId?: string // For tracking items before saving
 }
 

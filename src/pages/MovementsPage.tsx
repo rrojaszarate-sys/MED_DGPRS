@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Search, Filter, RefreshCw, Download, Calendar, TrendingUp } from 'lucide-react'
+import { Search, Filter, RefreshCw, TrendingUp } from 'lucide-react'
 import { useCentro } from '../context/CentroContext'
 import { useMovements } from '../hooks/useMovements'
 import { MovementTimeline } from '../components/movements/MovementTimeline'

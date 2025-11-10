@@ -59,7 +59,7 @@ export function ContractsPage() {
 
   const handleSubmit = async (
     contractData: Omit<Contract, 'id' | 'created_at'>,
-    items: Omit<ContractItem, 'id' | 'contract_id' | 'created_at'>[]
+    items: Omit<ContractItem, 'contract_id' | 'created_at'>[]
   ) => {
     if (selectedContract) {
       const { error } = await updateContract(selectedContract.id, contractData, items)
@@ -69,7 +69,9 @@ export function ContractsPage() {
         toast.success('Contrato actualizado exitosamente')
       }
     } else {
-      const { error } = await createContract(contractData, items)
+      // For create, strip ids if present since they'll be generated
+      const itemsForCreate = items.map(({ id, ...item }) => item) as Omit<ContractItem, 'id' | 'contract_id' | 'created_at'>[]
+      const { error } = await createContract(contractData, itemsForCreate)
       if (error) {
         toast.error('Error al crear contrato')
       } else {

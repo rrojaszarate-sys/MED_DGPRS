@@ -76,14 +76,16 @@ export function AdminPage() {
   }
 
   const handleExportPDF = () => {
-    exportCatalogPDF(filteredCatalogos)
-    toast.success('Catálogo PDF generado exitosamente')
+    // TODO: Pass filteredCatalogos when export function is implemented
+    exportCatalogPDF()
+    toast.success('Catálogo PDF pendiente de implementación')
     setShowExportMenu(false)
   }
 
   const handleExportExcel = () => {
-    exportCatalogExcel(filteredCatalogos)
-    toast.success('Catálogo Excel generado exitosamente')
+    // TODO: Pass filteredCatalogos when export function is implemented
+    exportCatalogExcel()
+    toast.success('Catálogo Excel pendiente de implementación')
     setShowExportMenu(false)
   }
 

@@ -124,7 +124,7 @@ export function BatchFormModal({ isOpen, onClose, onSubmit, batch }: BatchFormMo
       const submitData = {
         ...formData,
         cantidad_actual: batch ? formData.cantidad_actual : formData.cantidad_inicial,
-        supplier_id: formData.supplier_id || null
+        supplier_id: formData.supplier_id || undefined
       }
       await onSubmit(submitData)
       onClose()

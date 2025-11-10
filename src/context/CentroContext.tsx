@@ -1,15 +1,12 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
-import type { HealthCenter } from '../types'
-
-interface CentroContextType {
-  centroSeleccionado: HealthCenter | null
-  setCentroSeleccionado: (centro: HealthCenter | null) => void
-}
+import type { HealthCenter, CentroContextType } from '../types'
+import { useCentros as useCentrosHook } from '../hooks/useCentros'
 
 const CentroContext = createContext<CentroContextType | undefined>(undefined)
 
 export function CentroProvider({ children }: { children: ReactNode }) {
   const [centroSeleccionado, setCentroSeleccionado] = useState<HealthCenter | null>(null)
+  const { centros, loading, refresh } = useCentrosHook()
 
   // Guardar en localStorage
   useEffect(() => {
@@ -31,7 +28,7 @@ export function CentroProvider({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    <CentroContext.Provider value={{ centroSeleccionado, setCentroSeleccionado }}>
+    <CentroContext.Provider value={{ centroSeleccionado, setCentroSeleccionado, centros, loading, refresh }}>
       {children}
     </CentroContext.Provider>
   )

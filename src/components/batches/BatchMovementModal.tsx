@@ -3,7 +3,7 @@ import { X, TrendingUp, TrendingDown, RefreshCw, AlertTriangle, Trash2, ArrowRig
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
 import { Badge } from '../ui/Badge'
-import type { Batch, BatchMovement } from '../../types'
+import type { Batch, BatchMovement, HealthCenter } from '../../types'
 import { useAuth } from '../../context/AuthContext'
 import { useCentro } from '../../context/CentroContext'
 
@@ -81,9 +81,9 @@ export function BatchMovementModal({ isOpen, onClose, onSubmit, batch }: BatchMo
         cantidad_anterior: batch.cantidad_actual,
         cantidad_posterior: calculateNewQuantity(),
         centro_origen_id: centroSeleccionado?.id,
-        centro_destino_id: formData.centro_destino_id || null,
+        centro_destino_id: formData.centro_destino_id || undefined,
         motivo: formData.motivo,
-        observaciones: formData.observaciones || null,
+        observaciones: formData.observaciones || undefined,
         usuario_responsable: user.id,
         metadata: {
           batch_id: batch.id,
@@ -268,8 +268,8 @@ export function BatchMovementModal({ isOpen, onClose, onSubmit, batch }: BatchMo
               >
                 <option value="">Seleccionar centro...</option>
                 {centros
-                  .filter(c => c.id !== centroSeleccionado?.id && c.is_active)
-                  .map((centro) => (
+                  .filter((c: HealthCenter) => c.id !== centroSeleccionado?.id && c.is_active)
+                  .map((centro: HealthCenter) => (
                     <option key={centro.id} value={centro.id}>
                       {centro.name} - {centro.code}
                     </option>

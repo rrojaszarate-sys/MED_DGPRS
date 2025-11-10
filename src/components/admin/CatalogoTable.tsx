@@ -3,8 +3,6 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '.
 import { Button } from '../ui/Button'
 import { Badge } from '../ui/Badge'
 import type { MedicationCatalog } from '../../types'
-import { format } from 'date-fns'
-import { es } from 'date-fns/locale'
 
 interface CatalogoTableProps {
   catalogos: MedicationCatalog[]
