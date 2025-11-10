@@ -9,12 +9,12 @@
 
 ## 🔥 FASES PENDIENTES (Próximas 2 horas)
 
-### FASE 2: Proveedores (30 min) - EN CURSO
-**Archivos a crear:**
-- [ ] `src/hooks/useSuppliers.ts`
-- [ ] `src/pages/SuppliersPage.tsx`
-- [ ] `src/components/suppliers/SupplierFormModal.tsx`
-- [ ] Actualizar rutas en `main.tsx`
+### FASE 2: Proveedores (30 min) - ✅ COMPLETADA
+**Archivos creados:**
+- [x] `src/hooks/useSuppliers.ts`
+- [x] `src/pages/SuppliersPage.tsx`
+- [x] `src/components/suppliers/SupplierFormModal.tsx`
+- [x] Actualizar rutas en `App.tsx`
 
 **Campos del formulario:**
 - nombre, rfc, razon_social
@@ -27,11 +27,11 @@
 
 ---
 
-### FASE 3: Lotes Completo (30 min)
-**Archivos a crear:**
-- [ ] `src/components/batches/BatchFormModal.tsx`
-- [ ] `src/components/batches/BatchMovementModal.tsx`
-- [ ] Actualizar `InventoryPage.tsx` con botones crear/editar
+### FASE 3: Lotes Completo (30 min) - ✅ COMPLETADA
+**Archivos creados:**
+- [x] `src/components/batches/BatchFormModal.tsx`
+- [x] `src/components/batches/BatchMovementModal.tsx`
+- [x] Actualizar `InventoryPage.tsx` con botones crear/editar/movimiento
 
 **Formulario de Lote incluye:**
 - Seleccionar medicamento
@@ -150,8 +150,8 @@
 | Fase | Tiempo Estimado | Estado |
 |------|----------------|--------|
 | 1. Catálogos | 20 min | ✅ COMPLETO |
-| 2. Proveedores | 30 min | 🔄 EN CURSO |
-| 3. Lotes | 30 min | ⏳ Pendiente |
+| 2. Proveedores | 30 min | ✅ COMPLETO |
+| 3. Lotes | 30 min | ✅ COMPLETO |
 | 4. Movimientos | 20 min | ⏳ Pendiente |
 | 5. Contratos | 45 min | ⏳ Pendiente |
 | 6. Instituciones/Centros | 20 min | ⏳ Pendiente |
@@ -159,7 +159,7 @@
 | 8. Reportes | 20 min | ⏳ Pendiente |
 | 9. Secundarios | 30 min | ⏳ Pendiente |
 | 10. Verificación | 15 min | ⏳ Pendiente |
-| **TOTAL** | **4h 20min** | **10% completo** |
+| **TOTAL** | **4h 20min** | **30% completo** |
 
 ---
 
@@ -177,4 +177,5 @@ Al completar todas las fases:
 
 ---
 
-**Iniciando FASE 2: Proveedores...**
+**✅ FASES 1-3 COMPLETADAS**
+**🔄 INICIANDO FASE 4: Movimientos/Historial...**

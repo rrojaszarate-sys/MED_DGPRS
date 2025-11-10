@@ -1,17 +1,25 @@
 import { useState } from 'react'
-import { Plus, Search, Filter, Download, FileText, FileSpreadsheet } from 'lucide-react'
+import { Plus, Search, Filter, Download, FileText, FileSpreadsheet, Edit, TrendingUp } from 'lucide-react'
 import { useCentro } from '../context/CentroContext'
 import { useBatches } from '../hooks/useBatches'
 import { Button } from '../components/ui/Button'
 import { useToast } from '../components/ui/Toast'
-import type { Batch } from '../types'
+import { BatchFormModal } from '../components/batches/BatchFormModal'
+import { BatchMovementModal } from '../components/batches/BatchMovementModal'
+import type { Batch, BatchMovement } from '../types'
+import { supabase } from '../lib/supabase'
 
 export function InventoryPage() {
   const { centroSeleccionado } = useCentro()
-  const { batches, loading, deleteBatch } = useBatches(centroSeleccionado?.id)
+  const { batches, loading, deleteBatch, createBatch, updateBatch } = useBatches(centroSeleccionado?.id)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterEstado, setFilterEstado] = useState<string>('all')
   const toast = useToast()
+
+  // Modal states
+  const [isBatchModalOpen, setIsBatchModalOpen] = useState(false)
+  const [isMovementModalOpen, setIsMovementModalOpen] = useState(false)
+  const [selectedBatch, setSelectedBatch] = useState<Batch | null>(null)
 
   // Filtrar lotes
   const filteredBatches = batches.filter((batch) => {
@@ -32,6 +40,88 @@ export function InventoryPage() {
       toast.error('Error al eliminar lote')
     } else {
       toast.success('Lote eliminado correctamente')
+    }
+  }
+
+  const handleCreateBatch = () => {
+    setSelectedBatch(null)
+    setIsBatchModalOpen(true)
+  }
+
+  const handleEditBatch = (batch: Batch) => {
+    setSelectedBatch(batch)
+    setIsBatchModalOpen(true)
+  }
+
+  const handleBatchSubmit = async (data: Partial<Batch>) => {
+    if (selectedBatch) {
+      const { error } = await updateBatch(selectedBatch.id, data)
+      if (error) {
+        toast.error('Error al actualizar lote')
+      } else {
+        toast.success('Lote actualizado exitosamente')
+      }
+    } else {
+      const { error } = await createBatch(data as Omit<Batch, 'id' | 'created_at' | 'updated_at'>)
+      if (error) {
+        toast.error('Error al crear lote')
+      } else {
+        toast.success('Lote creado exitosamente')
+      }
+    }
+  }
+
+  const handleMovement = (batch: Batch) => {
+    setSelectedBatch(batch)
+    setIsMovementModalOpen(true)
+  }
+
+  const handleMovementSubmit = async (data: Partial<BatchMovement>) => {
+    try {
+      // Register movement in batch_movements table
+      const { error: movementError } = await supabase
+        .from('batch_movements')
+        .insert([data])
+
+      if (movementError) throw movementError
+
+      // Update batch cantidad_actual based on movement type
+      const batch = selectedBatch
+      if (!batch) return
+
+      let newQuantity = batch.cantidad_actual
+      const cantidad = data.cantidad || 0
+
+      switch (data.tipo_movimiento) {
+        case 'entrada':
+        case 'transferencia_entrada':
+        case 'devolucion':
+          newQuantity = batch.cantidad_actual + cantidad
+          break
+        case 'salida':
+        case 'transferencia_salida':
+        case 'vencimiento':
+        case 'merma':
+        case 'destruccion':
+          newQuantity = Math.max(0, batch.cantidad_actual - cantidad)
+          break
+        case 'ajuste':
+          newQuantity = cantidad
+          break
+      }
+
+      const { error: updateError } = await supabase
+        .from('batches')
+        .update({ cantidad_actual: newQuantity })
+        .eq('id', batch.id)
+
+      if (updateError) throw updateError
+
+      toast.success('Movimiento registrado exitosamente')
+      setIsMovementModalOpen(false)
+      setSelectedBatch(null)
+    } catch (error: any) {
+      toast.error('Error al registrar movimiento: ' + error.message)
     }
   }
 
@@ -76,7 +166,7 @@ export function InventoryPage() {
         </div>
         <div className="flex gap-2">
           <Button
-            onClick={() => toast.info('Función en desarrollo')}
+            onClick={handleCreateBatch}
             icon={<Plus className="h-5 w-5" />}
           >
             Agregar Lote
@@ -201,20 +291,25 @@ export function InventoryPage() {
                       <td className="px-6 py-4">
                         <div className="flex gap-2">
                           <button
-                            onClick={() => toast.info('Función en desarrollo')}
-                            className="text-primary hover:text-primary-dark text-sm font-medium"
+                            onClick={() => handleMovement(batch)}
+                            className="inline-flex items-center gap-1 text-green-600 hover:text-green-800 text-sm font-medium"
+                            title="Registrar movimiento"
                           >
-                            Ver
+                            <TrendingUp className="h-4 w-4" />
+                            Movimiento
                           </button>
                           <button
-                            onClick={() => toast.info('Función en desarrollo')}
-                            className="text-secondary hover:text-secondary-dark text-sm font-medium"
+                            onClick={() => handleEditBatch(batch)}
+                            className="inline-flex items-center gap-1 text-primary hover:text-primary-dark text-sm font-medium"
+                            title="Editar lote"
                           >
+                            <Edit className="h-4 w-4" />
                             Editar
                           </button>
                           <button
                             onClick={() => handleDelete(batch.id)}
                             className="text-red-600 hover:text-red-800 text-sm font-medium"
+                            title="Eliminar lote"
                           >
                             Eliminar
                           </button>
@@ -228,6 +323,21 @@ export function InventoryPage() {
           </div>
         )}
       </div>
+
+      {/* Modals */}
+      <BatchFormModal
+        isOpen={isBatchModalOpen}
+        onClose={() => setIsBatchModalOpen(false)}
+        onSubmit={handleBatchSubmit}
+        batch={selectedBatch}
+      />
+
+      <BatchMovementModal
+        isOpen={isMovementModalOpen}
+        onClose={() => setIsMovementModalOpen(false)}
+        onSubmit={handleMovementSubmit}
+        batch={selectedBatch}
+      />
     </div>
   )
 }
