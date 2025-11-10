@@ -12,10 +12,8 @@
 
 BEGIN;
 
-\echo '📦 Iniciando carga de 101 medicamentos del CSV...'
-
 -- ============================================
--- INSERTAR MEDICAMENTOS AL CATÁLOGO
+-- CARGA DE 101 MEDICAMENTOS
 -- ============================================
 
 -- Nota: Los medicamentos duplicados (mismo código) se insertan una sola vez en el catálogo
@@ -337,14 +335,9 @@ ON CONFLICT (codigo_medicamento) DO NOTHING;
 COMMIT;
 
 -- ============================================
+-- ============================================
 -- VERIFICACIÓN
 -- ============================================
-
-\echo '
-========================================
-✅ CARGA COMPLETADA
-========================================
-'
 
 SELECT
   '✅ Medicamentos insertados' as resultado,
@@ -376,18 +369,12 @@ FROM medication_catalog
 ORDER BY created_at DESC
 LIMIT 10;
 
-\echo '
-========================================
-📋 PRÓXIMOS PASOS
-========================================
-
-1. ✓ 101 medicamentos cargados en el catálogo
-2. → Verificar en /admin que aparecen todos los medicamentos
-3. → Crear lotes para cada medicamento desde /inventario
-4. → Asignar instituciones a cada lote
-5. → Los lotes con stock se mostrarán automáticamente
-
-========================================
-'
+-- ============================================
+-- PRÓXIMOS PASOS:
+-- 1. Verificar en /admin que aparecen los medicamentos
+-- 2. Crear lotes para cada medicamento desde /inventario
+-- 3. Asignar instituciones a cada lote
+-- 4. Los lotes con stock se mostrarán automáticamente
+-- ============================================
 
 -- FIN DEL SCRIPT
