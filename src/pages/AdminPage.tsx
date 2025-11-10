@@ -28,8 +28,10 @@ export function AdminPage() {
   const filteredCatalogos = catalogos.filter((cat) => {
     const searchLower = searchTerm.toLowerCase()
     return (
-      cat.nombre.toLowerCase().includes(searchLower) ||
-      cat.formula_activa.toLowerCase().includes(searchLower) ||
+      cat.nombre_generico.toLowerCase().includes(searchLower) ||
+      (cat.nombre_comercial && cat.nombre_comercial.toLowerCase().includes(searchLower)) ||
+      (cat.principio_activo && cat.principio_activo.toLowerCase().includes(searchLower)) ||
+      cat.codigo_medicamento.toLowerCase().includes(searchLower) ||
       (cat.categoria && cat.categoria.toLowerCase().includes(searchLower))
     )
   })
