@@ -1,6 +1,7 @@
 import { Package, AlertCircle, Clock, TrendingUp } from 'lucide-react'
 import { useCentro } from '../context/CentroContext'
 import { useMedicamentos } from '../hooks/useMedicamentos'
+import { useBatches } from '../hooks/useBatches'
 import { useAlertas } from '../hooks/useAlertas'
 import { useAuth } from '../context/AuthContext'
 import { Card } from '../components/ui/Card'
@@ -9,13 +10,18 @@ export function DashboardPage() {
   const { user } = useAuth()
   const { centroSeleccionado } = useCentro()
   const { medicamentos, loading: loadingMeds } = useMedicamentos(centroSeleccionado?.id)
+  const { batches, loading: loadingBatches } = useBatches(centroSeleccionado?.id)
   const { alertas, alertasCriticas, alertasUrgentes, alertasPreventivas } = useAlertas(centroSeleccionado?.id)
 
-  const totalStock = medicamentos.reduce((sum, med) => sum + med.cantidad, 0)
-  const proximosCaducar30 = medicamentos.filter(med => {
-    const dias = Math.ceil((new Date(med.fecha_caducidad).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+  const totalStock = batches.reduce((sum, batch) => sum + (batch.cantidad_actual || 0), 0)
+  const lotes_activos = batches.filter(batch => batch.cantidad_actual > 0 && batch.estado === 'disponible').length
+  const proximosCaducar30 = batches.filter(batch => {
+    if (!batch.fecha_caducidad || batch.cantidad_actual === 0) return false
+    const dias = Math.ceil((new Date(batch.fecha_caducidad).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
     return dias <= 30 && dias > 0
   }).length
+
+  const isLoading = loadingMeds || loadingBatches
 
   return (
     <div className="space-y-6">
@@ -35,7 +41,9 @@ export function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Medicamentos</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">{loadingMeds ? '...' : medicamentos.length}</p>
+              <p className="text-3xl font-bold text-gray-900 mt-2">
+                {isLoading ? '...' : medicamentos.length}
+              </p>
             </div>
             <div className="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center">
               <Package className="h-6 w-6 text-blue-600" />
@@ -47,7 +55,10 @@ export function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Stock Total</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">{loadingMeds ? '...' : totalStock.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-gray-900 mt-2">
+                {isLoading ? '...' : totalStock.toLocaleString()}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">{lotes_activos} lotes activos</p>
             </div>
             <div className="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center">
               <TrendingUp className="h-6 w-6 text-green-600" />
@@ -76,7 +87,9 @@ export function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Próximos a Caducar (30d)</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">{proximosCaducar30}</p>
+              <p className="text-3xl font-bold text-gray-900 mt-2">
+                {isLoading ? '...' : proximosCaducar30}
+              </p>
             </div>
             <div className="h-12 w-12 bg-red-100 rounded-full flex items-center justify-center">
               <Clock className="h-6 w-6 text-red-600" />

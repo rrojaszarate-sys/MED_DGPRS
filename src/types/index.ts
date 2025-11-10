@@ -33,13 +33,59 @@ export interface Medication {
   center_id: string
   catalog_id?: string
   nombre: string
-  formula_activa: string
-  lote: string
-  cantidad: number
+  descripcion?: string
+  unidad_medida: string
+  categoria?: string
+  requiere_refrigeracion: boolean
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface Batch {
+  id: string
+  medication_id: string
+  center_id: string
+  supplier_id?: string
+  numero_lote: string
+  cantidad_inicial: number
+  cantidad_actual: number
+  fecha_fabricacion?: string
   fecha_caducidad: string
   fecha_ingreso: string
-  estado: 'Disponible' | 'No Disponible' | 'Cuarentena'
+  ubicacion_fisica?: string
+  temperatura_almacenamiento?: string
+  stock_minimo: number
+  stock_maximo?: number
+  estado: 'disponible' | 'cuarentena' | 'vencido' | 'agotado'
+  observaciones?: string
   created_at: string
+  updated_at: string
+  // Relaciones
+  medication?: Medication
+  health_center?: HealthCenter
+  supplier?: Supplier
+}
+
+export interface Supplier {
+  id: string
+  nombre: string
+  rfc?: string
+  razon_social?: string
+  direccion?: string
+  ciudad?: string
+  estado?: string
+  telefono?: string
+  email?: string
+  contacto_nombre?: string
+  contacto_telefono?: string
+  terminos_pago?: string
+  dias_credito: number
+  calificacion?: number
+  notas?: string
+  is_active: boolean
+  created_at: string
+  updated_at: string
 }
 
 export interface Alert {
