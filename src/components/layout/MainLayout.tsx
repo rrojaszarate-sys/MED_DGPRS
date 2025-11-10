@@ -8,7 +8,8 @@ import {
   Settings,
   FileText,
   Truck,
-  TrendingUp
+  TrendingUp,
+  FileCheck
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { CentroSelector } from '../dashboard/CentroSelector'
@@ -26,6 +27,7 @@ export function MainLayout({ children }: MainLayoutProps) {
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Inventario', href: '/inventario', icon: Package },
     { name: 'Proveedores', href: '/proveedores', icon: Truck },
+    { name: 'Contratos', href: '/contratos', icon: FileCheck },
     { name: 'Movimientos', href: '/movimientos', icon: TrendingUp },
     { name: 'Alertas', href: '/alertas', icon: Bell },
     { name: 'Reportes', href: '/reportes', icon: FileText },

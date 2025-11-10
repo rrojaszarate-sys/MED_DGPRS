@@ -7,6 +7,7 @@ import { AdminPage } from './pages/AdminPage'
 import { ReportsPage } from './pages/ReportsPage'
 import { SuppliersPage } from './pages/SuppliersPage'
 import { MovementsPage } from './pages/MovementsPage'
+import { ContractsPage } from './pages/ContractsPage'
 import { AuthProvider } from './context/AuthContext'
 import { CentroProvider } from './context/CentroContext'
 import { ToastProvider } from './components/ui/Toast'
@@ -68,6 +69,14 @@ function App() {
                 <ProtectedRoute>
                   <MainLayout>
                     <MovementsPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/contratos" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ContractsPage />
                   </MainLayout>
                 </ProtectedRoute>
               } />

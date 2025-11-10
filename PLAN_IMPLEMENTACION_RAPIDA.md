@@ -65,12 +65,14 @@
 
 ---
 
-### FASE 5: Contratos (45 min)
-**Archivos a crear:**
-- [ ] `src/hooks/useContracts.ts`
-- [ ] `src/pages/ContractsPage.tsx`
-- [ ] `src/components/contracts/ContractFormModal.tsx`
-- [ ] `src/components/contracts/ContractItemsTable.tsx` (anidado)
+### FASE 5: Contratos (45 min) - ✅ COMPLETADA
+**Archivos creados:**
+- [x] `src/hooks/useContracts.ts`
+- [x] `src/pages/ContractsPage.tsx`
+- [x] `src/components/contracts/ContractFormModal.tsx`
+- [x] `src/components/contracts/ContractItemsTable.tsx` (anidado)
+- [x] Interfaces Contract y ContractItem agregadas a types
+- [x] Rutas y navegación agregadas
 
 **Formulario de Contrato:**
 - codigo_contrato
@@ -154,13 +156,13 @@
 | 2. Proveedores | 30 min | ✅ COMPLETO |
 | 3. Lotes | 30 min | ✅ COMPLETO |
 | 4. Movimientos | 20 min | ✅ COMPLETO |
-| 5. Contratos | 45 min | ⏳ Pendiente |
+| 5. Contratos | 45 min | ✅ COMPLETO |
 | 6. Instituciones/Centros | 20 min | ⏳ Pendiente |
 | 7. Dashboards | 30 min | ⏳ Pendiente |
 | 8. Reportes | 20 min | ⏳ Pendiente |
 | 9. Secundarios | 30 min | ⏳ Pendiente |
 | 10. Verificación | 15 min | ⏳ Pendiente |
-| **TOTAL** | **4h 20min** | **40% completo** |
+| **TOTAL** | **4h 20min** | **50% completo** |
 
 ---
 
@@ -178,5 +180,5 @@ Al completar todas las fases:
 
 ---
 
-**✅ FASES 1-4 COMPLETADAS**
-**🔄 INICIANDO FASE 5: Contratos con items anidados...**
+**✅ FASES 1-5 COMPLETADAS (50% del sistema)**
+**🔄 INICIANDO FASE 6: Instituciones y Centros de Salud...**

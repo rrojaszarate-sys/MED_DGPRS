@@ -126,6 +126,38 @@ export interface BatchMovement {
   metadata?: Record<string, any>
 }
 
+export interface Contract {
+  id: string
+  codigo_contrato: string
+  supplier_id: string
+  fecha_inicio: string
+  fecha_fin: string
+  monto_total?: number
+  estado: 'borrador' | 'activo' | 'vencido' | 'cancelado'
+  pdf_url?: string
+  firmado_por?: string
+  fecha_firma?: string
+  observaciones?: string
+  created_at: string
+  // Relaciones
+  supplier?: Supplier
+  items?: ContractItem[]
+}
+
+export interface ContractItem {
+  id: string
+  contract_id: string
+  medication_catalog_id: string
+  cantidad_comprometida: number
+  precio_unitario?: number
+  center_destino_id?: string
+  fecha_estimada_entrega?: string
+  created_at: string
+  // Relaciones
+  medication_catalog?: MedicationCatalog
+  center_destino?: HealthCenter
+}
+
 export interface AuditLog {
   id: string
   user_id?: string
