@@ -6,6 +6,7 @@ import { AlertasPage } from './pages/AlertasPage'
 import { AdminPage } from './pages/AdminPage'
 import { ReportsPage } from './pages/ReportsPage'
 import { SuppliersPage } from './pages/SuppliersPage'
+import { MovementsPage } from './pages/MovementsPage'
 import { AuthProvider } from './context/AuthContext'
 import { CentroProvider } from './context/CentroContext'
 import { ToastProvider } from './components/ui/Toast'
@@ -59,6 +60,14 @@ function App() {
                 <ProtectedRoute>
                   <MainLayout>
                     <SuppliersPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/movimientos" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <MovementsPage />
                   </MainLayout>
                 </ProtectedRoute>
               } />

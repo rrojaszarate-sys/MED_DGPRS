@@ -50,11 +50,12 @@
 
 ---
 
-### FASE 4: Movimientos/Historial (20 min)
-**Archivos a crear:**
-- [ ] `src/pages/MovementsPage.tsx`
-- [ ] `src/hooks/useMovements.ts`
-- [ ] `src/components/movements/MovementTimeline.tsx`
+### FASE 4: Movimientos/Historial (20 min) - ✅ COMPLETADA
+**Archivos creados:**
+- [x] `src/pages/MovementsPage.tsx`
+- [x] `src/hooks/useMovements.ts`
+- [x] `src/components/movements/MovementTimeline.tsx`
+- [x] Rutas y navegación agregadas
 
 **Mostrar:**
 - Timeline de todos los movimientos
@@ -152,14 +153,14 @@
 | 1. Catálogos | 20 min | ✅ COMPLETO |
 | 2. Proveedores | 30 min | ✅ COMPLETO |
 | 3. Lotes | 30 min | ✅ COMPLETO |
-| 4. Movimientos | 20 min | ⏳ Pendiente |
+| 4. Movimientos | 20 min | ✅ COMPLETO |
 | 5. Contratos | 45 min | ⏳ Pendiente |
 | 6. Instituciones/Centros | 20 min | ⏳ Pendiente |
 | 7. Dashboards | 30 min | ⏳ Pendiente |
 | 8. Reportes | 20 min | ⏳ Pendiente |
 | 9. Secundarios | 30 min | ⏳ Pendiente |
 | 10. Verificación | 15 min | ⏳ Pendiente |
-| **TOTAL** | **4h 20min** | **30% completo** |
+| **TOTAL** | **4h 20min** | **40% completo** |
 
 ---
 
@@ -177,5 +178,5 @@ Al completar todas las fases:
 
 ---
 
-**✅ FASES 1-3 COMPLETADAS**
-**🔄 INICIANDO FASE 4: Movimientos/Historial...**
+**✅ FASES 1-4 COMPLETADAS**
+**🔄 INICIANDO FASE 5: Contratos con items anidados...**
