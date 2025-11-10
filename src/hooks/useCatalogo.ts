@@ -50,18 +50,33 @@ export function useCatalogo() {
 
   async function createCatalogo(catalogo: Omit<MedicationCatalog, 'id' | 'created_at'>) {
     try {
+      console.log('📤 Intentando crear medicamento en catálogo:', {
+        codigo: catalogo.codigo_medicamento,
+        nombre: catalogo.nombre_generico
+      })
+
       const { data, error: createError } = await supabase
         .from('medication_catalog')
         .insert([catalogo])
         .select()
         .single()
 
-      if (createError) throw createError
+      if (createError) {
+        console.error('❌ Error de Supabase al crear medicamento:', {
+          message: createError.message,
+          code: createError.code,
+          details: createError.details,
+          hint: createError.hint
+        })
+        throw createError
+      }
 
+      console.log('✅ Medicamento creado exitosamente:', data)
       setCatalogos((prev) => [data, ...prev])
       return { data, error: null }
     } catch (err: any) {
-      return { data: null, error: err.message }
+      console.error('❌ Error capturado en catch:', err)
+      return { data: null, error: err.message || 'Error desconocido al crear medicamento' }
     }
   }
 

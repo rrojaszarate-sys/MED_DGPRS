@@ -50,7 +50,8 @@ export function AdminPage() {
     if (selectedCatalogo) {
       const { error } = await updateCatalogo(selectedCatalogo.id, data)
       if (error) {
-        toast.error('Error al actualizar el medicamento')
+        console.error('Error al actualizar medicamento:', error)
+        toast.error(`Error al actualizar: ${error}`)
       } else {
         toast.success('Medicamento actualizado exitosamente')
         setIsModalOpen(false)
@@ -58,7 +59,17 @@ export function AdminPage() {
     } else {
       const { error } = await createCatalogo(data as Omit<MedicationCatalog, 'id' | 'created_at'>)
       if (error) {
-        toast.error('Error al crear el medicamento')
+        console.error('Error al crear medicamento:', error)
+        // Mensajes específicos según el error
+        if (error.includes('23505') || error.includes('duplicate key')) {
+          toast.error(`Error: Código de medicamento duplicado`)
+        } else if (error.includes('RLS') || error.includes('policy')) {
+          toast.error(`Error de permisos: Verifica políticas RLS en Supabase`)
+        } else if (error.includes('connection') || error.includes('network')) {
+          toast.error(`Error de conexión a base de datos`)
+        } else {
+          toast.error(`Error al crear medicamento: ${error}`)
+        }
       } else {
         toast.success('Medicamento agregado al catálogo')
         setIsModalOpen(false)

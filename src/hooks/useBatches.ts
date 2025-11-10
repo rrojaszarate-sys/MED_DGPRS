@@ -68,18 +68,34 @@ export function useBatches(centroId?: string) {
 
   async function createBatch(batch: Omit<Batch, 'id' | 'created_at' | 'updated_at'>) {
     try {
+      console.log('📦 Intentando crear lote:', {
+        medication_id: batch.medication_id,
+        numero_lote: batch.numero_lote,
+        center_id: batch.center_id
+      })
+
       const { data, error: createError } = await supabase
         .from('batches')
         .insert([batch])
         .select()
         .single()
 
-      if (createError) throw createError
+      if (createError) {
+        console.error('❌ Error de Supabase al crear lote:', {
+          message: createError.message,
+          code: createError.code,
+          details: createError.details,
+          hint: createError.hint
+        })
+        throw createError
+      }
 
+      console.log('✅ Lote creado exitosamente:', data)
       setBatches((prev) => [data, ...prev])
       return { data, error: null }
     } catch (err: any) {
-      return { data: null, error: err.message }
+      console.error('❌ Error capturado en catch:', err)
+      return { data: null, error: err.message || 'Error desconocido al crear lote' }
     }
   }
 
