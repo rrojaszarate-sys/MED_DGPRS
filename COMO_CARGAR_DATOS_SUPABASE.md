@@ -167,6 +167,11 @@ ORDER BY ubicacion_fisica;
 
 ## ⚠️ Troubleshooting (Solución de Problemas)
 
+### Error: "there is no unique or exclusion constraint matching the ON CONFLICT specification"
+
+**Problema:** Error en versión antigua del script que intentaba insertar en auth.users
+**Solución:** ✅ **YA CORREGIDO** en la versión 2.0 del script. Asegúrate de usar la versión más reciente desde GitHub
+
 ### Error: "relation does not exist"
 
 **Problema:** Las tablas no existen
