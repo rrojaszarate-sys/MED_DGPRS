@@ -656,6 +656,77 @@ Para reportar bugs o issues:
 
 ---
 
+## 📦 SCRIPTS DE CARGA DE DATOS
+
+### CARGA_MEDICAMENTOS_COMPLETA.sql
+
+**Descripción:** Script SQL para poblar la base de datos con medicamentos reales
+
+**Contenido:**
+- Creación automática de centro de salud de prueba
+- Creación de proveedor (Distribuidora Farmacéutica Nacional)
+- Contrato anual (CA-0158-2025)
+- 30+ medicamentos comunes del sector salud
+- 40+ lotes con fechas de caducidad reales
+- ~250,000 unidades de stock distribuido
+
+**Medicamentos incluidos:**
+- Antibióticos (Amoxicilina, Ciprofloxacino, Azitromicina, etc.)
+- Analgésicos (Paracetamol, Ibuprofeno, Diclofenaco)
+- Antihipertensivos (Losartán, Captopril, Enalapril)
+- Antidiabéticos (Metformina, Glibenclamida)
+- Otros (Omeprazol, Salbutamol, Atorvastatina, etc.)
+
+**Características:**
+- ✅ Especifica todas las columnas (previene errores de orden)
+- ✅ Maneja conflictos con `ON CONFLICT DO NOTHING`
+- ✅ Crea usuario del sistema automáticamente
+- ✅ Datos inventados realistas con fabricación
+- ✅ Ubicaciones físicas asignadas
+- ✅ Temperaturas de almacenamiento correctas
+- ✅ Stock mínimo y máximo calculados
+- ✅ Verificación automática al final
+
+**Audiencia:** Administradores de BD, Desarrolladores
+**Extensión:** ~900 líneas
+**Estado:** ✅ Listo para usar
+
+---
+
+### COMO_CARGAR_DATOS_SUPABASE.md
+
+**Descripción:** Guía paso a paso para ejecutar scripts de carga en Supabase
+
+**Contenido:**
+- Prerrequisitos
+- Acceso a Supabase SQL Editor
+- Verificación de migraciones
+- 3 opciones de carga (copiar/pegar, GitHub, upload)
+- Pasos de ejecución detallados
+- Consultas de verificación
+- Troubleshooting completo
+- Datos que se cargarán (tabla resumen)
+- Checklist de ejecución
+
+**Troubleshooting incluye:**
+- Error: relation does not exist
+- Error: duplicate key value
+- Error: permission denied
+- Error: syntax error
+
+**Audiencia:** Cualquier persona que configure el sistema
+**Extensión:** Guía completa ilustrada
+**Estado:** ✅ Completo
+
+**📋 Pasos rápidos:**
+1. Ir a Supabase SQL Editor
+2. Verificar que tablas existen
+3. Copiar script `CARGA_MEDICAMENTOS_COMPLETA.sql`
+4. Pegar y ejecutar
+5. Verificar con consultas
+
+---
+
 ## 📖 GLOSARIO
 
 **BaaS** - Backend as a Service
