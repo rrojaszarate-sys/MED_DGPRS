@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Search, Edit, TrendingUp } from 'lucide-react'
+import { Plus, Search, Edit, TrendingUp, Download } from 'lucide-react'
 import { useCentro } from '../context/CentroContext'
 import { useBatches } from '../hooks/useBatches'
 import { Button } from '../components/ui/Button'
@@ -8,6 +8,7 @@ import { BatchFormModal } from '../components/batches/BatchFormModal'
 import { BatchMovementModal } from '../components/batches/BatchMovementModal'
 import type { Batch, BatchMovement } from '../types'
 import { supabase } from '../lib/supabase'
+import { exportInventoryPDF, exportInventoryExcel } from '../utils/exportUtils'
 
 export function InventoryPage() {
   const { centroSeleccionado } = useCentro()
@@ -165,6 +166,26 @@ export function InventoryPage() {
           <p className="text-gray-600 mt-1">{centroSeleccionado.name}</p>
         </div>
         <div className="flex gap-2">
+          <Button
+            onClick={() => {
+              exportInventoryPDF(filteredBatches, centroSeleccionado.name)
+              toast.success('PDF generado correctamente')
+            }}
+            icon={<Download className="h-5 w-5" />}
+            variant="outline"
+          >
+            Exportar PDF
+          </Button>
+          <Button
+            onClick={() => {
+              exportInventoryExcel(filteredBatches, centroSeleccionado.name)
+              toast.success('Excel generado correctamente')
+            }}
+            icon={<Download className="h-5 w-5" />}
+            variant="outline"
+          >
+            Exportar Excel
+          </Button>
           <Button
             onClick={handleCreateBatch}
             icon={<Plus className="h-5 w-5" />}

@@ -48,16 +48,14 @@ export function AlertasPage() {
   }
 
   const handleExportPDF = () => {
-    // TODO: Pass alertas and center name when export function is implemented
-    exportAlertsPDF()
-    toast.success('Reporte de alertas PDF pendiente de implementación')
+    exportAlertsPDF(alertas, centroSeleccionado?.name || 'Sistema')
+    toast.success('Reporte de alertas PDF generado correctamente')
     setShowExportMenu(false)
   }
 
   const handleExportExcel = () => {
-    // TODO: Pass alertas and center name when export function is implemented
-    exportAlertsExcel()
-    toast.success('Reporte de alertas Excel pendiente de implementación')
+    exportAlertsExcel(alertas, centroSeleccionado?.name || 'Sistema')
+    toast.success('Reporte de alertas Excel generado correctamente')
     setShowExportMenu(false)
   }
 

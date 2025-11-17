@@ -11,7 +11,10 @@ import {
   TrendingUp,
   FileCheck,
   Building2,
-  MapPin
+  MapPin,
+  Thermometer,
+  Users,
+  ClipboardList
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { CentroSelector } from '../dashboard/CentroSelector'
@@ -28,6 +31,8 @@ export function MainLayout({ children }: MainLayoutProps) {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Inventario', href: '/inventario', icon: Package },
+    { name: 'Mapa Almacén', href: '/mapa-almacen', icon: MapPin },
+    { name: 'Temperatura', href: '/temperatura', icon: Thermometer },
     { name: 'Proveedores', href: '/proveedores', icon: Truck },
     { name: 'Contratos', href: '/contratos', icon: FileCheck },
     { name: 'Movimientos', href: '/movimientos', icon: TrendingUp },
@@ -37,8 +42,10 @@ export function MainLayout({ children }: MainLayoutProps) {
 
   const adminNavigation = [
     { name: 'Administración', href: '/admin', icon: Settings },
+    { name: 'Usuarios', href: '/usuarios', icon: Users },
+    { name: 'Auditoría', href: '/auditoria', icon: ClipboardList },
     { name: 'Instituciones', href: '/instituciones', icon: Building2 },
-    { name: 'Centros', href: '/centros', icon: MapPin },
+    { name: 'Centros', href: '/centros', icon: Building2 },
   ]
 
   const isActive = (path: string) => location.pathname === path

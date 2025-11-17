@@ -10,6 +10,10 @@ import { MovementsPage } from './pages/MovementsPage'
 import { ContractsPage } from './pages/ContractsPage'
 import { InstitutionsPage } from './pages/InstitutionsPage'
 import { HealthCentersPage } from './pages/HealthCentersPage'
+import { WarehouseMapPage } from './pages/WarehouseMapPage'
+import { TemperatureMonitoringPage } from './pages/TemperatureMonitoringPage'
+import { UsersManagementPage } from './pages/UsersManagementPage'
+import { AuditLogPage } from './pages/AuditLogPage'
 import { AuthProvider } from './context/AuthContext'
 import { CentroProvider } from './context/CentroContext'
 import { ToastProvider } from './components/ui/Toast'
@@ -108,6 +112,42 @@ function App() {
                   <RoleGuard allowedRoles={['super_admin', 'admin_center']}>
                     <MainLayout>
                       <HealthCentersPage />
+                    </MainLayout>
+                  </RoleGuard>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/mapa-almacen" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <WarehouseMapPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/temperatura" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <TemperatureMonitoringPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/usuarios" element={
+                <ProtectedRoute>
+                  <RoleGuard allowedRoles={['super_admin', 'admin_center']}>
+                    <MainLayout>
+                      <UsersManagementPage />
+                    </MainLayout>
+                  </RoleGuard>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/auditoria" element={
+                <ProtectedRoute>
+                  <RoleGuard allowedRoles={['super_admin', 'admin_center']}>
+                    <MainLayout>
+                      <AuditLogPage />
                     </MainLayout>
                   </RoleGuard>
                 </ProtectedRoute>

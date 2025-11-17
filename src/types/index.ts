@@ -3,6 +3,7 @@ export interface User {
   email: string
   full_name?: string
   role: 'super_admin' | 'admin_center' | 'inventory_user' | 'read_only'
+  center_id?: string
   avatar_url?: string
   is_active: boolean
   created_at: string
