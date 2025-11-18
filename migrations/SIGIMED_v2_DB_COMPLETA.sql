@@ -9111,5 +9111,69 @@ SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename IN (
 SELECT 'Sistema listo para usar. Credenciales de prueba: admin@sigimed.com / Admin123!' AS proximo_paso;
 
 -- ============================================
+-- TRADUCCIÓN DE TABLAS AL ESPAÑOL
+-- ============================================
+-- Renombrar todas las tablas que están en inglés a español
+-- PostgreSQL actualiza automáticamente las referencias (FK, índices, etc.)
+
+-- Tablas Core
+ALTER TABLE IF EXISTS suppliers RENAME TO proveedores;
+ALTER TABLE IF EXISTS batches RENAME TO lotes;
+ALTER TABLE IF EXISTS batch_movements RENAME TO movimientos_lotes;
+ALTER TABLE IF EXISTS permissions RENAME TO permisos;
+ALTER TABLE IF EXISTS user_roles RENAME TO roles_usuario;
+
+-- Módulo de Contratos
+ALTER TABLE IF EXISTS contract_deliveries RENAME TO entregas_contrato;
+ALTER TABLE IF EXISTS contract_evaluations RENAME TO evaluaciones_contrato;
+ALTER TABLE IF EXISTS contract_amendments RENAME TO modificaciones_contrato;
+
+-- Módulo GS1 Barcoding
+ALTER TABLE IF EXISTS public.gs1_company_config RENAME TO gs1_configuracion_empresa;
+ALTER TABLE IF EXISTS public.barcode_labels RENAME TO etiquetas_codigo_barras;
+ALTER TABLE IF EXISTS public.barcode_scans RENAME TO escaneos_codigo_barras;
+
+-- Módulo DSCSA Serialization
+ALTER TABLE IF EXISTS public.medication_serializations RENAME TO serializaciones_medicamentos;
+ALTER TABLE IF EXISTS public.dscsa_transaction_history RENAME TO dscsa_historial_transacciones;
+ALTER TABLE IF EXISTS public.epcis_events RENAME TO epcis_eventos;
+ALTER TABLE IF EXISTS public.dscsa_verification_requests RENAME TO dscsa_solicitudes_verificacion;
+
+-- Módulo Drug Interactions
+ALTER TABLE IF EXISTS public.active_ingredients RENAME TO ingredientes_activos;
+ALTER TABLE IF EXISTS public.medication_active_ingredients RENAME TO medicamentos_ingredientes_activos;
+ALTER TABLE IF EXISTS public.drug_interactions RENAME TO interacciones_medicamentos;
+ALTER TABLE IF EXISTS public.drug_contraindications RENAME TO contraindicaciones_medicamentos;
+ALTER TABLE IF EXISTS public.interaction_alerts RENAME TO alertas_interacciones;
+
+-- Módulo QR Codes & Enhanced Exports
+ALTER TABLE IF EXISTS public.qr_codes RENAME TO codigos_qr;
+ALTER TABLE IF EXISTS public.qr_code_scans RENAME TO escaneos_codigos_qr;
+ALTER TABLE IF EXISTS public.enhanced_exports RENAME TO exportaciones_avanzadas;
+
+-- Módulo HL7 FHIR
+ALTER TABLE IF EXISTS public.fhir_endpoints RENAME TO fhir_puntos_conexion;
+ALTER TABLE IF EXISTS public.fhir_resource_mappings RENAME TO fhir_mapeos_recursos;
+ALTER TABLE IF EXISTS public.fhir_transactions RENAME TO fhir_transacciones;
+ALTER TABLE IF EXISTS public.fhir_identifiers RENAME TO fhir_identificadores;
+
+-- Módulo Notifications
+ALTER TABLE IF EXISTS public.notification_templates RENAME TO plantillas_notificacion;
+ALTER TABLE IF EXISTS public.user_notification_preferences RENAME TO preferencias_notificacion_usuario;
+ALTER TABLE IF EXISTS public.notification_queue RENAME TO cola_notificaciones;
+ALTER TABLE IF EXISTS public.notification_delivery_log RENAME TO registro_entrega_notificaciones;
+ALTER TABLE IF EXISTS public.in_app_notifications RENAME TO notificaciones_app;
+
+-- Módulo Analytics Dashboard
+ALTER TABLE IF EXISTS public.kpi_definitions RENAME TO definiciones_kpi;
+ALTER TABLE IF EXISTS public.kpi_snapshots RENAME TO instantaneas_kpi;
+ALTER TABLE IF EXISTS public.dashboard_widgets RENAME TO widgets_tablero;
+ALTER TABLE IF EXISTS public.user_dashboards RENAME TO tableros_usuario;
+ALTER TABLE IF EXISTS public.analytics_events RENAME TO eventos_analitica;
+
+-- Mensaje de confirmación
+SELECT '✅ TODAS LAS TABLAS TRADUCIDAS AL ESPAÑOL' AS resultado;
+
+-- ============================================
 -- FIN DE INSTALACIÓN
 -- ============================================
