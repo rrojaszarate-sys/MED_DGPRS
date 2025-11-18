@@ -14,7 +14,7 @@ export function useCentros(includeInactive = false) {
 
   // Real-time subscriptions
   useRealtime({
-    table: 'health_centers',
+    table: 'centros_salud',
     onInsert: (newCenter: HealthCenter) => {
       if (includeInactive || newCenter.is_active) {
         setCentros((prev) => [newCenter, ...prev])
@@ -36,7 +36,7 @@ export function useCentros(includeInactive = false) {
       setError(null)
 
       let query = supabase
-        .from('health_centers')
+        .from('centros_salud')
         .select('*')
         .order('name')
 
@@ -59,7 +59,7 @@ export function useCentros(includeInactive = false) {
   async function createCentro(centro: Omit<HealthCenter, 'id'>) {
     try {
       const { data, error: createError } = await supabase
-        .from('health_centers')
+        .from('centros_salud')
         .insert([centro])
         .select()
         .single()
@@ -76,7 +76,7 @@ export function useCentros(includeInactive = false) {
   async function updateCentro(id: string, updates: Partial<HealthCenter>) {
     try {
       const { data, error: updateError } = await supabase
-        .from('health_centers')
+        .from('centros_salud')
         .update(updates)
         .eq('id', id)
         .select()
@@ -96,7 +96,7 @@ export function useCentros(includeInactive = false) {
   async function deleteCentro(id: string) {
     try {
       const { error: deleteError } = await supabase
-        .from('health_centers')
+        .from('centros_salud')
         .delete()
         .eq('id', id)
 
