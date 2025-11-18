@@ -16,12 +16,12 @@ export function useAlertas(centroId?: string) {
 
   // Real-time subscriptions for alerts
   useRealtime({
-    table: 'alertas_medicamentos',
+    table: 'alertas_interacciones',
     filter: centroId ? `centro_id=eq.${centroId}` : undefined,
     onInsert: async (newAlert: Alert) => {
       // Fetch full alert with medication data
       const { data } = await supabase
-        .from('alertas_medicamentos')
+        .from('alertas_interacciones')
         .select('*, medicamento:medications(*)')
         .eq('id', newAlert.id)
         .single()
@@ -33,7 +33,7 @@ export function useAlertas(centroId?: string) {
     onUpdate: async (updatedAlert: Alert) => {
       // Fetch full alert with medication data
       const { data } = await supabase
-        .from('alertas_medicamentos')
+        .from('alertas_interacciones')
         .select('*, medicamento:medications(*)')
         .eq('id', updatedAlert.id)
         .single()
@@ -60,7 +60,7 @@ export function useAlertas(centroId?: string) {
       setError(null)
 
       let query = supabase
-        .from('alertas_medicamentos')
+        .from('alertas_interacciones')
         .select(`
           *,
           medicamento:medications(*)
@@ -88,7 +88,7 @@ export function useAlertas(centroId?: string) {
   async function marcarComoVisto(alertaId: string, userId: string) {
     try {
       const { error: updateError } = await supabase
-        .from('alertas_medicamentos')
+        .from('alertas_interacciones')
         .update({
           visto: true,
           visto_por: userId,
@@ -112,7 +112,7 @@ export function useAlertas(centroId?: string) {
   async function resolverAlerta(alertaId: string, userId: string) {
     try {
       const { error: updateError } = await supabase
-        .from('alertas_medicamentos')
+        .from('alertas_interacciones')
         .update({
           resuelta: true,
           resuelta_por: userId,

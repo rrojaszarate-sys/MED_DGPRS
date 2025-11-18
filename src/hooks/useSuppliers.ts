@@ -14,7 +14,7 @@ export function useSuppliers() {
 
   // Real-time subscriptions
   useRealtime({
-    table: 'suppliers',
+    table: 'proveedores',
     onInsert: (newSupplier: Supplier) => {
       setSuppliers((prev) => [newSupplier, ...prev])
     },
@@ -34,7 +34,7 @@ export function useSuppliers() {
       setError(null)
 
       const { data, error: fetchError } = await supabase
-        .from('suppliers')
+        .from('proveedores')
         .select('*')
         .order('nombre', { ascending: true })
 
@@ -51,7 +51,7 @@ export function useSuppliers() {
   async function createSupplier(supplier: Omit<Supplier, 'id' | 'created_at' | 'updated_at'>) {
     try {
       const { data, error: createError } = await supabase
-        .from('suppliers')
+        .from('proveedores')
         .insert([supplier])
         .select()
         .single()
@@ -68,7 +68,7 @@ export function useSuppliers() {
   async function updateSupplier(id: string, updates: Partial<Supplier>) {
     try {
       const { data, error: updateError } = await supabase
-        .from('suppliers')
+        .from('proveedores')
         .update(updates)
         .eq('id', id)
         .select()
@@ -88,7 +88,7 @@ export function useSuppliers() {
   async function deleteSupplier(id: string) {
     try {
       const { error: deleteError } = await supabase
-        .from('suppliers')
+        .from('proveedores')
         .delete()
         .eq('id', id)
 

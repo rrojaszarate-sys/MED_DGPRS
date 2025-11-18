@@ -14,7 +14,7 @@ export function useCatalogo() {
 
   // Real-time subscriptions
   useRealtime({
-    table: 'medication_catalog',
+    table: 'catalogo_medicamentos',
     onInsert: (newCatalog: MedicationCatalog) => {
       setCatalogos((prev) => [newCatalog, ...prev])
     },
@@ -34,7 +34,7 @@ export function useCatalogo() {
       setError(null)
 
       const { data, error: fetchError } = await supabase
-        .from('medication_catalog')
+        .from('catalogo_medicamentos')
         .select('*')
         .order('nombre', { ascending: true })
 
@@ -51,7 +51,7 @@ export function useCatalogo() {
   async function createCatalogo(catalogo: Omit<MedicationCatalog, 'id' | 'created_at'>) {
     try {
       const { data, error: createError } = await supabase
-        .from('medication_catalog')
+        .from('catalogo_medicamentos')
         .insert([catalogo])
         .select()
         .single()
@@ -68,7 +68,7 @@ export function useCatalogo() {
   async function updateCatalogo(id: string, updates: Partial<MedicationCatalog>) {
     try {
       const { data, error: updateError } = await supabase
-        .from('medication_catalog')
+        .from('catalogo_medicamentos')
         .update(updates)
         .eq('id', id)
         .select()
@@ -88,7 +88,7 @@ export function useCatalogo() {
   async function deleteCatalogo(id: string) {
     try {
       const { error: deleteError } = await supabase
-        .from('medication_catalog')
+        .from('catalogo_medicamentos')
         .delete()
         .eq('id', id)
 

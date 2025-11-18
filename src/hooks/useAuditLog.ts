@@ -50,7 +50,7 @@ export function useAuditLog() {
       setError(null);
 
       let query = supabase
-        .from('audit_log')
+        .from('registro_auditoria')
         .select('*', { count: 'exact' })
         .order('created_at', { ascending: false });
 
@@ -117,7 +117,7 @@ export function useAuditLog() {
       setError(null);
 
       const { data, error: queryError } = await supabase
-        .from('audit_log')
+        .from('registro_auditoria')
         .select('*')
         .eq('entity_type', entityType)
         .eq('entity_id', entityId)
@@ -147,7 +147,7 @@ export function useAuditLog() {
       setError(null);
 
       let query = supabase
-        .from('audit_log')
+        .from('registro_auditoria')
         .select('action_type, entity_type, severity, result, created_at');
 
       if (dateFrom) {
@@ -205,7 +205,7 @@ export function useAuditLog() {
       setError(null);
 
       const { data, error: queryError } = await supabase
-        .from('audit_log')
+        .from('registro_auditoria')
         .select('*')
         .eq('user_id', userId)
         .order('created_at', { ascending: false })

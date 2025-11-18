@@ -16,7 +16,7 @@ export function useUsers() {
       .on('postgres_changes', {
         event: '*',
         schema: 'public',
-        table: 'users_profiles'
+        table: 'perfiles_usuario'
       }, fetchUsers)
       .subscribe()
 
@@ -29,10 +29,10 @@ export function useUsers() {
     try {
       setLoading(true)
       const { data, error: fetchError } = await supabase
-        .from('users_profiles')
+        .from('perfiles_usuario')
         .select(`
           *,
-          health_center:health_centers(id, name, code)
+          health_center:centros_salud(id, name, code)
         `)
         .order('created_at', { ascending: false })
 
@@ -66,7 +66,7 @@ export function useUsers() {
       // Crear perfil de usuario
       if (authData.user) {
         const { error: profileError } = await supabase
-          .from('users_profiles')
+          .from('perfiles_usuario')
           .insert([{
             id: authData.user.id,
             email,
@@ -92,7 +92,7 @@ export function useUsers() {
   const updateUser = async (id: string, data: Partial<User>) => {
     try {
       const result = await supabase
-        .from('users_profiles')
+        .from('perfiles_usuario')
         .update(data)
         .eq('id', id)
         .select()
@@ -112,7 +112,7 @@ export function useUsers() {
     try {
       // Desactivar usuario en lugar de eliminar
       const result = await supabase
-        .from('users_profiles')
+        .from('perfiles_usuario')
         .update({ is_active: false })
         .eq('id', id)
 

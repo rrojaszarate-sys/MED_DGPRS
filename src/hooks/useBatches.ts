@@ -16,7 +16,7 @@ export function useBatches(centroId?: string) {
 
   // Real-time subscriptions
   useRealtime({
-    table: 'batches',
+    table: 'lotes',
     filter: centroId ? `center_id=eq.${centroId}` : undefined,
     onInsert: (newBatch: Batch) => {
       if (!centroId || newBatch.center_id === centroId) {
@@ -41,7 +41,7 @@ export function useBatches(centroId?: string) {
       setError(null)
 
       let query = supabase
-        .from('batches')
+        .from('lotes')
         .select(`
           *,
           medication:medications(id, nombre, categoria, unidad_medida),
@@ -69,7 +69,7 @@ export function useBatches(centroId?: string) {
   async function createBatch(batch: Omit<Batch, 'id' | 'created_at' | 'updated_at'>) {
     try {
       const { data, error: createError } = await supabase
-        .from('batches')
+        .from('lotes')
         .insert([batch])
         .select()
         .single()
@@ -86,7 +86,7 @@ export function useBatches(centroId?: string) {
   async function updateBatch(id: string, updates: Partial<Batch>) {
     try {
       const { data, error: updateError } = await supabase
-        .from('batches')
+        .from('lotes')
         .update(updates)
         .eq('id', id)
         .select()
@@ -106,7 +106,7 @@ export function useBatches(centroId?: string) {
   async function deleteBatch(id: string) {
     try {
       const { error: deleteError } = await supabase
-        .from('batches')
+        .from('lotes')
         .delete()
         .eq('id', id)
 

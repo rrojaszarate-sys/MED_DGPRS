@@ -96,7 +96,7 @@ export function useBatchMovements() {
       setError(null);
 
       const { data, error: queryError } = await supabase
-        .from('batch_movements')
+        .from('movimientos_lotes')
         .select('*')
         .eq('medication_id', medicationId)
         .order('created_at', { ascending: false });
@@ -125,7 +125,7 @@ export function useBatchMovements() {
       setError(null);
 
       const { data, error: queryError } = await supabase
-        .from('batch_movements')
+        .from('movimientos_lotes')
         .select(`
           *,
           medications!inner(center_id)
