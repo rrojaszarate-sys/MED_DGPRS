@@ -4,7 +4,7 @@
 -- Descripción: Archivo consolidado con 7 migraciones avanzadas (11-17)
 -- Fecha: 2025-11-18
 -- Autor: Sistema Automático SIGIMED
--- Versión: 2.0.0
+-- Versión: 2.0.1 (actualizado)
 --
 -- IMPORTANTE:
 -- Este archivo contiene TODAS las migraciones 11-17 en un solo archivo.
@@ -44,6 +44,9 @@
 --
 -- DOCUMENTACIÓN COMPLETA:
 -- Ver: IMPLEMENTACION_FUNCIONALIDADES_AVANZADAS.md
+--
+-- CAMBIOS v2.0.1:
+-- - Fix: Renombrado columna 'references' a 'reference_list' (palabra reservada SQL)
 --
 -- ============================================
 
@@ -1372,7 +1375,7 @@ CREATE TABLE IF NOT EXISTS public.drug_interactions (
   documentation TEXT CHECK (documentation IN ('excellent', 'good', 'fair', 'poor')),
 
   -- Referencias
-  references TEXT[], -- Referencias bibliográficas
+  reference_list TEXT[], -- Referencias bibliográficas
   source TEXT, -- Fuente: 'DrugBank', 'Lexicomp', 'Micromedex', 'FDA', etc.
   source_id TEXT, -- ID en la fuente externa
 
