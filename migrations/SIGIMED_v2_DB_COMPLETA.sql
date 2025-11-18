@@ -768,7 +768,7 @@ CREATE INDEX IF NOT EXISTS idx_kpi_definitions_category ON definiciones_kpi(kpi_
 CREATE TABLE instantaneas_kpi (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   kpi_id UUID REFERENCES definiciones_kpi(id),
-  center_id UUID REFERENCES centros_salud(id),
+  center_id UUID REFERENCES health_centers(id),
   kpi_value DECIMAL(15,2) NOT NULL,
   kpi_status TEXT CHECK (kpi_status IN ('normal', 'warning', 'critical')) DEFAULT 'normal',
   metadata JSONB,
@@ -813,7 +813,7 @@ CREATE TABLE eventos_analitica (
   entity_type TEXT,
   entity_id UUID,
   user_id UUID,
-  center_id UUID REFERENCES centros_salud(id),
+  center_id UUID REFERENCES health_centers(id),
   event_data JSONB,
   session_id TEXT,
   ip_address INET,
