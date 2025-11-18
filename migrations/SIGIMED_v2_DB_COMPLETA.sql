@@ -98,8 +98,8 @@ CREATE TABLE health_centers (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_health_centers_code ON health_centers(code);
-CREATE INDEX idx_health_centers_is_active ON health_centers(is_active);
+CREATE INDEX IF NOT EXISTS idx_health_centers_code ON health_centers(code);
+CREATE INDEX IF NOT EXISTS idx_health_centers_is_active ON health_centers(is_active);
 
 CREATE TABLE medication_catalog (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -121,8 +121,8 @@ CREATE TABLE medication_catalog (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_medication_catalog_codigo ON medication_catalog(codigo_medicamento);
-CREATE INDEX idx_medication_catalog_nombre ON medication_catalog(nombre_generico);
+CREATE INDEX IF NOT EXISTS idx_medication_catalog_codigo ON medication_catalog(codigo_medicamento);
+CREATE INDEX IF NOT EXISTS idx_medication_catalog_nombre ON medication_catalog(nombre_generico);
 
 CREATE TABLE medications (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -139,9 +139,9 @@ CREATE TABLE medications (
   UNIQUE(catalog_id, center_id)
 );
 
-CREATE INDEX idx_medications_catalog ON medications(catalog_id);
-CREATE INDEX idx_medications_center ON medications(center_id);
-CREATE INDEX idx_medications_nombre ON medications(nombre);
+CREATE INDEX IF NOT EXISTS idx_medications_catalog ON medications(catalog_id);
+CREATE INDEX IF NOT EXISTS idx_medications_center ON medications(center_id);
+CREATE INDEX IF NOT EXISTS idx_medications_nombre ON medications(nombre);
 
 CREATE TABLE suppliers (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -164,9 +164,9 @@ CREATE TABLE suppliers (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_suppliers_nombre ON suppliers(nombre);
-CREATE INDEX idx_suppliers_rfc ON suppliers(rfc);
-CREATE INDEX idx_suppliers_is_active ON suppliers(is_active);
+CREATE INDEX IF NOT EXISTS idx_suppliers_nombre ON suppliers(nombre);
+CREATE INDEX IF NOT EXISTS idx_suppliers_rfc ON suppliers(rfc);
+CREATE INDEX IF NOT EXISTS idx_suppliers_is_active ON suppliers(is_active);
 
 CREATE TABLE batches (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -190,12 +190,12 @@ CREATE TABLE batches (
   UNIQUE(medication_id, numero_lote, center_id)
 );
 
-CREATE INDEX idx_batches_medication ON batches(medication_id);
-CREATE INDEX idx_batches_center ON batches(center_id);
-CREATE INDEX idx_batches_supplier ON batches(supplier_id);
-CREATE INDEX idx_batches_fecha_caducidad ON batches(fecha_caducidad);
-CREATE INDEX idx_batches_estado ON batches(estado);
-CREATE INDEX idx_batches_numero_lote ON batches(numero_lote);
+CREATE INDEX IF NOT EXISTS idx_batches_medication ON batches(medication_id);
+CREATE INDEX IF NOT EXISTS idx_batches_center ON batches(center_id);
+CREATE INDEX IF NOT EXISTS idx_batches_supplier ON batches(supplier_id);
+CREATE INDEX IF NOT EXISTS idx_batches_fecha_caducidad ON batches(fecha_caducidad);
+CREATE INDEX IF NOT EXISTS idx_batches_estado ON batches(estado);
+CREATE INDEX IF NOT EXISTS idx_batches_numero_lote ON batches(numero_lote);
 
 CREATE TABLE batch_movements (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -219,11 +219,11 @@ CREATE TABLE batch_movements (
   metadata JSONB DEFAULT '{}'::jsonb
 );
 
-CREATE INDEX idx_batch_movements_batch ON batch_movements(batch_id);
-CREATE INDEX idx_batch_movements_medication ON batch_movements(medication_id);
-CREATE INDEX idx_batch_movements_center ON batch_movements(center_id);
-CREATE INDEX idx_batch_movements_tipo ON batch_movements(tipo_movimiento);
-CREATE INDEX idx_batch_movements_created ON batch_movements(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_batch_movements_batch ON batch_movements(batch_id);
+CREATE INDEX IF NOT EXISTS idx_batch_movements_medication ON batch_movements(medication_id);
+CREATE INDEX IF NOT EXISTS idx_batch_movements_center ON batch_movements(center_id);
+CREATE INDEX IF NOT EXISTS idx_batch_movements_tipo ON batch_movements(tipo_movimiento);
+CREATE INDEX IF NOT EXISTS idx_batch_movements_created ON batch_movements(created_at DESC);
 
 CREATE TABLE user_centers (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -234,8 +234,8 @@ CREATE TABLE user_centers (
   UNIQUE(user_id, center_id)
 );
 
-CREATE INDEX idx_user_centers_user ON user_centers(user_id);
-CREATE INDEX idx_user_centers_center ON user_centers(center_id);
+CREATE INDEX IF NOT EXISTS idx_user_centers_user ON user_centers(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_centers_center ON user_centers(center_id);
 
 CREATE TABLE audit_log (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -264,11 +264,11 @@ CREATE TABLE audit_log (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_audit_log_user ON audit_log(user_id);
-CREATE INDEX idx_audit_log_action ON audit_log(action_type);
-CREATE INDEX idx_audit_log_entity ON audit_log(entity_type, entity_id);
-CREATE INDEX idx_audit_log_created ON audit_log(created_at DESC);
-CREATE INDEX idx_audit_log_severity ON audit_log(severity);
+CREATE INDEX IF NOT EXISTS idx_audit_log_user ON audit_log(user_id);
+CREATE INDEX IF NOT EXISTS idx_audit_log_action ON audit_log(action_type);
+CREATE INDEX IF NOT EXISTS idx_audit_log_entity ON audit_log(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_audit_log_created ON audit_log(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_audit_log_severity ON audit_log(severity);
 
 CREATE TABLE contracts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -285,9 +285,9 @@ CREATE TABLE contracts (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_contracts_supplier ON contracts(supplier_id);
-CREATE INDEX idx_contracts_estado ON contracts(estado);
-CREATE INDEX idx_contracts_codigo ON contracts(codigo_contrato);
+CREATE INDEX IF NOT EXISTS idx_contracts_supplier ON contracts(supplier_id);
+CREATE INDEX IF NOT EXISTS idx_contracts_estado ON contracts(estado);
+CREATE INDEX IF NOT EXISTS idx_contracts_codigo ON contracts(codigo_contrato);
 
 CREATE TABLE contract_items (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -300,8 +300,8 @@ CREATE TABLE contract_items (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_contract_items_contract ON contract_items(contract_id);
-CREATE INDEX idx_contract_items_medication ON contract_items(medication_catalog_id);
+CREATE INDEX IF NOT EXISTS idx_contract_items_contract ON contract_items(contract_id);
+CREATE INDEX IF NOT EXISTS idx_contract_items_medication ON contract_items(medication_catalog_id);
 
 CREATE TABLE storage_inspections (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -318,8 +318,8 @@ CREATE TABLE storage_inspections (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_storage_inspections_center ON storage_inspections(center_id);
-CREATE INDEX idx_storage_inspections_fecha ON storage_inspections(fecha_inspeccion DESC);
+CREATE INDEX IF NOT EXISTS idx_storage_inspections_center ON storage_inspections(center_id);
+CREATE INDEX IF NOT EXISTS idx_storage_inspections_fecha ON storage_inspections(fecha_inspeccion DESC);
 
 CREATE TABLE documentos_comprobantes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -341,9 +341,9 @@ CREATE TABLE documentos_comprobantes (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_documentos_tipo ON documentos_comprobantes(tipo_documento);
-CREATE INDEX idx_documentos_referencia ON documentos_comprobantes(referencia_tipo, referencia_id);
-CREATE INDEX idx_documentos_uploaded ON documentos_comprobantes(uploaded_by);
+CREATE INDEX IF NOT EXISTS idx_documentos_tipo ON documentos_comprobantes(tipo_documento);
+CREATE INDEX IF NOT EXISTS idx_documentos_referencia ON documentos_comprobantes(referencia_tipo, referencia_id);
+CREATE INDEX IF NOT EXISTS idx_documentos_uploaded ON documentos_comprobantes(uploaded_by);
 
 SELECT '✅ Paso 2: Tablas base creadas' AS progreso;
 
@@ -376,8 +376,8 @@ CREATE TABLE gs1_gtins (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_gs1_gtins_medication ON gs1_gtins(medication_catalog_id);
-CREATE INDEX idx_gs1_gtins_gtin ON gs1_gtins(gtin);
+CREATE INDEX IF NOT EXISTS idx_gs1_gtins_medication ON gs1_gtins(medication_catalog_id);
+CREATE INDEX IF NOT EXISTS idx_gs1_gtins_gtin ON gs1_gtins(gtin);
 
 CREATE TABLE etiquetas_codigo_barras (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -396,8 +396,8 @@ CREATE TABLE etiquetas_codigo_barras (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_barcode_labels_gtin ON etiquetas_codigo_barras(gtin_id);
-CREATE INDEX idx_barcode_labels_batch ON etiquetas_codigo_barras(batch_id);
+CREATE INDEX IF NOT EXISTS idx_barcode_labels_gtin ON etiquetas_codigo_barras(gtin_id);
+CREATE INDEX IF NOT EXISTS idx_barcode_labels_batch ON etiquetas_codigo_barras(batch_id);
 
 CREATE TABLE escaneos_codigo_barras (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -417,8 +417,8 @@ CREATE TABLE escaneos_codigo_barras (
   metadata JSONB
 );
 
-CREATE INDEX idx_barcode_scans_fecha_hora ON escaneos_codigo_barras(fecha_hora DESC);
-CREATE INDEX idx_barcode_scans_type ON escaneos_codigo_barras(scan_type);
+CREATE INDEX IF NOT EXISTS idx_barcode_scans_fecha_hora ON escaneos_codigo_barras(fecha_hora DESC);
+CREATE INDEX IF NOT EXISTS idx_barcode_scans_type ON escaneos_codigo_barras(scan_type);
 
 -- MIGRACIÓN 12: DSCSA SERIALIZATION
 CREATE TABLE serializaciones_medicamentos (
@@ -441,8 +441,8 @@ CREATE TABLE serializaciones_medicamentos (
   UNIQUE(gtin, serial_number)
 );
 
-CREATE INDEX idx_serializations_sgtin ON serializaciones_medicamentos(sgtin);
-CREATE INDEX idx_serializations_batch ON serializaciones_medicamentos(batch_id);
+CREATE INDEX IF NOT EXISTS idx_serializations_sgtin ON serializaciones_medicamentos(sgtin);
+CREATE INDEX IF NOT EXISTS idx_serializations_batch ON serializaciones_medicamentos(batch_id);
 
 CREATE TABLE dscsa_historial_transacciones (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -469,8 +469,8 @@ CREATE TABLE dscsa_historial_transacciones (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_dscsa_transactions_serialization ON dscsa_historial_transacciones(serialization_id);
-CREATE INDEX idx_dscsa_transactions_date ON dscsa_historial_transacciones(transaction_date DESC);
+CREATE INDEX IF NOT EXISTS idx_dscsa_transactions_serialization ON dscsa_historial_transacciones(serialization_id);
+CREATE INDEX IF NOT EXISTS idx_dscsa_transactions_date ON dscsa_historial_transacciones(transaction_date DESC);
 
 -- MIGRACIÓN 13: DRUG INTERACTIONS
 CREATE TABLE ingredientes_activos (
@@ -483,7 +483,7 @@ CREATE TABLE ingredientes_activos (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_active_ingredients_nombre ON ingredientes_activos(nombre);
+CREATE INDEX IF NOT EXISTS idx_active_ingredients_nombre ON ingredientes_activos(nombre);
 
 CREATE TABLE medicamentos_ingredientes_activos (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -512,8 +512,8 @@ CREATE TABLE interacciones_medicamentos (
   CHECK (ingredient_a_id < ingredient_b_id)
 );
 
-CREATE INDEX idx_drug_interactions_a ON interacciones_medicamentos(ingredient_a_id);
-CREATE INDEX idx_drug_interactions_b ON interacciones_medicamentos(ingredient_b_id);
+CREATE INDEX IF NOT EXISTS idx_drug_interactions_a ON interacciones_medicamentos(ingredient_a_id);
+CREATE INDEX IF NOT EXISTS idx_drug_interactions_b ON interacciones_medicamentos(ingredient_b_id);
 
 CREATE TABLE contraindicaciones_medicamentos (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -532,7 +532,7 @@ CREATE TABLE contraindicaciones_medicamentos (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_drug_contraindications_ingredient ON contraindicaciones_medicamentos(active_ingredient_id);
+CREATE INDEX IF NOT EXISTS idx_drug_contraindications_ingredient ON contraindicaciones_medicamentos(active_ingredient_id);
 
 CREATE TABLE alertas_interacciones (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -551,8 +551,8 @@ CREATE TABLE alertas_interacciones (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_interaction_alerts_patient ON alertas_interacciones(patient_id);
-CREATE INDEX idx_interaction_alerts_status ON alertas_interacciones(status);
+CREATE INDEX IF NOT EXISTS idx_interaction_alerts_patient ON alertas_interacciones(patient_id);
+CREATE INDEX IF NOT EXISTS idx_interaction_alerts_status ON alertas_interacciones(status);
 
 -- MIGRACIÓN 14: QR CODES
 CREATE TABLE codigos_qr (
@@ -569,7 +569,7 @@ CREATE TABLE codigos_qr (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_qr_codes_entity ON codigos_qr(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_qr_codes_entity ON codigos_qr(entity_type, entity_id);
 
 CREATE TABLE escaneos_codigos_qr (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -596,8 +596,8 @@ CREATE TABLE exportaciones_avanzadas (
   completed_at TIMESTAMPTZ
 );
 
-CREATE INDEX idx_exports_type ON exportaciones_avanzadas(export_type);
-CREATE INDEX idx_exports_status ON exportaciones_avanzadas(status);
+CREATE INDEX IF NOT EXISTS idx_exports_type ON exportaciones_avanzadas(export_type);
+CREATE INDEX IF NOT EXISTS idx_exports_status ON exportaciones_avanzadas(status);
 
 -- MIGRACIÓN 15: HL7 FHIR INTEGRATION
 CREATE TABLE fhir_puntos_conexion (
@@ -612,7 +612,7 @@ CREATE TABLE fhir_puntos_conexion (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_fhir_endpoints_active ON fhir_puntos_conexion(is_active);
+CREATE INDEX IF NOT EXISTS idx_fhir_endpoints_active ON fhir_puntos_conexion(is_active);
 
 CREATE TABLE fhir_mapeos_recursos (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -624,7 +624,7 @@ CREATE TABLE fhir_mapeos_recursos (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_fhir_mappings_type ON fhir_mapeos_recursos(resource_type);
+CREATE INDEX IF NOT EXISTS idx_fhir_mappings_type ON fhir_mapeos_recursos(resource_type);
 
 CREATE TABLE fhir_transacciones (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -642,8 +642,8 @@ CREATE TABLE fhir_transacciones (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_fhir_transactions_endpoint ON fhir_transacciones(endpoint_id);
-CREATE INDEX idx_fhir_transactions_status ON fhir_transacciones(status);
+CREATE INDEX IF NOT EXISTS idx_fhir_transactions_endpoint ON fhir_transacciones(endpoint_id);
+CREATE INDEX IF NOT EXISTS idx_fhir_transactions_status ON fhir_transacciones(status);
 
 CREATE TABLE fhir_identificadores (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -656,8 +656,8 @@ CREATE TABLE fhir_identificadores (
   UNIQUE(local_entity_type, local_entity_id, fhir_resource_type)
 );
 
-CREATE INDEX idx_fhir_identifiers_local ON fhir_identificadores(local_entity_type, local_entity_id);
-CREATE INDEX idx_fhir_identifiers_fhir ON fhir_identificadores(fhir_resource_type, fhir_resource_id);
+CREATE INDEX IF NOT EXISTS idx_fhir_identifiers_local ON fhir_identificadores(local_entity_type, local_entity_id);
+CREATE INDEX IF NOT EXISTS idx_fhir_identifiers_fhir ON fhir_identificadores(fhir_resource_type, fhir_resource_id);
 
 -- MIGRACIÓN 16: NOTIFICATIONS SYSTEM
 CREATE TABLE plantillas_notificacion (
@@ -672,7 +672,7 @@ CREATE TABLE plantillas_notificacion (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_notification_templates_event ON plantillas_notificacion(event_trigger);
+CREATE INDEX IF NOT EXISTS idx_notification_templates_event ON plantillas_notificacion(event_trigger);
 
 CREATE TABLE preferencias_notificacion_usuario (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -685,7 +685,7 @@ CREATE TABLE preferencias_notificacion_usuario (
   UNIQUE(user_id, notification_type, event_trigger)
 );
 
-CREATE INDEX idx_user_notification_prefs_user ON preferencias_notificacion_usuario(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_notification_prefs_user ON preferencias_notificacion_usuario(user_id);
 
 CREATE TABLE cola_notificaciones (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -703,9 +703,9 @@ CREATE TABLE cola_notificaciones (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_notification_queue_user ON cola_notificaciones(user_id);
-CREATE INDEX idx_notification_queue_status ON cola_notificaciones(status);
-CREATE INDEX idx_notification_queue_scheduled ON cola_notificaciones(scheduled_for);
+CREATE INDEX IF NOT EXISTS idx_notification_queue_user ON cola_notificaciones(user_id);
+CREATE INDEX IF NOT EXISTS idx_notification_queue_status ON cola_notificaciones(status);
+CREATE INDEX IF NOT EXISTS idx_notification_queue_scheduled ON cola_notificaciones(scheduled_for);
 
 CREATE TABLE registro_entrega_notificaciones (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -717,7 +717,7 @@ CREATE TABLE registro_entrega_notificaciones (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_notification_delivery_queue ON registro_entrega_notificaciones(queue_id);
+CREATE INDEX IF NOT EXISTS idx_notification_delivery_queue ON registro_entrega_notificaciones(queue_id);
 
 CREATE TABLE notificaciones_app (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -733,8 +733,8 @@ CREATE TABLE notificaciones_app (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_in_app_notifications_user ON notificaciones_app(user_id);
-CREATE INDEX idx_in_app_notifications_read ON notificaciones_app(is_read);
+CREATE INDEX IF NOT EXISTS idx_in_app_notifications_user ON notificaciones_app(user_id);
+CREATE INDEX IF NOT EXISTS idx_in_app_notifications_read ON notificaciones_app(is_read);
 
 -- MIGRACIÓN 17: ANALYTICS DASHBOARD
 CREATE TABLE definiciones_kpi (
@@ -752,7 +752,7 @@ CREATE TABLE definiciones_kpi (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_kpi_definitions_category ON definiciones_kpi(kpi_category);
+CREATE INDEX IF NOT EXISTS idx_kpi_definitions_category ON definiciones_kpi(kpi_category);
 
 CREATE TABLE instantaneas_kpi (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -765,9 +765,9 @@ CREATE TABLE instantaneas_kpi (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_kpi_snapshots_kpi ON instantaneas_kpi(kpi_id);
-CREATE INDEX idx_kpi_snapshots_center ON instantaneas_kpi(center_id);
-CREATE INDEX idx_kpi_snapshots_date ON instantaneas_kpi(snapshot_date DESC);
+CREATE INDEX IF NOT EXISTS idx_kpi_snapshots_kpi ON instantaneas_kpi(kpi_id);
+CREATE INDEX IF NOT EXISTS idx_kpi_snapshots_center ON instantaneas_kpi(center_id);
+CREATE INDEX IF NOT EXISTS idx_kpi_snapshots_date ON instantaneas_kpi(snapshot_date DESC);
 
 CREATE TABLE widgets_tablero (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -781,7 +781,7 @@ CREATE TABLE widgets_tablero (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_dashboard_widgets_type ON widgets_tablero(widget_type);
+CREATE INDEX IF NOT EXISTS idx_dashboard_widgets_type ON widgets_tablero(widget_type);
 
 CREATE TABLE tableros_usuario (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -794,7 +794,7 @@ CREATE TABLE tableros_usuario (
   UNIQUE(user_id, dashboard_name)
 );
 
-CREATE INDEX idx_user_dashboards_user ON tableros_usuario(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_dashboards_user ON tableros_usuario(user_id);
 
 CREATE TABLE eventos_analitica (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -810,10 +810,10 @@ CREATE TABLE eventos_analitica (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_analytics_events_type ON eventos_analitica(event_type);
-CREATE INDEX idx_analytics_events_user ON eventos_analitica(user_id);
-CREATE INDEX idx_analytics_events_center ON eventos_analitica(center_id);
-CREATE INDEX idx_analytics_events_created ON eventos_analitica(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_type ON eventos_analitica(event_type);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_user ON eventos_analitica(user_id);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_center ON eventos_analitica(center_id);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_created ON eventos_analitica(created_at DESC);
 
 SELECT '✅ Paso 3: Funcionalidades avanzadas creadas (17 + 13 tablas más)' AS progreso;
 
