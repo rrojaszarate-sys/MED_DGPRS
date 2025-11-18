@@ -1,119 +1,26 @@
 -- ============================================
 -- SIGIMED v2.0 - BASE DE DATOS COMPLETA
 -- ============================================
--- Descripción: Instalación completa desde cero con TODAS las funcionalidades
+-- Versión: 2.0.2 (CORREGIDA - SIN ERRORES)
 -- Fecha: 2025-11-18
--- Autor: Sistema Automático SIGIMED
--- Versión: 2.0.1
+-- Tiempo estimado: 3-7 minutos
 --
--- ⚠️ ADVERTENCIA IMPORTANTE ⚠️
--- Este script ELIMINA y RECREA toda la base de datos.
--- Solo usar en:
---   - Instalación nueva
---   - Ambiente de desarrollo
---   - Después de hacer BACKUP completo
+-- ⚠️ IMPORTANTE: Este script crea la base de datos desde CERO
+-- Solo ejecutar en instalación nueva o después de backup
 --
--- NO EJECUTAR EN PRODUCCIÓN CON DATOS EXISTENTES
+-- CONTENIDO:
+-- - Migraciones 01-10: Base del sistema
+-- - Migraciones 11-17: Funcionalidades avanzadas
 --
--- ============================================
--- CONTENIDO COMPLETO:
--- ============================================
+-- Total: 60+ tablas, 60+ funciones, 20+ vistas
 --
--- MIGRACIONES BASE (01-10):
--- 01. Tablas Core (centros, usuarios, medicamentos, batches, dispensaciones)
--- 02. Datos Iniciales (centros de ejemplo, usuarios demo)
--- 03. Funciones y Triggers (automatizaciones, cálculos)
--- 04. Sistema de Permisos RLS (Row Level Security)
--- 05. Control de Calidad (inspecciones, no conformidades)
--- 06. Módulo de Contratos (proveedores, órdenes de compra)
--- 07. Gestión Documental (documentos, versiones, firmas)
--- 08. Testing y Reportes (vistas de reportes)
--- 09. Ubicaciones de Almacén (zonas, temperatura)
--- 10. Sistema FEFO y Temperatura (priorización, alertas)
---
--- FUNCIONALIDADES AVANZADAS (11-17):
--- 11. GS1 Barcoding System (GTIN, códigos de barras)
--- 12. DSCSA Serialization (FDA compliance, track & trace)
--- 13. Drug Interactions & CDS (interacciones, contraindicaciones)
--- 14. QR Codes & Enhanced Exports (QR, firmas digitales)
--- 15. HL7 FHIR Integration (interoperabilidad FHIR R4)
--- 16. Notifications System (Email, SMS, Push, In-App)
--- 17. Advanced Analytics Dashboard (KPIs, métricas, dashboards)
---
--- ============================================
--- ESTADÍSTICAS:
--- ============================================
--- Total Tablas: 60+
--- Total Funciones: 60+
--- Total Vistas: 20+
--- Total Líneas SQL: ~8,500
--- Tiempo Estimado Ejecución: 3-7 minutos
---
--- ============================================
--- ESTÁNDARES CUMPLIDOS:
--- ============================================
--- ✅ GS1 Global Standards
--- ✅ FDA DSCSA Title II
--- ✅ HL7 FHIR R4
--- ✅ DrugBank / RxNorm
--- ✅ ISO/IEC 18004 (QR Code)
--- ✅ ISO 9001:2015
--- ✅ 21 CFR Part 11
---
--- ============================================
--- PREREQUISITOS:
--- ============================================
--- - PostgreSQL 12+ (Supabase lo incluye)
--- - Extensiones: uuid-ossp, pgcrypto (se habilitan automáticamente)
--- - Permisos: SUPERUSER o owner de la base de datos
---
--- ============================================
--- INSTRUCCIONES DE USO:
--- ============================================
--- 1. HACER BACKUP si tienes datos existentes:
---    Dashboard → Database → Backups → Create backup
---
--- 2. Abrir Supabase SQL Editor:
---    https://supabase.com/dashboard/project/cyslhzynfuetthxngpoy/sql
---
--- 3. Copiar TODO este archivo
---
--- 4. Pegar en SQL Editor
---
--- 5. Click "RUN"
---
--- 6. Esperar 3-7 minutos ⏳
---
--- 7. Verificar mensajes de éxito al final
---
--- 8. Ir a Table Editor para ver las tablas creadas:
---    https://supabase.com/dashboard/project/cyslhzynfuetthxngpoy/editor
---
--- ============================================
--- CREDENCIALES DE PRUEBA CREADAS:
--- ============================================
--- Email: admin@sigimed.com
--- Password: Admin123!
--- Role: super_admin
---
--- ============================================
--- SOPORTE:
--- ============================================
--- GitHub: https://github.com/rrojaszarate-sys/MED_DGPRS
--- Documentación: IMPLEMENTACION_FUNCIONALIDADES_AVANZADAS.md
---
--- ============================================
--- INICIO DE INSTALACIÓN
 -- ============================================
 
--- Habilitar extensiones necesarias
+-- Habilitar extensiones
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- Mensaje de inicio
-SELECT 'Iniciando instalación de SIGIMED v2.0...' AS mensaje;
-SELECT 'Esto puede tomar 3-7 minutos. Por favor espere...' AS info;
-
+SELECT 'Iniciando instalación SIGIMED v2.0...' AS mensaje;
 
 -- ============================================
 -- FASE 1 - PARTE 1.1: TABLAS CORE
@@ -4655,7 +4562,7 @@ CREATE OR REPLACE FUNCTION get_temperature_history(
   p_horas INTEGER DEFAULT 24
 )
 RETURNS TABLE (
-  timestamp TIMESTAMP WITH TIME ZONE,
+  fecha_hora TIMESTAMP WITH TIME ZONE,
   temperatura DECIMAL,
   humedad DECIMAL,
   fuera_rango BOOLEAN,
@@ -4664,7 +4571,7 @@ RETURNS TABLE (
 BEGIN
   RETURN QUERY
   SELECT
-    mt.created_at AS timestamp,
+    mt.created_at AS fecha_hora,
     mt.temperatura,
     mt.humedad,
     mt.fuera_rango,
@@ -9171,12 +9078,6 @@ SELECT
 FROM pg_tables 
 WHERE schemaname = 'public';
 
--- Listar todas las tablas
-SELECT tablename AS tabla_creada
-FROM pg_tables 
-WHERE schemaname = 'public'
-ORDER BY tablename;
-
 -- Contar funciones creadas
 SELECT 
   'Total de funciones creadas:' AS descripcion,
@@ -9184,23 +9085,12 @@ SELECT
 FROM pg_proc 
 WHERE pronamespace = 'public'::regnamespace;
 
--- Verificar extensiones
-SELECT 
-  'Extensiones habilitadas:' AS descripcion,
-  extname AS extension
-FROM pg_extension
-WHERE extname IN ('uuid-ossp', 'pgcrypto');
-
--- ============================================
--- MENSAJE FINAL
--- ============================================
-
+-- Mensaje final
 SELECT '✅ INSTALACIÓN COMPLETADA EXITOSAMENTE' AS resultado;
-SELECT 'SIGIMED v2.0 Base de Datos Completa' AS sistema;
+SELECT 'SIGIMED v2.0.2 - Base de Datos Completa' AS sistema;
 SELECT NOW() AS fecha_instalacion;
-SELECT 'Puede comenzar a usar el sistema' AS estado;
 
--- Mostrar tablas principales creadas
+-- Mostrar algunas tablas principales
 SELECT 'Tablas principales creadas:' AS info;
 SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename IN (
   'centros_salud',
@@ -9218,16 +9108,7 @@ SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename IN (
   'kpi_definitions'
 ) ORDER BY tablename;
 
--- ============================================
--- PRÓXIMOS PASOS
--- ============================================
-
-SELECT 'PRÓXIMOS PASOS:' AS titulo;
-SELECT '1. Ir a Table Editor para ver las tablas' AS paso_1;
-SELECT '2. Verificar que aparezcan ~60 tablas' AS paso_2;
-SELECT '3. Probar login con admin@sigimed.com / Admin123!' AS paso_3;
-SELECT '4. Configurar variables de entorno en tu app' AS paso_4;
-SELECT '5. npm run dev para iniciar la aplicación' AS paso_5;
+SELECT 'Sistema listo para usar. Credenciales de prueba: admin@sigimed.com / Admin123!' AS proximo_paso;
 
 -- ============================================
 -- FIN DE INSTALACIÓN
