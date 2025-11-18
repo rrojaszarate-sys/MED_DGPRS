@@ -53,19 +53,30 @@ DROP TABLE IF EXISTS etiquetas_codigo_barras CASCADE;
 DROP TABLE IF EXISTS gs1_gtins CASCADE;
 DROP TABLE IF EXISTS gs1_configuracion_empresa CASCADE;
 
--- Tablas Base
+-- Tablas Base (en español e inglés para limpiar todo)
 DROP TABLE IF EXISTS documentos_comprobantes CASCADE;
 DROP TABLE IF EXISTS storage_inspections CASCADE;
+DROP TABLE IF EXISTS inspecciones_almacen CASCADE;
 DROP TABLE IF EXISTS contract_items CASCADE;
+DROP TABLE IF EXISTS items_contrato CASCADE;
 DROP TABLE IF EXISTS contracts CASCADE;
+DROP TABLE IF EXISTS contratos CASCADE;
 DROP TABLE IF EXISTS audit_log CASCADE;
+DROP TABLE IF EXISTS registro_auditoria CASCADE;
 DROP TABLE IF EXISTS user_centers CASCADE;
+DROP TABLE IF EXISTS centros_usuario CASCADE;
 DROP TABLE IF EXISTS batch_movements CASCADE;
+DROP TABLE IF EXISTS movimientos_lotes CASCADE;
 DROP TABLE IF EXISTS batches CASCADE;
+DROP TABLE IF EXISTS lotes CASCADE;
 DROP TABLE IF EXISTS medications CASCADE;
+DROP TABLE IF EXISTS medicamentos CASCADE;
 DROP TABLE IF EXISTS medication_catalog CASCADE;
+DROP TABLE IF EXISTS catalogo_medicamentos CASCADE;
 DROP TABLE IF EXISTS suppliers CASCADE;
+DROP TABLE IF EXISTS proveedores CASCADE;
 DROP TABLE IF EXISTS health_centers CASCADE;
+DROP TABLE IF EXISTS centros_salud CASCADE;
 DROP TABLE IF EXISTS instituciones CASCADE;
 
 SELECT '✅ Paso 1: Todo eliminado' AS progreso;
