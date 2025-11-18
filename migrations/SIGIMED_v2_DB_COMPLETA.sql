@@ -4906,11 +4906,11 @@ CREATE TABLE IF NOT EXISTS public.barcode_scans (
   validation_errors TEXT[], -- Array de errores si hay
 
   -- Metadatos
-  timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  fecha_hora TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   metadata JSONB -- Datos adicionales (IP, user agent, etc.)
 );
 
-CREATE INDEX idx_barcode_scans_timestamp ON public.barcode_scans(timestamp DESC);
+CREATE INDEX idx_barcode_scans_fecha_hora ON public.barcode_scans(fecha_hora DESC);
 CREATE INDEX idx_barcode_scans_type ON public.barcode_scans(scan_type);
 CREATE INDEX idx_barcode_scans_user ON public.barcode_scans(scanned_by);
 CREATE INDEX idx_barcode_scans_batch ON public.barcode_scans(batch_id);
@@ -6151,7 +6151,7 @@ CREATE TABLE IF NOT EXISTS public.drug_contraindications (
   alternatives TEXT, -- Alternativas sugeridas
 
   -- Referencias
-  references TEXT[],
+  reference_list TEXT[],
   source TEXT,
 
   is_active BOOLEAN DEFAULT true,
