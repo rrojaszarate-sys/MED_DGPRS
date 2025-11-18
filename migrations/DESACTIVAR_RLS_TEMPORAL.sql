@@ -1,0 +1,63 @@
+-- ============================================
+-- DESACTIVAR RLS TEMPORALMENTE - SOLO PARA DESARROLLO
+-- ============================================
+-- IMPORTANTE: Esto permite acceso sin restricciones.
+-- Solo usar en DESARROLLO. NO usar en PRODUCCIÓN.
+-- ============================================
+
+-- NIVEL 1-2: Tablas Base
+ALTER TABLE instituciones DISABLE ROW LEVEL SECURITY;
+ALTER TABLE perfiles_usuario DISABLE ROW LEVEL SECURITY;
+ALTER TABLE centros_salud DISABLE ROW LEVEL SECURITY;
+ALTER TABLE proveedores DISABLE ROW LEVEL SECURITY;
+ALTER TABLE catalogo_medicamentos DISABLE ROW LEVEL SECURITY;
+
+-- NIVEL 3-4: Inventario
+ALTER TABLE medicamentos DISABLE ROW LEVEL SECURITY;
+ALTER TABLE lotes DISABLE ROW LEVEL SECURITY;
+ALTER TABLE movimientos_lotes DISABLE ROW LEVEL SECURITY;
+ALTER TABLE ubicaciones_almacen DISABLE ROW LEVEL SECURITY;
+ALTER TABLE lotes_ubicaciones DISABLE ROW LEVEL SECURITY;
+ALTER TABLE permisos DISABLE ROW LEVEL SECURITY;
+ALTER TABLE roles_usuario DISABLE ROW LEVEL SECURITY;
+ALTER TABLE centros_usuario DISABLE ROW LEVEL SECURITY;
+
+-- NIVEL 5-7: Trazabilidad
+ALTER TABLE gs1_configuracion_empresa DISABLE ROW LEVEL SECURITY;
+ALTER TABLE gs1_gtins DISABLE ROW LEVEL SECURITY;
+ALTER TABLE etiquetas_codigo_barras DISABLE ROW LEVEL SECURITY;
+ALTER TABLE escaneos_codigo_barras DISABLE ROW LEVEL SECURITY;
+ALTER TABLE serializaciones_medicamentos DISABLE ROW LEVEL SECURITY;
+ALTER TABLE dscsa_historial_transacciones DISABLE ROW LEVEL SECURITY;
+ALTER TABLE dscsa_solicitudes_verificacion DISABLE ROW LEVEL SECURITY;
+ALTER TABLE eventos_epcis DISABLE ROW LEVEL SECURITY;
+ALTER TABLE monitoreo_temperatura DISABLE ROW LEVEL SECURITY;
+ALTER TABLE excursiones_termicas DISABLE ROW LEVEL SECURITY;
+ALTER TABLE ingredientes_activos DISABLE ROW LEVEL SECURITY;
+ALTER TABLE medicamentos_ingredientes_activos DISABLE ROW LEVEL SECURITY;
+ALTER TABLE interacciones_medicamentos DISABLE ROW LEVEL SECURITY;
+ALTER TABLE contraindicaciones_medicamentos DISABLE ROW LEVEL SECURITY;
+ALTER TABLE alertas_interacciones DISABLE ROW LEVEL SECURITY;
+ALTER TABLE codigos_qr DISABLE ROW LEVEL SECURITY;
+ALTER TABLE escaneos_codigos_qr DISABLE ROW LEVEL SECURITY;
+ALTER TABLE exportaciones_avanzadas DISABLE ROW LEVEL SECURITY;
+
+-- NIVEL 8-10: Integración y Analytics
+ALTER TABLE fhir_puntos_conexion DISABLE ROW LEVEL SECURITY;
+ALTER TABLE fhir_mapeos_recursos DISABLE ROW LEVEL SECURITY;
+ALTER TABLE fhir_transacciones DISABLE ROW LEVEL SECURITY;
+ALTER TABLE fhir_identificadores DISABLE ROW LEVEL SECURITY;
+ALTER TABLE plantillas_notificacion DISABLE ROW LEVEL SECURITY;
+ALTER TABLE preferencias_notificacion_usuario DISABLE ROW LEVEL SECURITY;
+ALTER TABLE cola_notificaciones DISABLE ROW LEVEL SECURITY;
+ALTER TABLE registro_entrega_notificaciones DISABLE ROW LEVEL SECURITY;
+ALTER TABLE notificaciones_app DISABLE ROW LEVEL SECURITY;
+ALTER TABLE definiciones_kpi DISABLE ROW LEVEL SECURITY;
+ALTER TABLE instantaneas_kpi DISABLE ROW LEVEL SECURITY;
+ALTER TABLE widgets_tablero DISABLE ROW LEVEL SECURITY;
+ALTER TABLE tableros_usuario DISABLE ROW LEVEL SECURITY;
+ALTER TABLE eventos_analitica DISABLE ROW LEVEL SECURITY;
+ALTER TABLE registro_auditoria DISABLE ROW LEVEL SECURITY;
+
+SELECT '✅ RLS DESACTIVADO EN TODAS LAS TABLAS (MODO DESARROLLO)' as resultado;
+SELECT 'IMPORTANTE: Reactiva RLS antes de ir a producción' as advertencia;
