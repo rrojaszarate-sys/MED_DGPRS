@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS public.drug_interactions (
   documentation TEXT CHECK (documentation IN ('excellent', 'good', 'fair', 'poor')),
 
   -- Referencias
-  references TEXT[], -- Referencias bibliográficas
+  reference_list TEXT[], -- Referencias bibliográficas
   source TEXT, -- Fuente: 'DrugBank', 'Lexicomp', 'Micromedex', 'FDA', etc.
   source_id TEXT, -- ID en la fuente externa
 
