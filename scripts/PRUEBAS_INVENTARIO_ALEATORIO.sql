@@ -208,33 +208,25 @@ LIMIT 75;
 
 COMMIT;
 
--- 10. Mostrar resumen en formato Markdown
-SELECT '# RESUMEN DE DATOS GENERADOS' as resultado
-UNION ALL SELECT ''
-UNION ALL SELECT '## Datos Maestros'
-UNION ALL SELECT ''
-UNION ALL SELECT '| Tabla | Total |'
-UNION ALL SELECT '|-------|-------|'
-UNION ALL SELECT '| suppliers | ' || COUNT(*)::text || ' |' FROM suppliers
-UNION ALL SELECT '| health_centers | ' || COUNT(*)::text || ' |' FROM health_centers
-UNION ALL SELECT '| catalogo_medicamentos | ' || COUNT(*)::text || ' |' FROM catalogo_medicamentos
-UNION ALL SELECT ''
-UNION ALL SELECT '## Datos Transaccionales Generados'
-UNION ALL SELECT ''
-UNION ALL SELECT '| Tabla | Total | Disponibles |'
-UNION ALL SELECT '|-------|-------|-------------|'
-UNION ALL SELECT '| medications | ' || COUNT(*)::text || ' | ' || COUNT(*) FILTER (WHERE estado = 'Disponible')::text || ' |' FROM medicamentos
-UNION ALL SELECT '| batches | ' || COUNT(*)::text || ' | ' || COUNT(*) FILTER (WHERE estado = 'disponible')::text || ' |' FROM lotes
-UNION ALL SELECT '| batch_movements | ' || COUNT(*)::text || ' | - |' FROM movimientos_lotes
-UNION ALL SELECT ''
-UNION ALL SELECT '## Casos Especiales de Prueba'
-UNION ALL SELECT ''
-UNION ALL SELECT '| Tipo | Cantidad |'
-UNION ALL SELECT '|------|----------|'
-UNION ALL SELECT '| Lotes vencidos | ' || COUNT(*)::text || ' |' FROM lotes WHERE estado = 'vencido'
-UNION ALL SELECT '| Lotes bajo stock | ' || COUNT(*)::text || ' |' FROM lotes WHERE cantidad_actual < stock_minimo
-UNION ALL SELECT '| Lotes próximos a vencer (3 meses) | ' || COUNT(*)::text || ' |' FROM lotes WHERE fecha_caducidad BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '3 months' AND estado = 'disponible'
-UNION ALL SELECT '| Medicamentos en cuarentena | ' || COUNT(*)::text || ' |' FROM medicamentos WHERE estado = 'Cuarentena'
-UNION ALL SELECT ''
-UNION ALL SELECT '**Generado:** ' || NOW()::text
-UNION ALL SELECT '**Sistema:** SIGIMED v2.0';
+-- 10. Mostrar resumen (formato igual al script que funciono)
+SELECT 'INVENTARIO GENERADO EXITOSAMENTE' as resultado;
+
+SELECT 'medications' as tabla, COUNT(*) as total, COUNT(*) FILTER (WHERE estado = 'Disponible') as disponibles FROM medications
+UNION ALL
+SELECT 'batches', COUNT(*), COUNT(*) FILTER (WHERE estado = 'disponible') FROM batches
+UNION ALL
+SELECT 'batch_movements', COUNT(*), NULL FROM batch_movements
+UNION ALL
+SELECT 'suppliers', COUNT(*), NULL FROM suppliers
+UNION ALL
+SELECT 'health_centers', COUNT(*), NULL FROM health_centers;
+
+SELECT 'CASOS_ESPECIALES' as tipo;
+
+SELECT 'lotes_vencidos' as caso, COUNT(*) as cantidad FROM lotes WHERE estado = 'vencido'
+UNION ALL
+SELECT 'lotes_bajo_stock', COUNT(*) FROM lotes WHERE cantidad_actual < stock_minimo
+UNION ALL
+SELECT 'lotes_proximos_vencer', COUNT(*) FROM lotes WHERE fecha_caducidad BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '3 months' AND estado = 'disponible'
+UNION ALL
+SELECT 'medicamentos_cuarentena', COUNT(*) FROM medicamentos WHERE estado = 'Cuarentena';
