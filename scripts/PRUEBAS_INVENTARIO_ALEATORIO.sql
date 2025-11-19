@@ -208,18 +208,16 @@ LIMIT 75;
 
 COMMIT;
 
--- 10. Mostrar resumen (formato igual al script que funciono)
+-- 10. Mostrar resumen
 SELECT 'INVENTARIO GENERADO EXITOSAMENTE' as resultado;
 
-SELECT 'medications' as tabla, COUNT(*) as total, COUNT(*) FILTER (WHERE estado = 'Disponible') as disponibles FROM medications
+SELECT 'medicamentos' as tabla, COUNT(*) as total, COUNT(*) FILTER (WHERE estado = 'Disponible') as disponibles FROM medicamentos
 UNION ALL
-SELECT 'batches', COUNT(*), COUNT(*) FILTER (WHERE estado = 'disponible') FROM batches
+SELECT 'lotes', COUNT(*), COUNT(*) FILTER (WHERE estado = 'disponible') FROM lotes
 UNION ALL
-SELECT 'batch_movements', COUNT(*), NULL FROM batch_movements
+SELECT 'movimientos_lotes', COUNT(*), NULL FROM movimientos_lotes
 UNION ALL
-SELECT 'suppliers', COUNT(*), NULL FROM suppliers
-UNION ALL
-SELECT 'health_centers', COUNT(*), NULL FROM health_centers;
+SELECT 'proveedores', COUNT(*), NULL FROM proveedores;
 
 SELECT 'CASOS_ESPECIALES' as tipo;
 
