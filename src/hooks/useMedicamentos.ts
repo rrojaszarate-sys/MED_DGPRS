@@ -16,8 +16,8 @@ export function useMedicamentos(centroId?: string) {
 
   // Real-time subscriptions
   useRealtime({
-    table: 'medicamentos',
-    filter: centroId ? `centro_salud_id=eq.${centroId}` : undefined,
+    table: 'medications',
+    filter: centroId ? `center_id=eq.${centroId}` : undefined,
     onInsert: (newMed: Medication) => {
       if (!centroId || newMed.center_id === centroId) {
         setMedicamentos((prev) => [newMed, ...prev])
@@ -41,12 +41,12 @@ export function useMedicamentos(centroId?: string) {
       setError(null)
 
       let query = supabase
-        .from('medicamentos')
+        .from('medications')
         .select('*')
         .order('created_at', { ascending: false })
 
       if (centroId) {
-        query = query.eq('centro_salud_id', centroId)
+        query = query.eq('center_id', centroId)
       }
 
       const { data, error: fetchError } = await query
@@ -64,7 +64,7 @@ export function useMedicamentos(centroId?: string) {
   async function createMedicamento(medicamento: Omit<Medication, 'id' | 'created_at'>) {
     try {
       const { data, error: createError } = await supabase
-        .from('medicamentos')
+        .from('medications')
         .insert([medicamento])
         .select()
         .single()
@@ -81,7 +81,7 @@ export function useMedicamentos(centroId?: string) {
   async function updateMedicamento(id: string, updates: Partial<Medication>) {
     try {
       const { data, error: updateError } = await supabase
-        .from('medicamentos')
+        .from('medications')
         .update(updates)
         .eq('id', id)
         .select()
@@ -101,7 +101,7 @@ export function useMedicamentos(centroId?: string) {
   async function deleteMedicamento(id: string) {
     try {
       const { error: deleteError } = await supabase
-        .from('medicamentos')
+        .from('medications')
         .delete()
         .eq('id', id)
 
