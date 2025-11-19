@@ -199,3 +199,163 @@ export interface CentroContextType {
   loading: boolean
   refresh: () => Promise<void>
 }
+
+// ============================================
+// TIPOS PARA CATÁLOGOS ADMINISTRABLES
+// ============================================
+
+/**
+ * Catálogo de Colores
+ * Gestiona la paleta de colores del sistema
+ */
+export interface CatalogoColor {
+  id: string
+  nombre: string // "Primario", "Secundario", "Éxito", etc.
+  codigo_hex: string // #3B82F6
+  codigo_rgb?: string // rgb(59, 130, 246)
+  codigo_hsl?: string // hsl(217, 91%, 60%)
+  uso?: string // Descripción del uso del color
+  categoria: 'principal' | 'estados' | 'graficos' | 'alertas' | 'general'
+  orden: number
+  es_activo: boolean
+  created_at: string
+  updated_at: string
+  created_by?: string
+  updated_by?: string
+}
+
+/**
+ * Catálogo de Estados
+ * Gestiona los estados de cada módulo del sistema
+ */
+export interface CatalogoEstado {
+  id: string
+  codigo: string // 'disponible', 'pendiente', 'aprobado'
+  nombre: string // "Disponible", "Pendiente de Aprobación"
+  descripcion?: string
+  modulo: 'medicamentos' | 'requisiciones' | 'transferencias' | 'contratos' | 'general'
+  color_id?: string
+  icono?: string // Nombre del ícono de lucide-react
+  orden: number
+  es_estado_inicial: boolean
+  es_estado_final: boolean
+  permite_edicion: boolean
+  es_activo: boolean
+  created_at: string
+  updated_at: string
+  created_by?: string
+  updated_by?: string
+  // Relaciones
+  color?: CatalogoColor
+}
+
+/**
+ * Catálogo de Tipos de Movimiento
+ * Gestiona los tipos de movimientos de inventario
+ */
+export interface CatalogoTipoMovimiento {
+  id: string
+  codigo: string // 'compra', 'donacion', 'salida_paciente'
+  nombre: string // "Entrada por Compra", "Salida por Dispensación"
+  descripcion?: string
+  tipo: 'entrada' | 'salida' | 'ajuste' | 'transferencia'
+  afecta_stock: boolean
+  requiere_aprobacion: boolean
+  requiere_documento: boolean
+  color_id?: string
+  icono?: string
+  orden: number
+  es_activo: boolean
+  created_at: string
+  updated_at: string
+  created_by?: string
+  updated_by?: string
+  // Relaciones
+  color?: CatalogoColor
+}
+
+/**
+ * Catálogo de Formas Farmacéuticas
+ * Gestiona las formas farmacéuticas de medicamentos
+ */
+export interface CatalogoFormaFarmaceutica {
+  id: string
+  codigo: string // 'tableta', 'capsula', 'jarabe'
+  nombre: string // "Tableta", "Cápsula"
+  descripcion?: string
+  categoria: 'solida' | 'liquida' | 'semisólida' | 'gaseosa' | 'parental'
+  via_administracion?: string // 'Oral', 'Parenteral', 'Tópica'
+  requiere_refrigeracion: boolean
+  requiere_cadena_frio: boolean
+  unidad_medida_default?: string // 'unidad', 'ml', 'mg'
+  icono?: string
+  orden: number
+  es_activo: boolean
+  created_at: string
+  updated_at: string
+  created_by?: string
+  updated_by?: string
+}
+
+/**
+ * Catálogo de Prioridades
+ * Gestiona los niveles de prioridad por módulo
+ */
+export interface CatalogoPrioridad {
+  id: string
+  codigo: string // 'baja', 'normal', 'alta', 'urgente', 'emergencia'
+  nombre: string // "Baja", "Normal", "Alta"
+  descripcion?: string
+  modulo: 'requisiciones' | 'transferencias' | 'alertas' | 'notificaciones' | 'general'
+  nivel: number // 1-10 (1=máxima prioridad)
+  color_id?: string
+  icono?: string
+  dias_respuesta_esperado?: number
+  requiere_notificacion: boolean
+  orden: number
+  es_activo: boolean
+  created_at: string
+  updated_at: string
+  created_by?: string
+  updated_by?: string
+  // Relaciones
+  color?: CatalogoColor
+}
+
+/**
+ * Catálogo de Configuraciones
+ * Gestiona las configuraciones generales del sistema
+ */
+export interface CatalogoConfiguracion {
+  id: string
+  clave: string // 'dias_alerta_critica', 'email_notificaciones'
+  valor: string // Valor actual de la configuración
+  tipo_dato: 'texto' | 'numero' | 'booleano' | 'json' | 'fecha'
+  nombre: string // Nombre legible
+  descripcion?: string
+  categoria: 'sistema' | 'alertas' | 'notificaciones' | 'seguridad' | 'general'
+  valor_por_defecto?: string
+  es_requerido: boolean
+  es_sensible: boolean // ¿Es información sensible?
+  orden: number
+  es_activo: boolean
+  created_at: string
+  updated_at: string
+  created_by?: string
+  updated_by?: string
+}
+
+/**
+ * Tipo genérico para formularios de catálogos
+ */
+export type CatalogoFormData<T> = Omit<T, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'updated_by'>
+
+/**
+ * Tipo para filtros de catálogos
+ */
+export interface CatalogoFiltros {
+  es_activo?: boolean
+  categoria?: string
+  modulo?: string
+  busqueda?: string
+}

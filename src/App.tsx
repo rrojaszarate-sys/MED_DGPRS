@@ -10,6 +10,7 @@ import { MovementsPage } from './pages/MovementsPage'
 import { ContractsPage } from './pages/ContractsPage'
 import { InstitutionsPage } from './pages/InstitutionsPage'
 import { HealthCentersPage } from './pages/HealthCentersPage'
+import CatalogosPage from './pages/CatalogosPage'
 import { AuthProvider } from './context/AuthContext'
 import { CentroProvider } from './context/CentroContext'
 import { ToastProvider } from './components/ui/Toast'
@@ -108,6 +109,16 @@ function App() {
                   <RoleGuard allowedRoles={['super_admin', 'admin_center']}>
                     <MainLayout>
                       <HealthCentersPage />
+                    </MainLayout>
+                  </RoleGuard>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/catalogos" element={
+                <ProtectedRoute>
+                  <RoleGuard allowedRoles={['super_admin', 'admin_center']}>
+                    <MainLayout>
+                      <CatalogosPage />
                     </MainLayout>
                   </RoleGuard>
                 </ProtectedRoute>

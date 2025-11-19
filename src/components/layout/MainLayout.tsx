@@ -11,7 +11,8 @@ import {
   TrendingUp,
   FileCheck,
   Building2,
-  MapPin
+  MapPin,
+  Sliders
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { CentroSelector } from '../dashboard/CentroSelector'
@@ -39,6 +40,7 @@ export function MainLayout({ children }: MainLayoutProps) {
     { name: 'Administración', href: '/admin', icon: Settings },
     { name: 'Instituciones', href: '/instituciones', icon: Building2 },
     { name: 'Centros', href: '/centros', icon: MapPin },
+    { name: 'Catálogos', href: '/catalogos', icon: Sliders },
   ]
 
   const isActive = (path: string) => location.pathname === path
