@@ -22,6 +22,14 @@ Sistema web moderno para la gestión integral, segura y trazable del inventario 
 - **Cumplimiento Normativo**: Documentación completa para auditorías sanitarias
 - **Sistema Gamificado de Alertas**: Experiencia interactiva que motiva al personal
 
+## 🆕 Nuevas Funcionalidades (v2.0.1)
+
+- **✨ Transferencias entre Centros**: Workflow completo de 5 estados con control de cantidades en cada etapa (solicitada, aprobada, enviada, recibida)
+- **✨ Requisiciones Internas**: Sistema de solicitudes por departamento con 3 niveles de prioridad (Normal, Urgente, Emergencia)
+- **✨ Ajustes de Inventario**: 4 tipos de ajustes (merma, corrección, devolución, reclasificación) con evidencia fotográfica y autorización
+- **✨ Gestión Completa de Lotes**: CRUD completo con cambio de estados, tracking de proveedores y control de caducidad
+- **✨ 33 Tablas de Base de Datos**: Estructura robusta con catálogos configurables y sistema de auditoría completo
+
 ## 🎨 Paleta de Colores Corporativa
 
 ### Colores Principales
@@ -71,8 +79,13 @@ Sistema web moderno para la gestión integral, segura y trazable del inventario 
 
 ### 3. Gestión de Inventario
 - CRUD completo de medicamentos
-- Catálogo maestro
-- Control de lotes y caducidad
+- Catálogo maestro de medicamentos
+- Gestión completa de lotes (batches)
+  - Creación, edición y eliminación de lotes
+  - Control de estados: Disponible, Cuarentena, Vencido, Agotado
+  - Tracking de cantidades (inicial, actual, stock mínimo/máximo)
+  - Trazabilidad por proveedor y centro de salud
+- Control de caducidad por lote
 - Búsqueda y filtros avanzados
 
 ### 4. Sistema de Alertas Gamificado
@@ -82,23 +95,56 @@ Sistema web moderno para la gestión integral, segura y trazable del inventario 
 - Sistema de puntos y logros
 - Ranking entre centros
 
-### 5. Transferencias
-- Solicitud de transferencias entre centros
-- Flujo de aprobación
-- Tracking en tiempo real
-- Documentación automática
+### 5. Transferencias entre Centros
+- Solicitud de transferencias entre centros de salud
+- **Flujo completo de estados**:
+  - 📝 Pendiente → ✅ Aprobada/❌ Rechazada → 🚚 En Tránsito → 📦 Recibida → ✔️ Completada
+- Control de cantidades por etapa:
+  - Cantidad solicitada
+  - Cantidad aprobada (puede diferir de la solicitada)
+  - Cantidad enviada
+  - Cantidad recibida (detección automática de faltantes)
+- Tracking de usuarios responsables en cada etapa
+- Múltiples ítems por transferencia
+- Documentación automática con número de seguimiento
+- Visualización de origen y destino con códigos de centro
 
 ### 6. Requisiciones Internas
-- Solicitudes por servicio/departamento
-- Flujo: Borrador → Solicitada → Aprobada → Surtida
-- Control de cantidades
-- Priorización (Normal, Urgente, Emergencia)
+- Solicitudes de medicamentos por servicio/departamento
+- **Flujo completo de estados**:
+  - 📝 Borrador → 📤 Solicitada → ✅ Aprobada/❌ Rechazada → 📦 Surtida → ✔️ Completada
+- Control de cantidades en tres niveles:
+  - Cantidad solicitada (original)
+  - Cantidad aprobada (ajustada por autorizador)
+  - Cantidad surtida (real entregada)
+- **Sistema de priorización**:
+  - 🟢 Normal - Suministro regular
+  - 🟡 Urgente - Requiere atención prioritaria
+  - 🔴 Emergencia - Atención inmediata
+- Justificación por ítem
+- Tracking de fechas clave (solicitud, aprobación, surtido)
+- Identificación de servicio solicitante
 
 ### 7. Ajustes de Inventario
-- Mermas por deterioro/rotura
-- Correcciones de inventario físico
-- Devoluciones a proveedor
-- Evidencia fotográfica
+- **Tipos de ajuste**:
+  - 📉 Merma - Pérdidas por deterioro, rotura, vencimiento
+  - 🔧 Corrección - Ajustes entre cantidad física vs. sistema
+  - ↩️ Devolución - Retorno de productos a proveedor
+  - 🔄 Reclasificación - Cambio de categorización
+- **Cálculo automático de diferencias**:
+  - Cantidad en sistema
+  - Cantidad física contada
+  - Diferencia calculada automáticamente (física - sistema)
+- **Sistema de evidencia fotográfica**:
+  - Upload de múltiples fotos por ajuste
+  - Almacenamiento en Supabase Storage
+  - Galería visual en la interfaz
+- **Flujo de autorización**:
+  - Creación por usuario de inventario
+  - Requiere autorización por supervisor
+  - Tracking de autorizador y fecha
+- Motivo y justificación obligatorios
+- Generación automática de número de ajuste
 
 ### 8. Reportes y Análisis
 - Reportes predefinidos
@@ -121,16 +167,46 @@ Sistema web moderno para la gestión integral, segura y trazable del inventario 
 
 ## 🗄️ Estructura de Base de Datos
 
-### Tablas Principales
-- `users_profiles` - Perfiles de usuario
-- `health_centers` - Centros de salud
-- `medication_catalog` - Catálogo maestro
-- `medications` - Inventario por centro
+### Tablas Principales (33 tablas implementadas)
+
+#### Usuarios y Autenticación
+- `users_profiles` - Perfiles extendidos de usuario con roles
+- `audit_log` - Registro completo de auditoría
+
+#### Organización
+- `instituciones` - Instituciones de salud
+- `health_centers` - Centros de salud por institución
+
+#### Catálogos Maestros
+- `medication_catalog` - Catálogo nacional de medicamentos
+- `suppliers` - Catálogo de proveedores
+
+#### Inventario y Lotes
+- `medications` - Medicamentos por centro de salud
+- `batches` - Lotes de medicamentos con tracking completo
+- `batch_movements` - Movimientos detallados de lotes
+
+#### Workflows de Operación
 - `transfers` - Transferencias entre centros
-- `requisitions` - Requisiciones internas
-- `inventory_adjustments` - Ajustes de inventario
-- `alertas_medicamentos` - Sistema de alertas
-- `audit_log` - Registro de auditoría
+- `transfer_items` - Items de cada transferencia
+- `requisitions` - Requisiciones internas por servicio
+- `requisition_items` - Items de cada requisición
+- `inventory_adjustments` - Ajustes de inventario con evidencia
+
+#### Contratos y Compras
+- `contracts` - Contratos con proveedores
+- `contract_items` - Items de cada contrato
+
+#### Sistema de Alertas
+- `alertas_medicamentos` - Alertas de caducidad y stock
+
+#### Catálogos Configurables (Sistema Avanzado)
+- `catalogo_colores` - Paleta de colores del sistema
+- `catalogo_estados` - Estados por módulo
+- `catalogo_tipos_movimiento` - Tipos de movimientos
+- `catalogo_formas_farmaceuticas` - Formas farmacéuticas
+- `catalogo_prioridades` - Niveles de prioridad
+- `catalogo_configuraciones` - Configuraciones del sistema
 
 ## 🚀 Instalación y Configuración
 
@@ -232,6 +308,36 @@ Para soporte técnico, contactar al equipo de desarrollo.
 
 ---
 
+## 📊 Estado del Proyecto
+
 **Versión**: 2.0.1
 **Última actualización**: Noviembre 2024
-**Estado**: En desarrollo activo
+**Estado**: En desarrollo activo - **~75% completado**
+
+### Módulos Implementados ✅
+- ✅ Autenticación y Roles
+- ✅ Dashboard con KPIs
+- ✅ Gestión de Inventario
+- ✅ Gestión de Lotes (CRUD completo)
+- ✅ Sistema de Alertas Gamificado
+- ✅ **Transferencias entre Centros** (workflow completo)
+- ✅ **Requisiciones Internas** (workflow completo)
+- ✅ **Ajustes de Inventario** (con evidencia fotográfica)
+- ✅ Reportes y Exportación
+- ✅ Administración (Usuarios, Centros, Catálogos)
+- ✅ Sistema de Auditoría
+- ✅ Gestión de Proveedores
+- ✅ Gestión de Contratos
+
+### En Desarrollo 🚧
+- 🚧 Órdenes de Compra
+- 🚧 Recepción de Mercancía
+- 🚧 Devoluciones a Proveedores
+- 🚧 Análisis Predictivo Avanzado
+- 🚧 Formularios de creación/edición en modales
+
+### Roadmap 🗺️
+- 📋 Integración con sistemas externos
+- 📋 App móvil nativa
+- 📋 Notificaciones push
+- 📋 Reportes personalizados avanzados
