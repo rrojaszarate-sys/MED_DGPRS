@@ -10,6 +10,7 @@ import { MovementsPage } from './pages/MovementsPage'
 import { ContractsPage } from './pages/ContractsPage'
 import { InstitutionsPage } from './pages/InstitutionsPage'
 import { HealthCentersPage } from './pages/HealthCentersPage'
+import { LotesPage } from './pages/LotesPage'
 import CatalogosPage from './pages/CatalogosPage'
 import { AuthProvider } from './context/AuthContext'
 import { CentroProvider } from './context/CentroContext'
@@ -40,6 +41,14 @@ function App() {
                 <ProtectedRoute>
                   <MainLayout>
                     <InventoryPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/lotes" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <LotesPage />
                   </MainLayout>
                 </ProtectedRoute>
               } />
