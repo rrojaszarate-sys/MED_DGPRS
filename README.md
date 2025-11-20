@@ -232,6 +232,6 @@ Para soporte técnico, contactar al equipo de desarrollo.
 
 ---
 
-**Versión**: 2.0
+**Versión**: 2.0.1
 **Última actualización**: Noviembre 2024
-**Estado**: En desarrollo
+**Estado**: En desarrollo activo
