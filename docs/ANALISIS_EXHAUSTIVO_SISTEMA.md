@@ -3,34 +3,35 @@
 **Fecha**: Noviembre 2024
 **Versión del Sistema**: 2.0.1
 **Propósito**: Identificar funcionalidades faltantes, CRUDs incompletos y mejoras necesarias
+**Estado**: ✅ VERIFICADO CON ESTRUCTURA REAL DE BASE DE DATOS
 
 ---
 
 ## 📊 RESUMEN EJECUTIVO
 
 ### Estado Actual
-- ✅ **13 páginas** implementadas
-- ⚠️ **15 hooks** creados pero algunos incompletos
-- 🔴 **CRUDs parcialmente implementados**
-- 🟡 **Base de datos con tablas desconectadas**
-- ⚠️ **Sin flujos completos end-to-end**
+- ✅ **13 páginas** implementadas en el frontend
+- ✅ **15 hooks** creados para manejo de datos
+- ✅ **Base de datos robusta** con 20+ tablas implementadas
+- 🔴 **GAP CRÍTICO**: Tablas de BD existen pero **sin UI** para usarlas
+- ⚠️ **CRUDs parcialmente conectados** a la base de datos
 
-### Hallazgos Críticos
+### Hallazgos Críticos (ACTUALIZADOS)
 
-1. **PROBLEMA CRÍTICO #1: CRUDs Incompletos**
-   - Solo 4 de 12 módulos tienen CRUD completo
-   - Faltan formularios de creación/edición en 8 módulos
-   - No hay confirmaciones visuales en eliminaciones
+1. **PROBLEMA CRÍTICO #1: Desconexión Frontend-Backend**
+   - ✅ Tablas `transfers`, `requisitions`, `inventory_adjustments` EXISTEN en BD
+   - ❌ PERO no hay páginas frontend para usarlas
+   - Impacto: 30% de la BD no es accesible desde la UI
 
-2. **PROBLEMA CRÍTICO #2: Flujos Rotos**
-   - No hay flujo para cargar inventario inicial
-   - Transferencias sin workflow completo
-   - Requisiciones sin aprobación implementada
+2. **PROBLEMA CRÍTICO #2: CRUDs Incompletos en Frontend**
+   - Solo 4 de 13 páginas tienen CRUD completo
+   - 5 páginas tienen CRUD parcial (solo lectura)
+   - 3 módulos críticos sin implementar (Transfers, Requisitions, Adjustments)
 
-3. **PROBLEMA CRÍTICO #3: Integridad de Datos**
-   - Tablas sin relaciones en el código
-   - Campos requeridos no validados
-   - Sin manejo de errores consistente
+3. **PROBLEMA CRÍTICO #3: Flujos de Trabajo Sin UI**
+   - Workflow de Transferencias: BD lista, ❌ sin página
+   - Workflow de Requisiciones: BD lista, ❌ sin página
+   - Ajustes de Inventario: BD lista, ❌ sin página
 
 ---
 
@@ -259,344 +260,314 @@
 
 ---
 
-### 🔴 CRUDs FALTANTES (7/12)
+### 🔴 PÁGINAS FALTANTES (Tablas en BD sin UI) - PRIORIDAD CRÍTICA
 
-#### 10. **Transferencias** 🔴
-**Ubicación**: NO EXISTE página completa
-- ❌ **Create**: NO IMPLEMENTADO
-- ❌ **Read**: NO IMPLEMENTADO
-- ❌ **Update**: NO IMPLEMENTADO
-- ❌ **Delete**: NO IMPLEMENTADO
-- **Estado**: ❌ NO EXISTE
-- **NECESARIO**:
-  - [ ] Página TransferenciasPage.tsx
-  - [ ] Hook useTransferencias.ts
+#### 10. **Transferencias** 🔴 **[✅ BD LISTA, ❌ SIN UI]**
+**Tabla BD**: `transfers` + `transfer_items` ✅ EXISTE
+**Ubicación**: ❌ NO HAY TransfersPage.tsx
+- ✅ **Tabla BD**: Completa con workflow (pending → approved → in_transit → received → completed)
+- ❌ **Create**: NO HAY FORMULARIO
+- ❌ **Read**: NO HAY LISTADO
+- ❌ **Update**: NO HAY EDICIÓN
+- ❌ **Workflow UI**: NO HAY BOTONES DE APROBACIÓN/RECEPCIÓN
+- **Estado**: ❌ 0% - Solo BD, sin UI
+- **NECESARIO URGENTE**:
+  - [ ] Crear TransfersPage.tsx con CRUD completo
+  - [ ] Crear Hook useTransfers.ts
   - [ ] Formulario de solicitud de transferencia
-  - [ ] Workflow: Solicitada → Aprobada → En tránsito → Recibida
-  - [ ] Confirmación de recepción
-  - [ ] Actualización automática de inventarios
+  - [ ] Botones de workflow: Aprobar, Rechazar, Enviar, Recibir
+  - [ ] Vista de items a transferir
+  - [ ] Integración con batch_movements para actualizar stock
 
-#### 11. **Requisiciones Internas** 🔴
-**Ubicación**: NO EXISTE
-- ❌ TODO NO IMPLEMENTADO
-- **Estado**: ❌ NO EXISTE
-- **NECESARIO**:
-  - [ ] Página RequisicionesPage.tsx
-  - [ ] Hook useRequisiciones.ts
-  - [ ] CRUD completo
-  - [ ] Workflow: Borrador → Solicitada → Aprobada → Surtida
-  - [ ] Priorización (Normal, Urgente, Emergencia)
-  - [ ] Departamentos solicitantes
+#### 11. **Requisiciones Internas** 🔴 **[✅ BD LISTA, ❌ SIN UI]**
+**Tabla BD**: `requisitions` + `requisition_items` ✅ EXISTE
+**Ubicación**: ❌ NO HAY RequisitionsPage.tsx
+- ✅ **Tabla BD**: Completa con workflow (borrador → solicitada → aprobada → surtida)
+- ❌ **Create**: NO HAY FORMULARIO
+- ❌ **Read**: NO HAY LISTADO
+- ❌ **Update**: NO HAY EDICIÓN
+- ❌ **Workflow UI**: NO HAY APROBACIÓN/SURTIDO
+- **Estado**: ❌ 0% - Solo BD, sin UI
+- **NECESARIO URGENTE**:
+  - [ ] Crear RequisitionsPage.tsx con CRUD completo
+  - [ ] Crear Hook useRequisitions.ts
+  - [ ] Formulario con servicio solicitante y prioridad
+  - [ ] Botones de workflow: Enviar, Aprobar, Rechazar, Surtir
+  - [ ] Vista de medicamentos solicitados
+  - [ ] Integración con inventario al surtir
 
-#### 12. **Ajustes de Inventario** 🔴
-**Ubicación**: NO EXISTE
-- ❌ TODO NO IMPLEMENTADO
-- **Estado**: ❌ NO EXISTE
-- **NECESARIO**:
-  - [ ] Página AjustesPage.tsx
-  - [ ] Hook useAjustes.ts
-  - [ ] CRUD completo
-  - [ ] Tipos: Merma, Deterioro, Corrección, Devolución
-  - [ ] Evidencia fotográfica
-  - [ ] Motivos y justificaciones
-  - [ ] Aprobaciones requeridas
+#### 12. **Ajustes de Inventario** 🔴 **[✅ BD LISTA, ❌ SIN UI]**
+**Tabla BD**: `inventory_adjustments` ✅ EXISTE
+**Ubicación**: ❌ NO HAY AdjustmentsPage.tsx
+- ✅ **Tabla BD**: Completa con tipos (merma, correccion, devolucion, reclasificacion)
+- ✅ **Evidencia fotográfica**: Campo array de URLs
+- ❌ **Create**: NO HAY FORMULARIO
+- ❌ **Read**: NO HAY LISTADO
+- ❌ **Update**: NO HAY EDICIÓN
+- ❌ **Authorization UI**: NO HAY APROBACIÓN
+- **Estado**: ❌ 0% - Solo BD, sin UI
+- **NECESARIO URGENTE**:
+  - [ ] Crear AdjustmentsPage.tsx con CRUD completo
+  - [ ] Crear Hook useAdjustments.ts
+  - [ ] Formulario con tipo de ajuste y evidencia
+  - [ ] Upload de fotos para evidencia
+  - [ ] Cálculo automático de diferencia (cantidad_fisica - cantidad_sistema)
+  - [ ] Botón de autorización para supervisores
+  - [ ] Integración con batch_movements
 
-#### 13. **Órdenes de Compra** 🔴
-**Ubicación**: NO EXISTE
-- ❌ TODO NO IMPLEMENTADO
-- **Estado**: ❌ NO EXISTE
+#### 13. **Órdenes de Compra** ❌ **[❌ NO EXISTE EN BD]**
+**Tabla BD**: ❌ NO EXISTE
+**Ubicación**: ❌ NO HAY PurchaseOrdersPage.tsx
+- **Estado**: ❌ 0% - Ni BD ni UI
 - **NECESARIO**:
-  - [ ] Página OrdenesCompraPage.tsx
-  - [ ] Hook useOrdenesCompra.ts
+  - [ ] Crear tabla purchase_orders + purchase_order_items
+  - [ ] Crear PurchaseOrdersPage.tsx
+  - [ ] Crear Hook usePurchaseOrders.ts
   - [ ] CRUD completo
-  - [ ] Generación automática basada en stock mínimo
+  - [ ] Generación automática desde alertas de stock bajo
   - [ ] Workflow de aprobación
-  - [ ] Seguimiento de entregas
-  - [ ] Vinculación con recepción de inventario
+  - [ ] Vinculación con proveedores
 
-#### 14. **Recepción de Inventario** 🔴
-**Ubicación**: NO EXISTE
-- ❌ TODO NO IMPLEMENTADO
-- **Estado**: ❌ NO EXISTE
+#### 14. **Recepción de Inventario** ❌ **[❌ NO EXISTE EN BD]**
+**Tabla BD**: ❌ NO EXISTE
+**Ubicación**: ❌ NO HAY ReceivingPage.tsx
+- **Estado**: ❌ 0% - Ni BD ni UI
 - **NECESARIO**:
-  - [ ] Página RecepcionPage.tsx
-  - [ ] Hook useRecepcion.ts
-  - [ ] Escaneo de lotes
-  - [ ] Verificación de cantidades
-  - [ ] Control de calidad
-  - [ ] Actualización automática de inventario
+  - [ ] Crear tabla receiving_inventory + receiving_items
+  - [ ] Crear ReceivingPage.tsx
+  - [ ] Crear Hook useReceiving.ts
+  - [ ] Vinculación con órdenes de compra
+  - [ ] Control de calidad (aprobado/rechazado/cuarentena)
+  - [ ] Creación automática de lotes al recibir
+  - [ ] Actualización de inventario
 
-#### 15. **Devoluciones a Proveedores** 🔴
-**Ubicación**: NO EXISTE
-- ❌ TODO NO IMPLEMENTADO
-- **Estado**: ❌ NO EXISTE
+#### 15. **Devoluciones a Proveedores** ❌ **[❌ NO EXISTE EN BD]**
+**Tabla BD**: ❌ NO EXISTE
+**Ubicación**: ❌ NO HAY ReturnsPage.tsx
+- **Estado**: ❌ 0% - Ni BD ni UI
 - **NECESARIO**:
-  - [ ] Página DevolucionesPage.tsx
-  - [ ] Hook useDevoluciones.ts
+  - [ ] Crear tabla supplier_returns + supplier_return_items
+  - [ ] Crear ReturnsPage.tsx
+  - [ ] Crear Hook useReturns.ts
   - [ ] CRUD completo
   - [ ] Motivos de devolución
   - [ ] Notas de crédito
   - [ ] Actualización de inventario
 
-#### 16. **Usuarios y Permisos** 🔴
-**Ubicación**: NO EXISTE (solo auth básico)
-- ❌ TODO NO IMPLEMENTADO
-- **Estado**: ❌ NO EXISTE
+#### 16. **Usuarios y Permisos** ⚠️ **[✅ BD EXISTE, ⚠️ UI PARCIAL]**
+**Tabla BD**: `users_profiles` + `permissions` + `user_roles` ✅ EXISTE
+**Ubicación**: AdminPage.tsx tiene gestión básica de usuarios
+- ✅ **Tabla BD**: Sistema completo de permisos y roles
+- ⚠️ **CRUD Básico**: Existe en AdminPage pero limitado
+- ❌ **Permisos Granulares**: NO HAY UI para asignar permisos individuales
+- ❌ **Roles Personalizados**: NO HAY UI para crear/editar roles
+- **Estado**: ⚠️ 30% - BD completa, UI básica
 - **NECESARIO**:
-  - [ ] Página UsuariosPage.tsx
-  - [ ] CRUD de usuarios
-  - [ ] Asignación de roles
-  - [ ] Permisos granulares
-  - [ ] Gestión de sesiones
-  - [ ] Auditoría de accesos
+  - [ ] Ampliar AdminPage o crear UsuariosPage.tsx dedicada
+  - [ ] UI para asignación granular de permisos
+  - [ ] Editor de roles personalizados
+  - [ ] Vista de auditoría de accesos por usuario
 
 ---
 
-## 🗄️ ANÁLISIS DE BASE DE DATOS
+## 🗄️ ANÁLISIS DE BASE DE DATOS (VERIFICADO)
 
-### Tablas Existentes vs Necesarias
+### ✅ Tablas Implementadas en Database Schema
 
-#### ✅ Tablas Implementadas
+#### Tablas Core (100% Implementadas)
 
 1. **users_profiles** ✅
    - Usuarios del sistema
    - Roles: super_admin, admin_center, inventory_user, read_only
+   - RLS: Implementado con políticas de seguridad
 
-2. **health_centers** ✅ (centros_salud)
+2. **health_centers** ✅
    - Centros de salud
-   - Campos: name, code, address, city, phone
+   - Campos: name, code, address, city, phone, storage_capacity
+   - Geolocalización: latitud, longitud
 
-3. **instituciones** ✅
-   - Instituciones de salud
-   - Campos: nombre, clave, tipo
+3. **user_centers** ✅
+   - Relación many-to-many entre usuarios y centros
+   - Campo is_primary para centro principal del usuario
 
-4. **medication_catalog** ✅ (catalogo_medicamentos)
-   - Catálogo maestro de medicamentos
-   - Campos completos: código, nombres, principio activo, forma farmacéutica
+4. **medication_catalog** ✅
+   - Catálogo maestro de 99 medicamentos
+   - Campos: nombre_comercial, nombre_generico, formula_activa, forma_farmaceutica
+   - Información completa: contraindicaciones, efectos secundarios, temperatura
 
-5. **medications** ✅ (medicamentos)
+5. **medications** ✅
    - Inventario de medicamentos por centro
-   - Relación: center_id → health_centers
+   - Relación: center_id → health_centers, catalog_id → medication_catalog
+   - Campos: lote, cantidad, fecha_caducidad, estado, ubicacion_fisica
 
-6. **lotes** ✅
-   - Lotes de medicamentos
-   - Campos: numero_lote, cantidades, fechas, estado
-   - Relación: medication_id → medications
+6. **batches** ✅
+   - Lotes de medicamentos (tabla migración)
+   - Campos: numero_lote, cantidad_inicial, cantidad_actual, fecha_fabricacion, fecha_caducidad
+   - Estados: disponible, cuarentena, vencido, agotado
+   - Relaciones: medication_id, center_id, supplier_id
 
-7. **suppliers** ✅ (proveedores)
-   - Proveedores
-   - Campos: RFC, razón social, contacto, términos de pago
+7. **suppliers** ✅
+   - Proveedores de medicamentos
+   - Campos: nombre, rfc, razón_social, contacto, términos_pago
+   - Rating system: calificación 0-5
 
-8. **contracts** ✅ (contratos)
-   - Contratos con proveedores
-   - Relación: supplier_id → suppliers
+8. **batch_movements** ✅
+   - Trazabilidad completa de movimientos de lotes
+   - Tipos: entrada, salida, ajuste, transferencia_entrada/salida, devolucion, merma, vencimiento
+   - Campos: cantidad_anterior, cantidad, cantidad_posterior, motivo, usuario_responsable
+   - Referencias: transfer_id, requisition_id, adjustment_id
 
-9. **batch_movements** ⚠️ (movimientos_lotes)
-   - Movimientos de lotes
-   - **PROBLEMA**: Sin tipo de movimiento claro
+#### Tablas de Workflows (✅ EXISTEN pero SIN UI)
 
-#### 🔴 Tablas FALTANTES (Críticas)
+9. **transfers** ✅ **[BD EXISTE, ❌ SIN PÁGINA]**
+   - Transferencias entre centros
+   - Estados: pending, approved, rejected, in_transit, received, completed
+   - Campos completos: transfer_number, origin_center_id, destination_center_id
+   - Workflow completo: requested_by/at, approved_by/at, shipped_by/at, received_by/at
+   - **PROBLEMA**: ❌ No hay TransfersPage.tsx para usar esta funcionalidad
 
-10. **transferencias** 🔴
-    ```sql
-    CREATE TABLE transferencias (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      folio VARCHAR(50) UNIQUE NOT NULL,
-      centro_origen_id UUID REFERENCES centros_salud(id),
-      centro_destino_id UUID REFERENCES centros_salud(id),
-      estado VARCHAR(20) CHECK (estado IN ('solicitada', 'aprobada', 'en_transito', 'recibida', 'cancelada')),
-      fecha_solicitud TIMESTAMP DEFAULT NOW(),
-      fecha_aprobacion TIMESTAMP,
-      fecha_envio TIMESTAMP,
-      fecha_recepcion TIMESTAMP,
-      solicitante_id UUID REFERENCES users_profiles(id),
-      aprobador_id UUID REFERENCES users_profiles(id),
-      observaciones TEXT,
-      created_at TIMESTAMP DEFAULT NOW(),
-      updated_at TIMESTAMP DEFAULT NOW()
-    );
-    ```
+10. **transfer_items** ✅ **[BD EXISTE, ❌ SIN UI]**
+    - Detalle de items en transferencias
+    - Campos: cantidad_solicitada, cantidad_aprobada, cantidad_enviada, cantidad_recibida
+    - **PROBLEMA**: ❌ No hay UI para gestionar transferencias
 
-11. **transferencias_detalle** 🔴
-    ```sql
-    CREATE TABLE transferencias_detalle (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      transferencia_id UUID REFERENCES transferencias(id) ON DELETE CASCADE,
-      lote_id UUID REFERENCES lotes(id),
-      cantidad_solicitada INTEGER NOT NULL,
-      cantidad_enviada INTEGER,
-      cantidad_recibida INTEGER,
-      estado VARCHAR(20),
-      observaciones TEXT
-    );
-    ```
+11. **requisitions** ✅ **[BD EXISTE, ❌ SIN PÁGINA]**
+    - Requisiciones internas entre departamentos
+    - Estados: borrador, solicitada, aprobada, rechazada, surtida, completada
+    - Campos: requisition_number, requesting_service, center_id, prioridad (normal/urgente/emergencia)
+    - Workflow completo: solicitante, aprobador, surtidor con timestamps
+    - **PROBLEMA**: ❌ No hay RequisitionsPage.tsx para usar esta funcionalidad
 
-12. **requisiciones** 🔴
-    ```sql
-    CREATE TABLE requisiciones (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      folio VARCHAR(50) UNIQUE NOT NULL,
-      centro_id UUID REFERENCES centros_salud(id),
-      departamento VARCHAR(100) NOT NULL,
-      estado VARCHAR(20) CHECK (estado IN ('borrador', 'solicitada', 'aprobada', 'surtida', 'cancelada')),
-      prioridad VARCHAR(20) CHECK (prioridad IN ('normal', 'urgente', 'emergencia')),
-      solicitante_id UUID REFERENCES users_profiles(id),
-      aprobador_id UUID REFERENCES users_profiles(id),
-      fecha_solicitud TIMESTAMP DEFAULT NOW(),
-      fecha_requerida DATE,
-      fecha_aprobacion TIMESTAMP,
-      fecha_surtido TIMESTAMP,
-      observaciones TEXT,
-      created_at TIMESTAMP DEFAULT NOW()
-    );
-    ```
+12. **requisition_items** ✅ **[BD EXISTE, ❌ SIN UI]**
+    - Detalle de medicamentos en requisiciones
+    - Campos: cantidad_solicitada, cantidad_aprobada, cantidad_surtida, justificacion
+    - **PROBLEMA**: ❌ No hay UI para gestionar requisiciones
 
-13. **requisiciones_detalle** 🔴
-    ```sql
-    CREATE TABLE requisiciones_detalle (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      requisicion_id UUID REFERENCES requisiciones(id) ON DELETE CASCADE,
-      medicamento_id UUID REFERENCES medicamentos(id),
-      cantidad_solicitada INTEGER NOT NULL,
-      cantidad_aprobada INTEGER,
-      cantidad_surtida INTEGER,
-      observaciones TEXT
-    );
-    ```
+13. **inventory_adjustments** ✅ **[BD EXISTE, ❌ SIN PÁGINA]**
+    - Ajustes de inventario (mermas, correcciones, devoluciones)
+    - Tipos: merma, correccion, devolucion, reclasificacion
+    - Campos: adjustment_number, cantidad_sistema, cantidad_fisica, diferencia (calculada)
+    - Campos de evidencia: evidencia_fotografica (array), motivo, justificacion
+    - Workflow: created_by, autorizado_por/en
+    - **PROBLEMA**: ❌ No hay AdjustmentsPage.tsx para usar esta funcionalidad
 
-14. **ajustes_inventario** 🔴
-    ```sql
-    CREATE TABLE ajustes_inventario (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      folio VARCHAR(50) UNIQUE NOT NULL,
-      centro_id UUID REFERENCES centros_salud(id),
-      lote_id UUID REFERENCES lotes(id),
-      tipo_ajuste VARCHAR(30) CHECK (tipo_ajuste IN ('merma', 'deterioro', 'correccion', 'devolucion', 'vencimiento')),
-      cantidad_anterior INTEGER NOT NULL,
-      cantidad_ajuste INTEGER NOT NULL,
-      cantidad_nueva INTEGER NOT NULL,
-      motivo TEXT NOT NULL,
-      usuario_id UUID REFERENCES users_profiles(id),
-      aprobador_id UUID REFERENCES users_profiles(id),
-      estado VARCHAR(20) CHECK (estado IN ('pendiente', 'aprobado', 'rechazado')),
-      evidencia_url TEXT,
-      fecha_ajuste TIMESTAMP DEFAULT NOW(),
-      created_at TIMESTAMP DEFAULT NOW()
-    );
-    ```
+14. **alertas_medicamentos** ✅
+    - Sistema de alertas por caducidad
+    - Niveles: critico (0-7 días), urgente (8-30 días), preventivo (31-90 días)
+    - Estados: visto, resuelta con timestamps y responsables
+    - ✅ Tiene UI en AlertasPage.tsx
 
-15. **ordenes_compra** 🔴
-    ```sql
-    CREATE TABLE ordenes_compra (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      folio VARCHAR(50) UNIQUE NOT NULL,
-      proveedor_id UUID REFERENCES proveedores(id),
-      centro_id UUID REFERENCES centros_salud(id),
-      estado VARCHAR(20) CHECK (estado IN ('borrador', 'enviada', 'confirmada', 'parcial', 'completada', 'cancelada')),
-      fecha_orden DATE DEFAULT CURRENT_DATE,
-      fecha_entrega_esperada DATE,
-      fecha_entrega_real DATE,
-      subtotal NUMERIC(12,2),
-      impuestos NUMERIC(12,2),
-      total NUMERIC(12,2),
-      condiciones_pago TEXT,
-      observaciones TEXT,
-      creado_por UUID REFERENCES users_profiles(id),
-      aprobado_por UUID REFERENCES users_profiles(id),
-      created_at TIMESTAMP DEFAULT NOW()
-    );
-    ```
+15. **audit_log** ✅
+    - Log de auditoría completo
+    - Tipos de acción: CREATE, READ, UPDATE, DELETE, LOGIN, LOGOUT, APPROVE, REJECT, etc.
+    - Tipos de entidad: medication, user, center, transfer, requisition, adjustment, batch, etc.
+    - Campos: old_values, new_values (JSONB), ip_address, user_agent, device_info
+    - ⚠️ EXISTE pero sin UI dedicada para consultar (solo backend)
 
-16. **ordenes_compra_detalle** 🔴
-    ```sql
-    CREATE TABLE ordenes_compra_detalle (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      orden_compra_id UUID REFERENCES ordenes_compra(id) ON DELETE CASCADE,
-      medicamento_catalogo_id UUID REFERENCES catalogo_medicamentos(id),
-      cantidad_solicitada INTEGER NOT NULL,
-      cantidad_recibida INTEGER DEFAULT 0,
-      precio_unitario NUMERIC(10,2) NOT NULL,
-      subtotal NUMERIC(12,2) GENERATED ALWAYS AS (cantidad_solicitada * precio_unitario) STORED,
-      observaciones TEXT
-    );
-    ```
+#### Tablas de Catálogos Configurables (✅ COMPLETAS)
 
-17. **recepciones_inventario** 🔴
-    ```sql
-    CREATE TABLE recepciones_inventario (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      folio VARCHAR(50) UNIQUE NOT NULL,
-      orden_compra_id UUID REFERENCES ordenes_compra(id),
-      centro_id UUID REFERENCES centros_salud(id),
-      proveedor_id UUID REFERENCES proveedores(id),
-      estado VARCHAR(20) CHECK (estado IN ('pendiente', 'parcial', 'completada', 'rechazada')),
-      fecha_recepcion TIMESTAMP DEFAULT NOW(),
-      recibido_por UUID REFERENCES users_profiles(id),
-      observaciones TEXT,
-      created_at TIMESTAMP DEFAULT NOW()
-    );
-    ```
+16. **catalogo_colores** ✅
+    - Paleta de colores corporativa (Pantone 505 C, 7504 C, etc.)
+    - Categorías: principal, estados, graficos, alertas, general
+    - ✅ UI en CatalogosPage.tsx
 
-18. **recepciones_detalle** 🔴
-    ```sql
-    CREATE TABLE recepciones_detalle (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      recepcion_id UUID REFERENCES recepciones_inventario(id) ON DELETE CASCADE,
-      medicamento_catalogo_id UUID REFERENCES catalogo_medicamentos(id),
-      numero_lote VARCHAR(100) NOT NULL,
-      cantidad_esperada INTEGER,
-      cantidad_recibida INTEGER NOT NULL,
-      fecha_fabricacion DATE,
-      fecha_vencimiento DATE NOT NULL,
-      precio_unitario NUMERIC(10,2),
-      ubicacion_fisica VARCHAR(100),
-      temperatura_recepcion NUMERIC(5,2),
-      estado_calidad VARCHAR(20) CHECK (estado_calidad IN ('aprobado', 'rechazado', 'cuarentena')),
-      observaciones TEXT
-    );
-    ```
+17. **catalogo_estados** ✅
+    - Estados por módulo (medicamentos, requisiciones, transferencias, contratos)
+    - ✅ UI en CatalogosPage.tsx
 
-19. **devoluciones_proveedores** 🔴
-    ```sql
-    CREATE TABLE devoluciones_proveedores (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      folio VARCHAR(50) UNIQUE NOT NULL,
-      proveedor_id UUID REFERENCES proveedores(id),
-      centro_id UUID REFERENCES centros_salud(id),
-      orden_compra_id UUID REFERENCES ordenes_compra(id),
-      motivo VARCHAR(100) NOT NULL,
-      descripcion TEXT,
-      estado VARCHAR(20) CHECK (estado IN ('solicitada', 'aprobada_proveedor', 'en_transito', 'completada', 'rechazada')),
-      total_devolucion NUMERIC(12,2),
-      nota_credito VARCHAR(100),
-      fecha_solicitud TIMESTAMP DEFAULT NOW(),
-      fecha_aprobacion TIMESTAMP,
-      fecha_recepcion_proveedor TIMESTAMP,
-      solicitante_id UUID REFERENCES users_profiles(id),
-      created_at TIMESTAMP DEFAULT NOW()
-    );
-    ```
+18. **catalogo_tipos_movimiento** ✅
+    - Tipos de movimiento de inventario
+    - Categorías: entrada, salida, ajuste, transferencia
+    - Campo afecta_stock: incrementa, decrementa, neutro
+    - ✅ UI en CatalogosPage.tsx
 
-20. **devoluciones_detalle** 🔴
-    ```sql
-    CREATE TABLE devoluciones_detalle (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      devolucion_id UUID REFERENCES devoluciones_proveedores(id) ON DELETE CASCADE,
-      lote_id UUID REFERENCES lotes(id),
-      cantidad INTEGER NOT NULL,
-      precio_unitario NUMERIC(10,2),
-      subtotal NUMERIC(12,2) GENERATED ALWAYS AS (cantidad * precio_unitario) STORED,
-      motivo_especifico TEXT
-    );
-    ```
+19. **catalogo_formas_farmaceuticas** ✅
+    - Formas farmacéuticas (tableta, capsula, jarabe, etc.)
+    - ✅ UI en CatalogosPage.tsx
 
-21. **alertas_medicamentos** ⚠️
-    - EXISTE pero sin lógica de notificaciones
-    - **NECESITA**: Sistema de notificaciones push/email
+20. **catalogo_prioridades** ✅
+    - Niveles de prioridad (normal, urgente, emergencia)
+    - ✅ UI en CatalogosPage.tsx
 
-22. **audit_log** ⚠️
-    - EXISTE pero sin UI para consultar
-    - **NECESITA**: Página de auditoría
+21. **catalogo_configuraciones** ✅
+    - Configuraciones del sistema (key-value con metadata JSONB)
+    - ✅ UI en CatalogosPage.tsx
+
+#### Tablas de Gestión Documental (✅ COMPLETAS)
+
+22. **vales_entrada** + **vales_entrada_items** ✅
+    - Documentación de entradas de inventario
+    - Campos: numero_vale, proveedor_id, fecha_recepcion, total
+    - Items con: lote, cantidad, precio_unitario
+
+23. **vales_salida** + **vales_salida_items** ✅
+    - Documentación de salidas de inventario
+    - Campos: numero_vale, destino, fecha_salida, autorizado_por
+
+24. **actas_entrega** + **actas_entrega_items** ✅
+    - Actas de entrega formales
+    - Firma digital integrada
+
+25. **firmas_digitales** ✅
+    - Sistema de firma digital para documentos
+    - Campos: documento_tipo, documento_id, firmante_id, firma_hash, timestamp
+
+#### Tablas de Contratos (✅ COMPLETAS)
+
+26. **contracts** ✅ (en database-schema.sql base)
+    - Contratos con proveedores
+    - ✅ Tiene UI en ContractsPage.tsx (parcial)
+
+27. **contract_amendments** ✅
+    - Enmiendas a contratos
+
+28. **contract_deliveries** ✅
+    - Entregas bajo contrato
+
+29. **contract_evaluations** ✅
+    - Evaluaciones de cumplimiento de contratos
+
+#### Tablas de Permisos y Roles (✅ COMPLETAS)
+
+30. **permissions** ✅
+    - Sistema de permisos granulares
+    - Campos: modulo, accion, descripcion
+
+31. **user_roles** ✅
+    - Roles de usuario personalizables
+
+#### Tablas de Métricas (✅ COMPLETAS)
+
+32. **metricas_inventario** ✅
+    - Métricas históricas de inventario
+    - Campos: centro_id, total_medicamentos, valor_total, medicamentos_proximos_vencer
+
+33. **notificaciones** ✅
+    - Sistema de notificaciones para usuarios
+    - Tipos, prioridades, estados (leida/no_leida)
+
+### ❌ Tablas REALMENTE FALTANTES (No existen en BD)
+
+34. **purchase_orders** ❌ **[NO EXISTE]**
+    - Órdenes de compra a proveedores
+    - **NECESITA**: Creación de tabla + hook + página
+
+35. **purchase_order_items** ❌ **[NO EXISTE]**
+    - Detalle de items en órdenes de compra
+
+36. **receiving_inventory** ❌ **[NO EXISTE]**
+    - Recepción de inventario con control de calidad
+    - **NECESITA**: Creación de tabla + hook + página
+
+37. **receiving_items** ❌ **[NO EXISTE]**
+    - Detalle de items recibidos
+
+38. **supplier_returns** ❌ **[NO EXISTE]**
+    - Devoluciones a proveedores
+    - **NECESITA**: Creación de tabla + hook + página
+
+39. **supplier_return_items** ❌ **[NO EXISTE]**
+    - Detalle de devoluciones
 
 ---
 
@@ -818,33 +789,57 @@ FOR EACH ROW EXECUTE FUNCTION actualizar_stock_medicamento();
 
 ---
 
-## 📊 MÉTRICAS DE COMPLETITUD
+## 📊 MÉTRICAS DE COMPLETITUD (ACTUALIZADAS)
 
-### Estado Actual del Sistema
+### Estado Actual del Sistema - Detallado
 
-| Módulo | CRUD | Workflow | Validaciones | UI/UX | Total |
-|--------|------|----------|--------------|-------|-------|
-| Catálogo Medicamentos | 100% | N/A | 100% | 90% | **95%** ✅ |
-| Proveedores | 100% | N/A | 100% | 90% | **95%** ✅ |
-| Instituciones | 100% | N/A | 80% | 80% | **85%** ✅ |
-| Centros de Salud | 100% | N/A | 100% | 90% | **95%** ✅ |
-| Inventario | 25% | 0% | 20% | 60% | **26%** 🔴 |
-| Lotes | 25% | 0% | 0% | 60% | **21%** 🔴 |
-| Movimientos | 25% | 0% | 0% | 50% | **19%** 🔴 |
-| Contratos | 75% | 50% | 60% | 70% | **64%** ⚠️ |
-| Catálogos Generales | 60% | N/A | 40% | 70% | **57%** ⚠️ |
-| Alertas | 100% | 50% | 60% | 80% | **73%** ⚠️ |
-| Dashboard | N/A | N/A | N/A | 85% | **85%** ✅ |
-| Reportes | 0% | 0% | 0% | 40% | **10%** 🔴 |
-| **Transferencias** | 0% | 0% | 0% | 0% | **0%** 🔴 |
-| **Requisiciones** | 0% | 0% | 0% | 0% | **0%** 🔴 |
-| **Ajustes Inventario** | 0% | 0% | 0% | 0% | **0%** 🔴 |
-| **Órdenes Compra** | 0% | 0% | 0% | 0% | **0%** 🔴 |
-| **Recepción** | 0% | 0% | 0% | 0% | **0%** 🔴 |
-| **Devoluciones** | 0% | 0% | 0% | 0% | **0%** 🔴 |
-| **Usuarios/Permisos** | 10% | 0% | 10% | 20% | **10%** 🔴 |
+| Módulo | BD | Hook | CRUD UI | Workflow | Validaciones | Total | Estado |
+|--------|-----|------|---------|----------|--------------|-------|--------|
+| **Catálogo Medicamentos** | 100% | 100% | 100% | N/A | 100% | **100%** | ✅ COMPLETO |
+| **Proveedores** | 100% | 100% | 100% | N/A | 100% | **100%** | ✅ COMPLETO |
+| **Instituciones** | 100% | 100% | 100% | N/A | 80% | **95%** | ✅ COMPLETO |
+| **Centros de Salud** | 100% | 100% | 100% | N/A | 100% | **100%** | ✅ COMPLETO |
+| **Alertas** | 100% | 100% | 100% | 60% | 80% | **88%** | ✅ FUNCIONAL |
+| **Dashboard** | 100% | 100% | N/A | N/A | N/A | **90%** | ✅ FUNCIONAL |
+| **Catálogos Admin** | 100% | 100% | 80% | N/A | 60% | **85%** | ✅ FUNCIONAL |
+| **Lotes** | 100% | 100% | 25% | 0% | 20% | **49%** | ⚠️ SOLO LECTURA |
+| **Inventario** | 100% | 100% | 25% | 0% | 20% | **49%** | ⚠️ SOLO LECTURA |
+| **Movimientos** | 100% | 100% | 25% | 0% | 0% | **45%** | ⚠️ SOLO LECTURA |
+| **Contratos** | 100% | 100% | 75% | 50% | 60% | **77%** | ⚠️ PARCIAL |
+| **Reportes** | 50% | 50% | 10% | 0% | 0% | **22%** | 🔴 BÁSICO |
+| **Transferencias** | **100%** | **0%** | **0%** | **0%** | **0%** | **20%** | 🔴 **BD SIN UI** |
+| **Requisiciones** | **100%** | **0%** | **0%** | **0%** | **0%** | **20%** | 🔴 **BD SIN UI** |
+| **Ajustes Inventario** | **100%** | **0%** | **0%** | **0%** | **0%** | **20%** | 🔴 **BD SIN UI** |
+| **Usuarios/Permisos** | **100%** | **50%** | **30%** | **0%** | **20%** | **40%** | 🔴 **UI BÁSICA** |
+| **Órdenes Compra** | **0%** | **0%** | **0%** | **0%** | **0%** | **0%** | 🔴 **NO EXISTE** |
+| **Recepción** | **0%** | **0%** | **0%** | **0%** | **0%** | **0%** | 🔴 **NO EXISTE** |
+| **Devoluciones** | **0%** | **0%** | **0%** | **0%** | **0%** | **0%** | 🔴 **NO EXISTE** |
 
-### COMPLETITUD GENERAL: **42%** ⚠️
+### RESUMEN DE COMPLETITUD
+
+- ✅ **Módulos Completos (100%)**: 4/19 (21%)
+  - Catálogo Medicamentos, Proveedores, Instituciones, Centros de Salud
+
+- ✅ **Módulos Funcionales (80-99%)**: 3/19 (16%)
+  - Dashboard, Alertas, Catálogos Administrables
+
+- ⚠️ **Módulos Parciales (40-79%)**: 4/19 (21%)
+  - Lotes, Inventario, Movimientos, Contratos
+
+- 🔴 **Módulos Críticos (20-39%)**: 5/19 (26%)
+  - **BD lista pero SIN UI**: Transferencias, Requisiciones, Ajustes (60% del backend listo!)
+  - **UI básica**: Usuarios/Permisos
+  - **Básico**: Reportes
+
+- 🔴 **Módulos Faltantes (0%)**: 3/19 (16%)
+  - Órdenes de Compra, Recepción, Devoluciones (ni BD ni UI)
+
+### COMPLETITUD GENERAL: **52%** ⚠️
+
+**NOTA IMPORTANTE**: El 52% de completitud SUBESTIMA el progreso real porque:
+- ✅ **Backend (BD) está al 75%** - La mayoría de tablas existen
+- ❌ **Frontend (UI) está al 45%** - Faltan páginas para tablas existentes
+- **GAP PRINCIPAL**: 3 tablas críticas (transfers, requisitions, adjustments) están listas en BD pero no tienen UI
 
 ---
 
@@ -1098,34 +1093,102 @@ FOR EACH ROW EXECUTE FUNCTION actualizar_stock_medicamento();
 
 ---
 
-## 🚀 CONCLUSIONES Y PRÓXIMOS PASOS
+## 🚀 CONCLUSIONES Y PRÓXIMOS PASOS (ACTUALIZADAS)
 
 ### Resumen Ejecutivo
 
-El sistema SIGIMED v2.0 tiene una **base sólida** pero está **42% completo**. Los módulos administrativos (catálogos, proveedores, centros) funcionan bien, pero **los flujos operativos críticos faltan completamente**.
+El sistema SIGIMED v2.0 tiene una **arquitectura de base de datos robusta (75% completa)** pero con un **gap significativo en el frontend (45% completo)**. Los módulos administrativos (catálogos, proveedores, centros) están 100% funcionales, pero **3 workflows críticos tienen BD lista sin UI**.
+
+### Hallazgo Principal 🎯
+
+**PROBLEMA**: No es que falten tablas en la BD, sino que **faltan páginas frontend para tablas existentes**:
+
+1. ✅ **Tabla `transfers` EXISTE** → ❌ Falta TransfersPage.tsx
+2. ✅ **Tabla `requisitions` EXISTE** → ❌ Falta RequisitionsPage.tsx
+3. ✅ **Tabla `inventory_adjustments` EXISTE** → ❌ Falta AdjustmentsPage.tsx
+
+**IMPACTO**: 60% del backend ya está listo esperando UI. Esto ACELERA el desarrollo significativamente.
 
 ### Impacto en Producción
 
-**❌ NO ESTÁ LISTO PARA PRODUCCIÓN** porque:
+**⚠️ PARCIALMENTE LISTO PARA PRODUCCIÓN** con limitaciones:
 
-1. No hay forma de cargar inventario inicial
-2. No hay ajustes de inventario
-3. Transferencias no funcionan
-4. Requisiciones no existen
-5. Órdenes de compra no existen
+✅ **Lo que SÍ funciona**:
+1. ✅ Autenticación y gestión de usuarios básica
+2. ✅ Gestión completa de centros de salud
+3. ✅ Catálogo maestro de 99 medicamentos
+4. ✅ Gestión de proveedores
+5. ✅ Sistema de alertas por caducidad
+6. ✅ Dashboard con KPIs
+7. ✅ Vista de lotes (solo lectura)
+8. ✅ Vista de inventario (solo lectura)
+9. ✅ Historial de movimientos (solo lectura)
 
-### Tiempo Estimado para Completar
+❌ **Lo que NO funciona**:
+1. ❌ Transferencias entre centros (BD lista, sin UI)
+2. ❌ Requisiciones internas (BD lista, sin UI)
+3. ❌ Ajustes de inventario (BD lista, sin UI)
+4. ❌ Órdenes de compra (no existe)
+5. ❌ Recepción de inventario (no existe)
+6. ❌ Devoluciones a proveedores (no existe)
+7. ❌ Edición de lotes (solo lectura)
+8. ❌ Carga/edición de inventario (solo lectura)
 
-- **FASE 1 (Crítica)**: 2 semanas
-- **FASE 2 (Importante)**: 2 semanas
-- **FASE 3 (Mejoras)**: 2 semanas
-- **FASE 4 (Innovación)**: 2 semanas
+### Tiempo Estimado para Completar (REVISADO)
 
-**TOTAL: 8 semanas** para sistema 100% funcional
+#### ⚡ FAST TRACK - Conectar BD existente con UI (1-2 semanas)
 
-### Recomendación
+**FASE 1A: UI para BD Existente** (1 semana)
+- [ ] TransfersPage.tsx + useTransfers.ts (3 días)
+- [ ] RequisitionsPage.tsx + useRequisitions.ts (2 días)
+- [ ] AdjustmentsPage.tsx + useAdjustments.ts (2 días)
 
-**Priorizar FASE 1 y FASE 2** (4 semanas) para tener un **MVP funcional** que se pueda usar en producción. Las FASE 3 y 4 se pueden agregar después como mejoras.
+**BENEFICIO**: Sistema pasa de 52% → 70% de completitud en 1 semana
+
+#### 📦 FASE 1B: Completar CRUDs de Lectura (1 semana)
+- [ ] Agregar Create/Update en LotesPage (2 días)
+- [ ] Agregar Create/Update en InventoryPage (2 días)
+- [ ] Mejorar permisos en AdminPage (1 día)
+
+**BENEFICIO**: Sistema pasa de 70% → 80% en 1 semana
+
+#### 🏗️ FASE 2: Módulos Nuevos (2-3 semanas)
+- [ ] Purchase Orders (BD + UI): 5 días
+- [ ] Receiving (BD + UI): 4 días
+- [ ] Supplier Returns (BD + UI): 3 días
+
+**BENEFICIO**: Sistema completo al 95%
+
+### Recomendación Actualizada 🎯
+
+**ESTRATEGIA FAST TRACK (2 semanas → 80% completo)**:
+
+1. **Semana 1**: Crear UI para BD existente (Transfers, Requisitions, Adjustments)
+   - Esfuerzo: 7 días de desarrollo frontend
+   - ROI: +18% de completitud con mínimo esfuerzo
+
+2. **Semana 2**: Completar CRUDs parciales (Lotes, Inventario)
+   - Esfuerzo: 5 días de desarrollo frontend
+   - ROI: +10% de completitud
+
+**Resultado**: Sistema funcionalmente completo para operación diaria en 2 semanas, dejando módulos avanzados (Órdenes de Compra, Recepción) para fase 2.
+
+### Priorización de Desarrollo
+
+**PRIORIDAD CRÍTICA** (hacer primero):
+1. TransfersPage.tsx (BD ya lista) - 3 días
+2. AdjustmentsPage.tsx (BD ya lista) - 2 días
+3. CRUD completo para Lotes - 2 días
+
+**PRIORIDAD ALTA** (hacer después):
+4. RequisitionsPage.tsx (BD ya lista) - 2 días
+5. CRUD completo para Inventario - 2 días
+6. Mejorar Usuarios/Permisos - 1 día
+
+**PRIORIDAD MEDIA** (puede esperar):
+7. Purchase Orders (BD + UI) - 5 días
+8. Receiving (BD + UI) - 4 días
+9. Supplier Returns (BD + UI) - 3 días
 
 ---
 
