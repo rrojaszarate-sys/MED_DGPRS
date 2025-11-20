@@ -236,6 +236,16 @@ export function MainLayout({ children }: MainLayoutProps) {
 
       {/* Main Content Area */}
       <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
+        {/* Development Mode Banner */}
+        {import.meta.env.DEV && (
+          <div className="bg-yellow-500 text-yellow-900 px-4 py-2 text-center text-sm font-medium">
+            <span className="inline-flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              MODO DESARROLLO - Los cambios se guardan automáticamente
+            </span>
+          </div>
+        )}
+
         {/* Header */}
         <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
           <div className="px-4 sm:px-6 lg:px-8">
