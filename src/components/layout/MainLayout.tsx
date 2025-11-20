@@ -18,7 +18,10 @@ import {
   Menu,
   X,
   Pill,
-  ClipboardList
+  ClipboardList,
+  ArrowRightLeft,
+  Calculator,
+  FileSignature
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { CentroSelector } from '../dashboard/CentroSelector'
@@ -61,6 +64,9 @@ export function MainLayout({ children }: MainLayoutProps) {
         { name: 'Inventario', href: '/inventario', icon: Package },
         { name: 'Lotes', href: '/lotes', icon: ClipboardList },
         { name: 'Movimientos', href: '/movimientos', icon: TrendingUp },
+        { name: 'Transferencias', href: '/transferencias', icon: ArrowRightLeft },
+        { name: 'Requisiciones', href: '/requisiciones', icon: FileSignature },
+        { name: 'Ajustes', href: '/ajustes', icon: Calculator },
       ]
     },
     {

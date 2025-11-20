@@ -11,6 +11,9 @@ import { ContractsPage } from './pages/ContractsPage'
 import { InstitutionsPage } from './pages/InstitutionsPage'
 import { HealthCentersPage } from './pages/HealthCentersPage'
 import { LotesPage } from './pages/LotesPage'
+import { TransfersPage } from './pages/TransfersPage'
+import { RequisitionsPage } from './pages/RequisitionsPage'
+import { AdjustmentsPage } from './pages/AdjustmentsPage'
 import CatalogosPage from './pages/CatalogosPage'
 import { AuthProvider } from './context/AuthContext'
 import { CentroProvider } from './context/CentroContext'
@@ -49,6 +52,30 @@ function App() {
                 <ProtectedRoute>
                   <MainLayout>
                     <LotesPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/transferencias" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <TransfersPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/requisiciones" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <RequisitionsPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+
+              <Route path="/ajustes" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <AdjustmentsPage />
                   </MainLayout>
                 </ProtectedRoute>
               } />

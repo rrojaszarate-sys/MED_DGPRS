@@ -359,3 +359,119 @@ export interface CatalogoFiltros {
   modulo?: string
   busqueda?: string
 }
+
+// ============================================
+// INTERFACES PARA WORKFLOWS (Transfers, Requisitions, Adjustments)
+// ============================================
+
+/**
+ * Transferencias entre centros de salud
+ */
+export interface Transfer {
+  id: string
+  transfer_number: string
+  origin_center_id: string
+  destination_center_id: string
+  status: 'pending' | 'approved' | 'rejected' | 'in_transit' | 'received' | 'completed'
+  requested_by: string
+  requested_at: string
+  approved_by?: string
+  approved_at?: string
+  shipped_by?: string
+  shipped_at?: string
+  received_by?: string
+  received_at?: string
+  rejection_reason?: string
+  notes?: string
+  tracking_number?: string
+  created_at: string
+  updated_at: string
+  // Relaciones
+  origin_center?: HealthCenter
+  destination_center?: HealthCenter
+  requester?: User
+  approver?: User
+  items?: TransferItem[]
+}
+
+export interface TransferItem {
+  id: string
+  transfer_id: string
+  medication_id: string
+  cantidad_solicitada: number
+  cantidad_aprobada?: number
+  cantidad_enviada?: number
+  cantidad_recibida?: number
+  lote?: string
+  fecha_caducidad?: string
+  created_at: string
+  // Relaciones
+  medication?: Medication
+}
+
+/**
+ * Requisiciones internas
+ */
+export interface Requisition {
+  id: string
+  requisition_number: string
+  requesting_service: string
+  requesting_user_id: string
+  center_id: string
+  status: 'borrador' | 'solicitada' | 'aprobada' | 'rechazada' | 'surtida' | 'completada'
+  fecha_solicitud?: string
+  fecha_necesaria?: string
+  aprobada_por?: string
+  aprobada_en?: string
+  motivo_rechazo?: string
+  surtida_por?: string
+  surtida_en?: string
+  observaciones?: string
+  prioridad?: 'normal' | 'urgente' | 'emergencia'
+  created_at: string
+  updated_at: string
+  // Relaciones
+  requesting_user?: User
+  center?: HealthCenter
+  approver?: User
+  items?: RequisitionItem[]
+}
+
+export interface RequisitionItem {
+  id: string
+  requisition_id: string
+  medication_id: string
+  cantidad_solicitada: number
+  cantidad_aprobada?: number
+  cantidad_surtida?: number
+  justificacion?: string
+  created_at: string
+  // Relaciones
+  medication?: Medication
+}
+
+/**
+ * Ajustes de inventario
+ */
+export interface InventoryAdjustment {
+  id: string
+  adjustment_number: string
+  medication_id?: string
+  center_id: string
+  adjustment_type: 'merma' | 'correccion' | 'devolucion' | 'reclasificacion'
+  cantidad_sistema: number
+  cantidad_fisica: number
+  diferencia?: number // Calculado: cantidad_fisica - cantidad_sistema
+  motivo: string
+  justificacion: string
+  evidencia_fotografica?: string[]
+  autorizado_por?: string
+  autorizado_en?: string
+  created_at: string
+  created_by: string
+  // Relaciones
+  medication?: Medication
+  center?: HealthCenter
+  creator?: User
+  authorizer?: User
+}
