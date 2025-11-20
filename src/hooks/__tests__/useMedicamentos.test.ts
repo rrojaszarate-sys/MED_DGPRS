@@ -1,65 +1,65 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useMedicamentos } from '../useMedicamentos';
+import { supabase } from '../../lib/supabase';
 
 // Mock Supabase
-vi.mock('../../lib/supabase', () => ({
-  supabase: {
-    from: vi.fn(() => ({
-      select: vi.fn(() => ({
-        eq: vi.fn(() => Promise.resolve({
-          data: mockMedicamentos,
-          error: null,
-        })),
-      })),
-      insert: vi.fn(() => Promise.resolve({
-        data: [mockMedicamentos[0]],
-        error: null,
-      })),
-      update: vi.fn(() => ({
-        eq: vi.fn(() => Promise.resolve({
-          data: [mockMedicamentos[0]],
-          error: null,
-        })),
-      })),
-      delete: vi.fn(() => ({
-        eq: vi.fn(() => Promise.resolve({
-          data: [],
-          error: null,
-        })),
-      })),
-    })),
-  },
-}));
+vi.mock('../../lib/supabase', () => {
+  const mockMedicamentos = [
+    {
+      id: '1',
+      center_id: 'center-1',
+      catalog_id: 'catalog-1',
+      nombre: 'Paracetamol',
+      descripcion: 'Acetaminofén',
+      cantidad: 1000,
+      fecha_caducidad: '2025-12-31',
+      estado: 'Disponible',
+      lote: 'LOTE-2025-001',
+      ubicacion_fisica: 'Anaquel A',
+      is_active: true,
+    },
+    {
+      id: '2',
+      center_id: 'center-1',
+      catalog_id: 'catalog-2',
+      nombre: 'Ibuprofeno',
+      descripcion: 'Ibuprofeno',
+      cantidad: 50,
+      fecha_caducidad: '2025-03-15',
+      estado: 'Disponible',
+      lote: 'LOTE-2025-002',
+      ubicacion_fisica: 'Anaquel B',
+      is_active: true,
+    },
+  ];
 
-const mockMedicamentos = [
-  {
-    id: '1',
-    center_id: 'center-1',
-    catalog_id: 'catalog-1',
-    nombre: 'Paracetamol',
-    descripcion: 'Acetaminofén',
-    cantidad: 1000,
-    fecha_caducidad: '2025-12-31',
-    estado: 'Disponible',
-    lote: 'LOTE-2025-001',
-    ubicacion_fisica: 'Anaquel A',
-    is_active: true,
-  },
-  {
-    id: '2',
-    center_id: 'center-1',
-    catalog_id: 'catalog-2',
-    nombre: 'Ibuprofeno',
-    descripcion: 'Ibuprofeno',
-    cantidad: 50,
-    fecha_caducidad: '2025-03-15',
-    estado: 'Disponible',
-    lote: 'LOTE-2025-002',
-    ubicacion_fisica: 'Anaquel B',
-    is_active: true,
-  },
-];
+  const createQueryBuilder = () => {
+    const queryPromise = Promise.resolve({ data: mockMedicamentos, error: null });
+    const query = {
+      select: vi.fn(() => query),
+      order: vi.fn(() => query),
+      eq: vi.fn(() => query),
+      then: queryPromise.then.bind(queryPromise),
+      catch: queryPromise.catch.bind(queryPromise),
+      finally: queryPromise.finally.bind(queryPromise),
+    };
+    return query;
+  };
+
+  const mockSupabase = {
+    from: vi.fn(() => createQueryBuilder()),
+    channel: vi.fn(() => ({
+      on: vi.fn().mockReturnThis(),
+      subscribe: vi.fn().mockReturnThis(),
+    })),
+    removeChannel: vi.fn(),
+  };
+
+  return {
+    supabase: mockSupabase,
+  };
+});
 
 describe('useMedicamentos', () => {
   beforeEach(() => {
@@ -227,12 +227,18 @@ describe('useMedicamentos', () => {
       // Mock error
       vi.mocked(supabase.from).mockImplementationOnce(() => ({
         select: () => ({
-          eq: () => Promise.resolve({
+          eq: () => ({
+            order: () => Promise.resolve({
+              data: null,
+              error: { message: 'Network error' },
+            }),
+          }),
+          order: () => Promise.resolve({
             data: null,
             error: { message: 'Network error' },
           }),
         }),
-      }));
+      }) as any);
 
       const { result } = renderHook(() => useMedicamentos());
 
@@ -246,12 +252,18 @@ describe('useMedicamentos', () => {
     it('debe manejar datos vacíos correctamente', async () => {
       vi.mocked(supabase.from).mockImplementationOnce(() => ({
         select: () => ({
-          eq: () => Promise.resolve({
+          eq: () => ({
+            order: () => Promise.resolve({
+              data: [],
+              error: null,
+            }),
+          }),
+          order: () => Promise.resolve({
             data: [],
             error: null,
           }),
         }),
-      }));
+      }) as any);
 
       const { result } = renderHook(() => useMedicamentos());
 
