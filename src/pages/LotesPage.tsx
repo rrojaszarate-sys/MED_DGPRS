@@ -1,16 +1,21 @@
 import { useState } from 'react'
-import { Package, Search, Calendar, AlertCircle, CheckCircle } from 'lucide-react'
+import { Package, Search, Calendar, AlertCircle, CheckCircle, Plus, Edit, Trash2, XCircle } from 'lucide-react'
 import { Card } from '../components/ui/Card'
 import { Input } from '../components/ui/Input'
+import { Button } from '../components/ui/Button'
 import { useLotes } from '../hooks/useLotes'
 import { useCentro } from '../context/CentroContext'
+import type { Batch } from '../types'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 export function LotesPage() {
   const { centroSeleccionado } = useCentro()
-  const { lotes, loading } = useLotes(centroSeleccionado?.id)
+  const { lotes, loading, updateEstado, deleteLote } = useLotes(centroSeleccionado?.id)
   const [searchTerm, setSearchTerm] = useState('')
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [selectedLote, setSelectedLote] = useState<any>(null)
 
   const filteredLotes = lotes.filter((lote) => {
     const searchLower = searchTerm.toLowerCase()
@@ -48,14 +53,40 @@ export function LotesPage() {
     }
   }
 
+  const handleChangeEstado = async (loteId: string, currentEstado: Batch['estado']) => {
+    const estados: Batch['estado'][] = ['disponible', 'cuarentena', 'vencido', 'agotado']
+    const currentIndex = estados.indexOf(currentEstado)
+    const nextIndex = (currentIndex + 1) % estados.length
+    const nextEstado = estados[nextIndex]
+
+    await updateEstado(loteId, nextEstado)
+  }
+
+  const handleDelete = async (loteId: string, numeroLote: string) => {
+    if (window.confirm(`¿Está seguro de eliminar el lote ${numeroLote}?`)) {
+      await deleteLote(loteId)
+    }
+  }
+
+  const handleEdit = (lote: any) => {
+    setSelectedLote(lote)
+    setShowEditModal(true)
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Gestión de Lotes</h1>
-        <p className="text-gray-600 mt-1">
-          Control y seguimiento de lotes de medicamentos
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Gestión de Lotes</h1>
+          <p className="text-gray-600 mt-1">
+            Control y seguimiento de lotes de medicamentos
+          </p>
+        </div>
+        <Button onClick={() => setShowCreateModal(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Nuevo Lote
+        </Button>
       </div>
 
       {/* KPIs */}
@@ -161,6 +192,9 @@ export function LotesPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Estado
                   </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Acciones
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -173,7 +207,7 @@ export function LotesPage() {
                       {lote.medication_name || 'Sin nombre'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {lote.cantidad_actual} / {lote.cantidad_inicial}
+                      <span className="font-medium">{lote.cantidad_actual}</span> / {lote.cantidad_inicial}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {formatDate(lote.fecha_fabricacion)}
@@ -182,7 +216,31 @@ export function LotesPage() {
                       {formatDate(lote.fecha_vencimiento)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {getEstadoBadge(lote.estado)}
+                      <button
+                        onClick={() => handleChangeEstado(lote.id, lote.estado)}
+                        className="hover:opacity-80 transition-opacity"
+                        title="Click para cambiar estado"
+                      >
+                        {getEstadoBadge(lote.estado)}
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => handleEdit(lote)}
+                          className="text-blue-600 hover:text-blue-900"
+                          title="Editar"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(lote.id, lote.numero_lote)}
+                          className="text-red-600 hover:text-red-900"
+                          title="Eliminar"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -191,6 +249,51 @@ export function LotesPage() {
           )}
         </div>
       </Card>
+
+      {/* Create Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <Card className="max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Nuevo Lote</h2>
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <XCircle className="h-6 w-6" />
+              </button>
+            </div>
+            <p className="text-gray-600 text-center py-8">
+              Formulario de creación de lote en construcción...
+            </p>
+          </Card>
+        </div>
+      )}
+
+      {/* Edit Modal */}
+      {showEditModal && selectedLote && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <Card className="max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Editar Lote</h2>
+              <button
+                onClick={() => {
+                  setShowEditModal(false)
+                  setSelectedLote(null)
+                }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <XCircle className="h-6 w-6" />
+              </button>
+            </div>
+            <p className="text-gray-600 text-center py-8">
+              Formulario de edición de lote en construcción...
+              <br />
+              <span className="text-sm mt-2 block">Lote seleccionado: {selectedLote.numero_lote}</span>
+            </p>
+          </Card>
+        </div>
+      )}
     </div>
   )
 }
