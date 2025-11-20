@@ -3,6 +3,11 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { useMedicamentos } from '../useMedicamentos';
 import { supabase } from '../../lib/supabase';
 
+// Mock useRealtime
+vi.mock('../useRealtime', () => ({
+  useRealtime: vi.fn(() => null),
+}));
+
 // Mock Supabase
 vi.mock('../../lib/supabase', () => {
   const mockMedicamentos = [
@@ -35,15 +40,20 @@ vi.mock('../../lib/supabase', () => {
   ];
 
   const createQueryBuilder = () => {
-    const queryPromise = Promise.resolve({ data: mockMedicamentos, error: null });
-    const query = {
+    // Create a promise-like object that can be awaited
+    const createPromiseLike = () => ({
+      then: (resolve: any) => Promise.resolve(resolve({ data: mockMedicamentos, error: null })),
+      catch: (reject: any) => Promise.resolve(),
+      finally: (fn: any) => Promise.resolve().finally(fn),
+    });
+
+    const query: any = {
       select: vi.fn(() => query),
       order: vi.fn(() => query),
       eq: vi.fn(() => query),
-      then: queryPromise.then.bind(queryPromise),
-      catch: queryPromise.catch.bind(queryPromise),
-      finally: queryPromise.finally.bind(queryPromise),
+      ...createPromiseLike(),
     };
+
     return query;
   };
 
