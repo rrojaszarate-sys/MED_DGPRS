@@ -15,13 +15,16 @@ import { Input } from '../components/ui/Input'
 import { Button } from '../components/ui/Button'
 import { useRequisitions } from '../hooks/useRequisitions'
 import { useCentro } from '../context/CentroContext'
-import type { Requisition } from '../types'
+import { useToast } from '../components/ui/Toast'
+import { RequisitionFormModal } from '../components/requisitions/RequisitionFormModal'
+import type { Requisition, RequisitionItem } from '../types'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 export function RequisitionsPage() {
   const { centroSeleccionado } = useCentro()
-  const { requisitions, loading, submitRequisition, approveRequisition, rejectRequisition, fulfillRequisition } = useRequisitions(centroSeleccionado?.id)
+  const { requisitions, loading, createRequisition, submitRequisition, approveRequisition, rejectRequisition, fulfillRequisition } = useRequisitions(centroSeleccionado?.id)
+  const toast = useToast()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState<Requisition['status'] | 'all'>('all')
   const [showCreateModal, setShowCreateModal] = useState(false)
@@ -83,6 +86,16 @@ export function RequisitionsPage() {
       return format(new Date(date), 'dd MMM yyyy HH:mm', { locale: es })
     } catch {
       return 'Fecha inválida'
+    }
+  }
+
+  const handleCreateRequisition = async (requisition: Partial<Requisition>, items: Partial<RequisitionItem>[]) => {
+    const result = await createRequisition(requisition, items)
+    if (result) {
+      toast.success('Requisición creada exitosamente')
+      setShowCreateModal(false)
+    } else {
+      toast.error('Error al crear requisición')
     }
   }
 
@@ -375,25 +388,12 @@ export function RequisitionsPage() {
         </div>
       )}
 
-      {/* TODO: Create Requisition Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <Card className="max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Nueva Requisición</h2>
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <Plus className="h-6 w-6 transform rotate-45" />
-              </button>
-            </div>
-            <p className="text-gray-600 text-center py-8">
-              Formulario de creación de requisición en construcción...
-            </p>
-          </Card>
-        </div>
-      )}
+      {/* Create Requisition Modal */}
+      <RequisitionFormModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSubmit={handleCreateRequisition}
+      />
     </div>
   )
 }

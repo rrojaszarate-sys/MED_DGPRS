@@ -14,13 +14,16 @@ import { Input } from '../components/ui/Input'
 import { Button } from '../components/ui/Button'
 import { useTransfers } from '../hooks/useTransfers'
 import { useCentro } from '../context/CentroContext'
-import type { Transfer } from '../types'
+import { useToast } from '../components/ui/Toast'
+import { TransferFormModal } from '../components/transfers/TransferFormModal'
+import type { Transfer, TransferItem } from '../types'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 export function TransfersPage() {
   const { centroSeleccionado } = useCentro()
-  const { transfers, loading, approveTransfer, rejectTransfer, shipTransfer, receiveTransfer } = useTransfers(centroSeleccionado?.id)
+  const { transfers, loading, createTransfer, approveTransfer, rejectTransfer, shipTransfer, receiveTransfer } = useTransfers(centroSeleccionado?.id)
+  const toast = useToast()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState<Transfer['status'] | 'all'>('all')
   const [showCreateModal, setShowCreateModal] = useState(false)
@@ -96,6 +99,16 @@ export function TransfersPage() {
       cantidad_recibida: item.cantidad_enviada || item.cantidad_aprobada || item.cantidad_solicitada
     }))
     await receiveTransfer(transferId, receivedItems)
+  }
+
+  const handleCreateTransfer = async (transfer: Partial<Transfer>, items: Partial<TransferItem>[]) => {
+    const result = await createTransfer(transfer, items)
+    if (result) {
+      toast.success('Transferencia creada exitosamente')
+      setShowCreateModal(false)
+    } else {
+      toast.error('Error al crear transferencia')
+    }
   }
 
   const stats = {
@@ -351,25 +364,12 @@ export function TransfersPage() {
         </div>
       )}
 
-      {/* TODO: Create Transfer Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <Card className="max-w-2xl w-full mx-4">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Nueva Transferencia</h2>
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <XCircle className="h-6 w-6" />
-              </button>
-            </div>
-            <p className="text-gray-600 text-center py-8">
-              Formulario de creación de transferencia en construcción...
-            </p>
-          </Card>
-        </div>
-      )}
+      {/* Create Transfer Modal */}
+      <TransferFormModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSubmit={handleCreateTransfer}
+      />
     </div>
   )
 }

@@ -16,13 +16,16 @@ import { Input } from '../components/ui/Input'
 import { Button } from '../components/ui/Button'
 import { useAdjustments } from '../hooks/useAdjustments'
 import { useCentro } from '../context/CentroContext'
+import { useToast } from '../components/ui/Toast'
+import { AdjustmentFormModal } from '../components/adjustments/AdjustmentFormModal'
 import type { InventoryAdjustment } from '../types'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 export function AdjustmentsPage() {
   const { centroSeleccionado } = useCentro()
-  const { adjustments, loading, authorizeAdjustment } = useAdjustments(centroSeleccionado?.id)
+  const { adjustments, loading, createAdjustment, authorizeAdjustment } = useAdjustments(centroSeleccionado?.id)
+  const toast = useToast()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedType, setSelectedType] = useState<InventoryAdjustment['adjustment_type'] | 'all'>('all')
   const [showCreateModal, setShowCreateModal] = useState(false)
@@ -89,6 +92,16 @@ export function AdjustmentsPage() {
       return format(new Date(date), 'dd MMM yyyy HH:mm', { locale: es })
     } catch {
       return 'Fecha inválida'
+    }
+  }
+
+  const handleCreateAdjustment = async (adjustment: Partial<InventoryAdjustment>, photos: File[]) => {
+    const result = await createAdjustment(adjustment, photos)
+    if (result) {
+      toast.success('Ajuste creado exitosamente. Pendiente de autorización.')
+      setShowCreateModal(false)
+    } else {
+      toast.error('Error al crear ajuste')
     }
   }
 
@@ -347,25 +360,12 @@ export function AdjustmentsPage() {
         </div>
       )}
 
-      {/* TODO: Create Adjustment Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <Card className="max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Nuevo Ajuste de Inventario</h2>
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <Plus className="h-6 w-6 transform rotate-45" />
-              </button>
-            </div>
-            <p className="text-gray-600 text-center py-8">
-              Formulario de creación de ajuste en construcción...
-            </p>
-          </Card>
-        </div>
-      )}
+      {/* Create Adjustment Modal */}
+      <AdjustmentFormModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSubmit={handleCreateAdjustment}
+      />
     </div>
   )
 }
