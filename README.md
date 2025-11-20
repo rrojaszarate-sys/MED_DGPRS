@@ -1,5 +1,14 @@
 # SIGIMED - Sistema de Gestión de Inventario de Medicamentos
 
+## 📚 Documentación Rápida
+
+- 🚀 **[Guía de Ejecución Local](docs/GUIA_EJECUCION_LOCAL.md)** - Cómo ejecutar el proyecto localmente
+- 📖 **[Documentación Técnica](docs/DOCUMENTACION_TECNICA.md)** - Arquitectura y especificaciones técnicas
+- 📘 **[Manual de Usuario](docs/MANUAL_DE_USUARIO.md)** - Guía completa para usuarios finales
+- 🧪 **[Plan de Pruebas](docs/PLAN_PRUEBAS_AUTOMATIZADAS.md)** - Estrategia de testing
+- ✅ **[Pruebas de Escritorio](docs/PRUEBAS_ESCRITORIO_INTERNAS.md)** - Testing interno
+- 🔍 **[Validación QA](docs/VALIDACION_EXTERNA_QA.md)** - Checklist de QA externa
+
 ## 🎯 Objetivo Principal
 
 Sistema web moderno para la gestión integral, segura y trazable del inventario de medicamentos en múltiples centros de salud.
@@ -158,11 +167,19 @@ npm run build
 
 ## 📦 Scripts Disponibles
 
-- `npm run dev` - Ejecutar en modo desarrollo
+### Desarrollo
+- `npm run dev` - Ejecutar en modo desarrollo con banner de MODO DESARROLLO
 - `npm run build` - Build para producción
-- `npm run preview` - Preview del build
-- `npm run lint` - Ejecutar linter
-- `npm test` - Ejecutar tests
+- `npm run preview` - Preview del build de producción
+
+### Testing
+- `npm run test` - Ejecutar tests en modo watch
+- `npm run test:run` - Ejecutar tests una sola vez
+- `npm run test:ui` - Abrir interfaz visual de tests
+- `npm run test:coverage` - Generar reporte de cobertura
+
+### Calidad de Código
+- `npm run lint` - Ejecutar linter ESLint
 
 ## 🎮 Sistema de Gamificación
 
