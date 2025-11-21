@@ -12,16 +12,11 @@ import {
   FileCheck,
   Building2,
   MapPin,
-  Sliders,
   ChevronDown,
   ChevronRight,
   Menu,
   X,
-  Pill,
-  ClipboardList,
-  ArrowRightLeft,
-  Calculator,
-  FileSignature
+  Pill
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { CentroSelector } from '../dashboard/CentroSelector'
@@ -62,11 +57,7 @@ export function MainLayout({ children }: MainLayoutProps) {
       title: 'Inventario',
       items: [
         { name: 'Inventario', href: '/inventario', icon: Package },
-        { name: 'Lotes', href: '/lotes', icon: ClipboardList },
         { name: 'Movimientos', href: '/movimientos', icon: TrendingUp },
-        { name: 'Transferencias', href: '/transferencias', icon: ArrowRightLeft },
-        { name: 'Requisiciones', href: '/requisiciones', icon: FileSignature },
-        { name: 'Ajustes', href: '/ajustes', icon: Calculator },
       ]
     },
     {
@@ -82,7 +73,6 @@ export function MainLayout({ children }: MainLayoutProps) {
         { name: 'Catálogo Medicamentos', href: '/admin', icon: Pill, adminOnly: true },
         { name: 'Instituciones', href: '/instituciones', icon: Building2, adminOnly: true },
         { name: 'Centros de Salud', href: '/centros', icon: MapPin, adminOnly: true },
-        { name: 'Catálogos', href: '/catalogos', icon: Sliders, adminOnly: true },
       ]
     }
   ]
