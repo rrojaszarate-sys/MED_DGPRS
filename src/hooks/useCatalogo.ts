@@ -36,7 +36,7 @@ export function useCatalogo() {
       const { data, error: fetchError } = await supabase
         .from('medication_catalog')
         .select('*')
-        .order('nombre', { ascending: true })
+        .order('nombre_generico', { ascending: true })
 
       if (fetchError) throw fetchError
       setCatalogos(data || [])
