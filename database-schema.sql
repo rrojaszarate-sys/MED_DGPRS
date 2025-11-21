@@ -1059,6 +1059,46 @@ CREATE POLICY "Only admins can view audit logs" ON audit_log FOR SELECT TO authe
   )
 );
 
+-- Policies para medication_catalog (CRÍTICO - catálogo legible por todos)
+CREATE POLICY "Catalog readable by all authenticated" ON medication_catalog FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Catalog readable by anon" ON medication_catalog FOR SELECT TO anon USING (is_active = true);
+CREATE POLICY "Catalog insertable by admins" ON medication_catalog FOR INSERT TO authenticated WITH CHECK (
+  EXISTS (SELECT 1 FROM users_profiles WHERE id = auth.uid() AND role IN ('super_admin', 'admin_center'))
+);
+CREATE POLICY "Catalog updatable by admins" ON medication_catalog FOR UPDATE TO authenticated USING (
+  EXISTS (SELECT 1 FROM users_profiles WHERE id = auth.uid() AND role IN ('super_admin', 'admin_center'))
+);
+CREATE POLICY "Catalog deletable by super admins" ON medication_catalog FOR DELETE TO authenticated USING (
+  EXISTS (SELECT 1 FROM users_profiles WHERE id = auth.uid() AND role = 'super_admin')
+);
+
+-- Policies para health_centers (legible por todos, editable por admins)
+CREATE POLICY "Centers readable by all authenticated" ON health_centers FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Centers insertable by admins" ON health_centers FOR INSERT TO authenticated WITH CHECK (
+  EXISTS (SELECT 1 FROM users_profiles WHERE id = auth.uid() AND role IN ('super_admin', 'admin_center'))
+);
+CREATE POLICY "Centers updatable by admins" ON health_centers FOR UPDATE TO authenticated USING (
+  EXISTS (SELECT 1 FROM users_profiles WHERE id = auth.uid() AND role IN ('super_admin', 'admin_center'))
+);
+
+-- Policies para suppliers (legible por todos, editable por admins)
+CREATE POLICY "Suppliers readable by all authenticated" ON suppliers FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Suppliers insertable by admins" ON suppliers FOR INSERT TO authenticated WITH CHECK (
+  EXISTS (SELECT 1 FROM users_profiles WHERE id = auth.uid() AND role IN ('super_admin', 'admin_center'))
+);
+CREATE POLICY "Suppliers updatable by admins" ON suppliers FOR UPDATE TO authenticated USING (
+  EXISTS (SELECT 1 FROM users_profiles WHERE id = auth.uid() AND role IN ('super_admin', 'admin_center'))
+);
+CREATE POLICY "Suppliers deletable by super admins" ON suppliers FOR DELETE TO authenticated USING (
+  EXISTS (SELECT 1 FROM users_profiles WHERE id = auth.uid() AND role = 'super_admin')
+);
+
+-- Policies para user_centers (usuarios ven sus propios centros)
+CREATE POLICY "Users see own center assignments" ON user_centers FOR SELECT TO authenticated USING (user_id = auth.uid());
+CREATE POLICY "Admins manage center assignments" ON user_centers FOR ALL TO authenticated USING (
+  EXISTS (SELECT 1 FROM users_profiles WHERE id = auth.uid() AND role IN ('super_admin', 'admin_center'))
+);
+
 -- ============================================
 -- DATOS DE PRUEBA (SEED DATA)
 -- ============================================
