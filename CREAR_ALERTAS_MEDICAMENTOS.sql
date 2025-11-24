@@ -16,9 +16,9 @@ CREATE TABLE IF NOT EXISTS alertas_medicamentos (
   dias_restantes INTEGER NOT NULL,
   visto BOOLEAN DEFAULT false,
   resuelta BOOLEAN DEFAULT false,
-  visto_por UUID REFERENCES perfiles_usuario(id),
+  visto_por UUID,
   visto_en TIMESTAMP WITH TIME ZONE,
-  resuelta_por UUID REFERENCES perfiles_usuario(id),
+  resuelta_por UUID,
   resuelta_en TIMESTAMP WITH TIME ZONE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -59,6 +59,7 @@ COMMIT;
 
 -- ============================================
 -- 3. FUNCIÓN PARA GENERAR ALERTAS AUTOMÁTICAS
+-- NOTA: Usa medication_id y center_id (columnas en inglés de tabla lotes)
 -- ============================================
 CREATE OR REPLACE FUNCTION generar_alertas_caducidad()
 RETURNS JSONB
@@ -82,8 +83,8 @@ BEGIN
     dias_restantes = (
       SELECT MIN(l.fecha_caducidad - CURRENT_DATE)
       FROM lotes l
-      WHERE l.medicamento_id = am.medicamento_id
-        AND l.centro_id = am.centro_id
+      WHERE l.medication_id = am.medicamento_id
+        AND l.center_id = am.centro_id
         AND l.estado = 'disponible'
         AND l.cantidad_actual > 0
     ),
@@ -91,16 +92,16 @@ BEGIN
       WHEN (
         SELECT MIN(l.fecha_caducidad - CURRENT_DATE)
         FROM lotes l
-        WHERE l.medicamento_id = am.medicamento_id
-          AND l.centro_id = am.centro_id
+        WHERE l.medication_id = am.medicamento_id
+          AND l.center_id = am.centro_id
           AND l.estado = 'disponible'
           AND l.cantidad_actual > 0
       ) <= 7 THEN 'critico'
       WHEN (
         SELECT MIN(l.fecha_caducidad - CURRENT_DATE)
         FROM lotes l
-        WHERE l.medicamento_id = am.medicamento_id
-          AND l.centro_id = am.centro_id
+        WHERE l.medication_id = am.medicamento_id
+          AND l.center_id = am.centro_id
           AND l.estado = 'disponible'
           AND l.cantidad_actual > 0
       ) <= 30 THEN 'urgente'
@@ -111,8 +112,8 @@ BEGIN
   -- Insertar nuevas alertas para medicamentos próximos a caducar
   INSERT INTO alertas_medicamentos (medicamento_id, centro_id, nivel_alerta, dias_restantes)
   SELECT DISTINCT
-    l.medicamento_id,
-    l.centro_id,
+    l.medication_id,
+    l.center_id,
     CASE
       WHEN MIN(l.fecha_caducidad - CURRENT_DATE) <= 7 THEN 'critico'
       WHEN MIN(l.fecha_caducidad - CURRENT_DATE) <= 30 THEN 'urgente'
@@ -125,11 +126,11 @@ BEGIN
     AND l.fecha_caducidad <= CURRENT_DATE + INTERVAL '90 days'
     AND NOT EXISTS (
       SELECT 1 FROM alertas_medicamentos a
-      WHERE a.medicamento_id = l.medicamento_id
-        AND a.centro_id = l.centro_id
+      WHERE a.medicamento_id = l.medication_id
+        AND a.centro_id = l.center_id
         AND a.resuelta = false
     )
-  GROUP BY l.medicamento_id, l.centro_id;
+  GROUP BY l.medication_id, l.center_id;
 
   GET DIAGNOSTICS alertas_generadas = ROW_COUNT;
 

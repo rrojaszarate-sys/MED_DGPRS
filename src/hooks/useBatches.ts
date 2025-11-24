@@ -17,14 +17,14 @@ export function useBatches(centroId?: string) {
   // Real-time subscriptions
   useRealtime({
     table: 'lotes',
-    filter: centroId ? `centro_id=eq.${centroId}` : undefined,
+    filter: centroId ? `center_id=eq.${centroId}` : undefined,
     onInsert: (newBatch: Batch) => {
-      if (!centroId || newBatch.centro_id === centroId) {
+      if (!centroId || newBatch.center_id === centroId) {
         setBatches((prev) => [newBatch, ...prev])
       }
     },
     onUpdate: (updatedBatch: Batch) => {
-      if (!centroId || updatedBatch.centro_id === centroId) {
+      if (!centroId || updatedBatch.center_id === centroId) {
         setBatches((prev) =>
           prev.map((batch) => (batch.id === updatedBatch.id ? updatedBatch : batch))
         )
@@ -51,7 +51,7 @@ export function useBatches(centroId?: string) {
         .order('created_at', { ascending: false })
 
       if (centroId) {
-        query = query.eq('centro_id', centroId)
+        query = query.eq('center_id', centroId)
       }
 
       const { data, error: fetchError } = await query

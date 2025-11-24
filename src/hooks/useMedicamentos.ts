@@ -17,14 +17,14 @@ export function useMedicamentos(centroId?: string) {
   // Real-time subscriptions
   useRealtime({
     table: 'medicamentos',
-    filter: centroId ? `centro_id=eq.${centroId}` : undefined,
+    filter: centroId ? `center_id=eq.${centroId}` : undefined,
     onInsert: (newMed: Medication) => {
-      if (!centroId || newMed.centro_id === centroId) {
+      if (!centroId || newMed.center_id === centroId) {
         setMedicamentos((prev) => [newMed, ...prev])
       }
     },
     onUpdate: (updatedMed: Medication) => {
-      if (!centroId || updatedMed.centro_id === centroId) {
+      if (!centroId || updatedMed.center_id === centroId) {
         setMedicamentos((prev) =>
           prev.map((med) => (med.id === updatedMed.id ? updatedMed : med))
         )
@@ -46,7 +46,7 @@ export function useMedicamentos(centroId?: string) {
         .order('created_at', { ascending: false })
 
       if (centroId) {
-        query = query.eq('centro_id', centroId)
+        query = query.eq('center_id', centroId)
       }
 
       const { data, error: fetchError } = await query
