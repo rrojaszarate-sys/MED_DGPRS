@@ -14,7 +14,7 @@ export function useContracts() {
 
   // Real-time subscriptions
   useRealtime({
-    table: 'contracts',
+    table: 'contratos',
     onInsert: (newContract: Contract) => {
       setContracts((prev) => [newContract, ...prev])
     },
@@ -34,13 +34,13 @@ export function useContracts() {
       setError(null)
 
       const { data, error: fetchError } = await supabase
-        .from('contracts')
+        .from('contratos')
         .select(`
           *,
           supplier:suppliers(id, nombre, rfc),
-          items:contract_items(
+          items:items_contrato(
             *,
-            medication_catalog:medication_catalog(id, nombre_generico, codigo_medicamento, concentracion),
+            medication_catalog:catalogo_medicamentos(id, nombre_generico, clave_cuadro, dosis),
             center_destino:health_centers(id, name, code)
           )
         `)
@@ -63,7 +63,7 @@ export function useContracts() {
     try {
       // Create contract first
       const { data: contractData, error: contractError } = await supabase
-        .from('contracts')
+        .from('contratos')
         .insert([contract])
         .select()
         .single()
@@ -78,7 +78,7 @@ export function useContracts() {
         }))
 
         const { error: itemsError } = await supabase
-          .from('contract_items')
+          .from('items_contrato')
           .insert(itemsWithContractId)
 
         if (itemsError) throw itemsError
@@ -101,7 +101,7 @@ export function useContracts() {
     try {
       // Update contract
       const { data: contractData, error: updateError } = await supabase
-        .from('contracts')
+        .from('contratos')
         .update(updates)
         .eq('id', id)
         .select()
@@ -113,7 +113,7 @@ export function useContracts() {
       if (items) {
         // Delete existing items
         const { error: deleteError } = await supabase
-          .from('contract_items')
+          .from('items_contrato')
           .delete()
           .eq('contract_id', id)
 
@@ -127,7 +127,7 @@ export function useContracts() {
           }))
 
           const { error: insertError } = await supabase
-            .from('contract_items')
+            .from('items_contrato')
             .insert(itemsWithContractId)
 
           if (insertError) throw insertError
@@ -147,7 +147,7 @@ export function useContracts() {
     try {
       // Items will be deleted automatically due to ON DELETE CASCADE
       const { error: deleteError } = await supabase
-        .from('contracts')
+        .from('contratos')
         .delete()
         .eq('id', id)
 
@@ -163,7 +163,7 @@ export function useContracts() {
   async function updateContractStatus(id: string, estado: Contract['estado']) {
     try {
       const { error: updateError } = await supabase
-        .from('contracts')
+        .from('contratos')
         .update({ estado })
         .eq('id', id)
 
