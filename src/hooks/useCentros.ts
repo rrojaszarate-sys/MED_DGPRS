@@ -16,7 +16,7 @@ export function useCentros(includeInactive = false) {
   useRealtime({
     table: 'centros_salud',
     onInsert: (newCenter: HealthCenter) => {
-      if (includeInactive || newCenter.activo) {
+      if (includeInactive || newCenter.is_active) {
         setCentros((prev) => [newCenter, ...prev])
       }
     },
@@ -38,10 +38,10 @@ export function useCentros(includeInactive = false) {
       let query = supabase
         .from('centros_salud')
         .select('*')
-        .order('nombre')
+        .order('name')
 
       if (!includeInactive) {
-        query = query.eq('activo', true)
+        query = query.eq('is_active', true)
       }
 
       const { data, error: fetchError } = await query

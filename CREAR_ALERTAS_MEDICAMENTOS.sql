@@ -84,7 +84,7 @@ BEGIN
       SELECT MIN(l.fecha_caducidad - CURRENT_DATE)
       FROM lotes l
       WHERE l.medication_id = am.medicamento_id
-        AND l.center_id = am.centro_id
+        AND l.centro_id = am.centro_id
         AND l.estado = 'disponible'
         AND l.cantidad_actual > 0
     ),
@@ -93,7 +93,7 @@ BEGIN
         SELECT MIN(l.fecha_caducidad - CURRENT_DATE)
         FROM lotes l
         WHERE l.medication_id = am.medicamento_id
-          AND l.center_id = am.centro_id
+          AND l.centro_id = am.centro_id
           AND l.estado = 'disponible'
           AND l.cantidad_actual > 0
       ) <= 7 THEN 'critico'
@@ -101,7 +101,7 @@ BEGIN
         SELECT MIN(l.fecha_caducidad - CURRENT_DATE)
         FROM lotes l
         WHERE l.medication_id = am.medicamento_id
-          AND l.center_id = am.centro_id
+          AND l.centro_id = am.centro_id
           AND l.estado = 'disponible'
           AND l.cantidad_actual > 0
       ) <= 30 THEN 'urgente'
@@ -113,7 +113,7 @@ BEGIN
   INSERT INTO alertas_medicamentos (medicamento_id, centro_id, nivel_alerta, dias_restantes)
   SELECT DISTINCT
     l.medication_id,
-    l.center_id,
+    l.centro_id,
     CASE
       WHEN MIN(l.fecha_caducidad - CURRENT_DATE) <= 7 THEN 'critico'
       WHEN MIN(l.fecha_caducidad - CURRENT_DATE) <= 30 THEN 'urgente'
@@ -127,10 +127,10 @@ BEGIN
     AND NOT EXISTS (
       SELECT 1 FROM alertas_medicamentos a
       WHERE a.medicamento_id = l.medication_id
-        AND a.centro_id = l.center_id
+        AND a.centro_id = l.centro_id
         AND a.resuelta = false
     )
-  GROUP BY l.medication_id, l.center_id;
+  GROUP BY l.medication_id, l.centro_id;
 
   GET DIAGNOSTICS alertas_generadas = ROW_COUNT;
 
