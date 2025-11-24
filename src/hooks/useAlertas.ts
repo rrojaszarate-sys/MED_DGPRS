@@ -22,7 +22,7 @@ export function useAlertas(centroId?: string) {
       // Fetch full alert with medication data
       const { data } = await supabase
         .from('alertas_medicamentos')
-        .select('*, medicamento:medications(*)')
+        .select('*, medicamento:medicamentos(*)')
         .eq('id', newAlert.id)
         .single()
 
@@ -34,7 +34,7 @@ export function useAlertas(centroId?: string) {
       // Fetch full alert with medication data
       const { data } = await supabase
         .from('alertas_medicamentos')
-        .select('*, medicamento:medications(*)')
+        .select('*, medicamento:medicamentos(*)')
         .eq('id', updatedAlert.id)
         .single()
 
@@ -63,7 +63,7 @@ export function useAlertas(centroId?: string) {
         .from('alertas_medicamentos')
         .select(`
           *,
-          medicamento:medications(*)
+          medicamento:medicamentos(*)
         `)
         .eq('resuelta', false)
         .order('nivel_alerta', { ascending: false })

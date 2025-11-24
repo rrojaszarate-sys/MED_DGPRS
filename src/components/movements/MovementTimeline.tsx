@@ -24,10 +24,12 @@ interface Movement {
   observaciones?: string
   usuario_responsable: string
   created_at: string
-  centro_origen?: { name: string; code: string }
-  centro_destino?: { name: string; code: string }
+  centro_origen?: { name?: string; nombre?: string; code?: string; codigo?: string }
+  centro_destino?: { name?: string; nombre?: string; code?: string; codigo?: string }
   medication?: { nombre: string; categoria?: string }
+  medicamento?: { nombre: string; categoria?: string }
   batch?: { numero_lote: string }
+  lote?: { numero_lote: string }
   metadata?: any
 }
 
@@ -234,7 +236,7 @@ export function MovementTimeline({ movements, loading }: MovementTimelineProps) 
                       <div className="flex items-center gap-1">
                         <span className="text-xs text-purple-600">Origen:</span>
                         <span className="text-sm font-medium text-purple-900">
-                          {movement.centro_origen.name} ({movement.centro_origen.code})
+                          {movement.centro_origen.nombre || movement.centro_origen.name} ({movement.centro_origen.codigo || movement.centro_origen.code})
                         </span>
                       </div>
                     )}
@@ -245,7 +247,7 @@ export function MovementTimeline({ movements, loading }: MovementTimelineProps) 
                       <div className="flex items-center gap-1">
                         <span className="text-xs text-purple-600">Destino:</span>
                         <span className="text-sm font-medium text-purple-900">
-                          {movement.centro_destino.name} ({movement.centro_destino.code})
+                          {movement.centro_destino.nombre || movement.centro_destino.name} ({movement.centro_destino.codigo || movement.centro_destino.code})
                         </span>
                       </div>
                     )}

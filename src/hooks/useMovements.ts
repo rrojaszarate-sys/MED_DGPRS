@@ -4,24 +4,24 @@ import { useRealtime } from './useRealtime'
 import type { BatchMovement } from '../types'
 
 interface MovementWithRelations extends BatchMovement {
-  medication?: {
+  medicamento?: {
     id: string
     nombre: string
     categoria?: string
   }
-  batch?: {
+  lote?: {
     id: string
     numero_lote: string
   }
   centro_origen?: {
     id: string
-    name: string
-    code: string
+    nombre: string
+    codigo: string
   }
   centro_destino?: {
     id: string
-    name: string
-    code: string
+    nombre: string
+    codigo: string
   }
 }
 
@@ -36,7 +36,7 @@ export function useMovements(centroId?: string) {
 
   // Real-time subscriptions
   useRealtime({
-    table: 'batch_movements',
+    table: 'movimientos_lotes',
     onInsert: (newMovement: MovementWithRelations) => {
       // Only add if it belongs to the selected center
       if (!centroId || newMovement.centro_origen_id === centroId || newMovement.centro_destino_id === centroId) {
@@ -59,12 +59,12 @@ export function useMovements(centroId?: string) {
       setError(null)
 
       let query = supabase
-        .from('batch_movements')
+        .from('movimientos_lotes')
         .select(`
           *,
-          medication:medications(id, nombre, categoria),
-          centro_origen:health_centers!batch_movements_centro_origen_id_fkey(id, name, code),
-          centro_destino:health_centers!batch_movements_centro_destino_id_fkey(id, name, code)
+          medicamento:medicamentos(id, nombre, categoria),
+          centro_origen:centros_salud!movimientos_lotes_centro_origen_id_fkey(id, nombre, codigo),
+          centro_destino:centros_salud!movimientos_lotes_centro_destino_id_fkey(id, nombre, codigo)
         `)
         .order('created_at', { ascending: false })
 
@@ -84,14 +84,14 @@ export function useMovements(centroId?: string) {
           const batchId = movement.metadata?.batch_id
           if (batchId) {
             const { data: batchData } = await supabase
-              .from('batches')
+              .from('lotes')
               .select('id, numero_lote')
               .eq('id', batchId)
               .single()
 
             return {
               ...movement,
-              batch: batchData
+              lote: batchData
             }
           }
           return movement

@@ -23,8 +23,8 @@ export function MovementsPage() {
       const searchLower = searchTerm.toLowerCase()
       const matchesSearch =
         movement.motivo.toLowerCase().includes(searchLower) ||
-        movement.medication?.nombre.toLowerCase().includes(searchLower) ||
-        movement.batch?.numero_lote.toLowerCase().includes(searchLower) ||
+        movement.medicamento?.nombre?.toLowerCase().includes(searchLower) ||
+        movement.lote?.numero_lote?.toLowerCase().includes(searchLower) ||
         movement.metadata?.user_name?.toLowerCase().includes(searchLower)
 
       // Type filter

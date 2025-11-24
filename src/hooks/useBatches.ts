@@ -16,15 +16,15 @@ export function useBatches(centroId?: string) {
 
   // Real-time subscriptions
   useRealtime({
-    table: 'batches',
-    filter: centroId ? `center_id=eq.${centroId}` : undefined,
+    table: 'lotes',
+    filter: centroId ? `centro_id=eq.${centroId}` : undefined,
     onInsert: (newBatch: Batch) => {
-      if (!centroId || newBatch.center_id === centroId) {
+      if (!centroId || newBatch.centro_id === centroId) {
         setBatches((prev) => [newBatch, ...prev])
       }
     },
     onUpdate: (updatedBatch: Batch) => {
-      if (!centroId || updatedBatch.center_id === centroId) {
+      if (!centroId || updatedBatch.centro_id === centroId) {
         setBatches((prev) =>
           prev.map((batch) => (batch.id === updatedBatch.id ? updatedBatch : batch))
         )
@@ -41,17 +41,17 @@ export function useBatches(centroId?: string) {
       setError(null)
 
       let query = supabase
-        .from('batches')
+        .from('lotes')
         .select(`
           *,
-          medication:medications(id, nombre, categoria, unidad_medida),
-          health_center:health_centers(id, name, code),
-          supplier:suppliers(id, nombre)
+          medicamento:medicamentos(id, nombre, categoria, unidad_medida),
+          centro:centros_salud(id, nombre, codigo),
+          proveedor:proveedores(id, nombre)
         `)
         .order('created_at', { ascending: false })
 
       if (centroId) {
-        query = query.eq('center_id', centroId)
+        query = query.eq('centro_id', centroId)
       }
 
       const { data, error: fetchError } = await query
@@ -69,7 +69,7 @@ export function useBatches(centroId?: string) {
   async function createBatch(batch: Omit<Batch, 'id' | 'created_at' | 'updated_at'>) {
     try {
       const { data, error: createError } = await supabase
-        .from('batches')
+        .from('lotes')
         .insert([batch])
         .select()
         .single()
@@ -86,7 +86,7 @@ export function useBatches(centroId?: string) {
   async function updateBatch(id: string, updates: Partial<Batch>) {
     try {
       const { data, error: updateError } = await supabase
-        .from('batches')
+        .from('lotes')
         .update(updates)
         .eq('id', id)
         .select()
@@ -106,7 +106,7 @@ export function useBatches(centroId?: string) {
   async function deleteBatch(id: string) {
     try {
       const { error: deleteError } = await supabase
-        .from('batches')
+        .from('lotes')
         .delete()
         .eq('id', id)
 

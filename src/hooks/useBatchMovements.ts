@@ -96,9 +96,9 @@ export function useBatchMovements() {
       setError(null);
 
       const { data, error: queryError } = await supabase
-        .from('batch_movements')
+        .from('movimientos_lotes')
         .select('*')
-        .eq('medication_id', medicationId)
+        .eq('medicamento_id', medicationId)
         .order('created_at', { ascending: false });
 
       if (queryError) {
@@ -125,12 +125,12 @@ export function useBatchMovements() {
       setError(null);
 
       const { data, error: queryError } = await supabase
-        .from('batch_movements')
+        .from('movimientos_lotes')
         .select(`
           *,
-          medications!inner(center_id)
+          medicamentos!inner(centro_id)
         `)
-        .eq('medications.center_id', centroId)
+        .eq('medicamentos.centro_id', centroId)
         .order('created_at', { ascending: false })
         .limit(limit);
 

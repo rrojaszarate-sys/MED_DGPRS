@@ -11,11 +11,17 @@ export interface User {
 export interface HealthCenter {
   id: string
   name: string
+  nombre?: string
   code: string
+  codigo?: string
   address?: string
+  direccion?: string
   city?: string
+  ciudad?: string
   phone?: string
+  telefono?: string
   is_active: boolean
+  activo?: boolean
 }
 
 export interface Institucion {
@@ -62,23 +68,29 @@ export interface MedicationCatalog {
 
 export interface Medication {
   id: string
-  center_id: string
+  center_id?: string
+  centro_id?: string
   catalog_id?: string
+  catalogo_id?: string
   nombre: string
   descripcion?: string
-  unidad_medida: string
+  unidad_medida?: string
   categoria?: string
-  requiere_refrigeracion: boolean
-  is_active: boolean
-  created_at: string
-  updated_at: string
+  requiere_refrigeracion?: boolean
+  is_active?: boolean
+  activo?: boolean
+  created_at?: string
+  updated_at?: string
 }
 
 export interface Batch {
   id: string
   medication_id: string
+  medicamento_id?: string
   center_id: string
+  centro_id?: string
   supplier_id?: string
+  proveedor_id?: string
   numero_lote: string
   cantidad_inicial: number
   cantidad_actual: number
@@ -95,8 +107,11 @@ export interface Batch {
   updated_at: string
   // Relaciones
   medication?: Medication
+  medicamento?: Medication
   health_center?: HealthCenter
+  centro?: HealthCenter
   supplier?: Supplier
+  proveedor?: Supplier
 }
 
 export interface Supplier {
