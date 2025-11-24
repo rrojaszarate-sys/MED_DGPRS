@@ -95,7 +95,7 @@ export function ContractItemsTable({
 
   const getMedicationName = (id: string) => {
     const med = medications.find(m => m.id === id)
-    return med ? `${med.nombre_generico} ${med.concentracion || ''}`.trim() : 'N/A'
+    return med ? `${med.nombre_generico} ${med.dosis || ''}`.trim() : 'N/A'
   }
 
   const getCenterName = (id?: string) => {
@@ -218,7 +218,7 @@ export function ContractItemsTable({
                 <option value="">Seleccionar medicamento...</option>
                 {medications.filter(m => m.is_active).map((med) => (
                   <option key={med.id} value={med.id}>
-                    {med.codigo_medicamento} - {med.nombre_generico} {med.concentracion}
+                    {med.clave_cuadro || med.codigo_atc || ''} - {med.nombre_generico} {med.dosis || ''}
                   </option>
                 ))}
               </select>

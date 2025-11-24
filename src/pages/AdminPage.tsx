@@ -30,9 +30,10 @@ export function AdminPage() {
     return (
       cat.nombre_generico.toLowerCase().includes(searchLower) ||
       (cat.nombre_comercial && cat.nombre_comercial.toLowerCase().includes(searchLower)) ||
-      (cat.principio_activo && cat.principio_activo.toLowerCase().includes(searchLower)) ||
-      cat.codigo_medicamento.toLowerCase().includes(searchLower) ||
-      (cat.categoria && cat.categoria.toLowerCase().includes(searchLower))
+      (cat.laboratorio && cat.laboratorio.toLowerCase().includes(searchLower)) ||
+      (cat.clave_cuadro && cat.clave_cuadro.toLowerCase().includes(searchLower)) ||
+      (cat.codigo_atc && cat.codigo_atc.toLowerCase().includes(searchLower)) ||
+      (cat.categoria_farmacologica && cat.categoria_farmacologica.toLowerCase().includes(searchLower))
     )
   })
 

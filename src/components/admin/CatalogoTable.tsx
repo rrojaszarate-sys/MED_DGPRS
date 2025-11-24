@@ -49,7 +49,7 @@ export function CatalogoTable({ catalogos, loading, onEdit, onDelete }: Catalogo
             <TableRow key={catalogo.id} className="hover:bg-gray-50">
               <TableCell>
                 <span className="font-mono text-sm text-gray-600">
-                  {catalogo.codigo_medicamento}
+                  {catalogo.clave_cuadro || catalogo.codigo_atc || '-'}
                 </span>
               </TableCell>
 
@@ -63,9 +63,9 @@ export function CatalogoTable({ catalogos, loading, onEdit, onDelete }: Catalogo
                       {catalogo.nombre_comercial}
                     </div>
                   )}
-                  {catalogo.principio_activo && (
+                  {catalogo.laboratorio && (
                     <div className="text-xs text-gray-400 mt-1">
-                      {catalogo.principio_activo}
+                      {catalogo.laboratorio}
                     </div>
                   )}
                 </div>
@@ -73,9 +73,9 @@ export function CatalogoTable({ catalogos, loading, onEdit, onDelete }: Catalogo
 
               <TableCell>
                 <div className="text-sm">
-                  {catalogo.concentracion && (
+                  {catalogo.dosis && (
                     <div className="font-medium text-gray-700">
-                      {catalogo.concentracion}
+                      {catalogo.dosis}
                     </div>
                   )}
                   {catalogo.forma_farmaceutica && (
@@ -83,17 +83,17 @@ export function CatalogoTable({ catalogos, loading, onEdit, onDelete }: Catalogo
                       {catalogo.forma_farmaceutica}
                     </div>
                   )}
-                  {catalogo.via_administracion && (
+                  {catalogo.unidad_medida && (
                     <div className="text-xs text-gray-400">
-                      Vía: {catalogo.via_administracion}
+                      {catalogo.unidad_medida}
                     </div>
                   )}
                 </div>
               </TableCell>
 
               <TableCell>
-                {catalogo.categoria ? (
-                  <Badge variant="info" size="sm">{catalogo.categoria}</Badge>
+                {catalogo.categoria_farmacologica ? (
+                  <Badge variant="info" size="sm">{catalogo.categoria_farmacologica}</Badge>
                 ) : (
                   <span className="text-gray-400 text-sm">-</span>
                 )}
@@ -101,7 +101,7 @@ export function CatalogoTable({ catalogos, loading, onEdit, onDelete }: Catalogo
 
               <TableCell>
                 <div className="flex flex-col gap-1">
-                  {catalogo.controlado && (
+                  {catalogo.es_controlado && (
                     <Badge variant="danger" size="sm">
                       <AlertCircle className="h-3 w-3 mr-1" />
                       Controlado
@@ -112,7 +112,7 @@ export function CatalogoTable({ catalogos, loading, onEdit, onDelete }: Catalogo
                       Receta
                     </Badge>
                   )}
-                  {!catalogo.controlado && !catalogo.requiere_receta && (
+                  {!catalogo.es_controlado && !catalogo.requiere_receta && (
                     <span className="text-gray-400 text-sm">Libre venta</span>
                   )}
                 </div>

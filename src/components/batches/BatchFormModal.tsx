@@ -179,8 +179,8 @@ export function BatchFormModal({ isOpen, onClose, onSubmit, batch }: BatchFormMo
                   <option value="">Seleccionar medicamento...</option>
                   {activeCatalogos.map((cat) => (
                     <option key={cat.id} value={cat.id}>
-                      {cat.nombre_generico} - {cat.codigo_medicamento}
-                      {cat.concentracion ? ` (${cat.concentracion})` : ''}
+                      {cat.nombre_generico} - {cat.clave_cuadro || cat.codigo_atc || ''}
+                      {cat.dosis ? ` (${cat.dosis})` : ''}
                     </option>
                   ))}
                 </select>

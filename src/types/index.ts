@@ -28,22 +28,36 @@ export interface Institucion {
 
 export interface MedicationCatalog {
   id: string
-  codigo_medicamento: string
+  nombre?: string
   nombre_generico: string
   nombre_comercial?: string
-  principio_activo?: string
   forma_farmaceutica?: string
-  via_administracion?: string
-  concentracion?: string
   unidad_medida?: string
-  categoria?: string
+  categoria_farmacologica?: string
   requiere_receta: boolean
-  controlado: boolean
+  es_controlado: boolean
   temperatura_almacenamiento?: string
-  observaciones?: string
+  dosis?: string
+  dosis_usual?: string
+  laboratorio?: string
+  precio_unitario?: number
+  codigo_atc?: string
+  clave_cuadro?: string
+  uso_terapeutico?: string
+  contraindicaciones?: string
+  efectos_secundarios?: string
+  interacciones?: string
+  condiciones_especiales?: string
+  imagen_producto?: string
+  ficha_tecnica_url?: string
+  fabricantes_autorizados?: string[]
+  temperatura_min?: number
+  temperatura_max?: number
   is_active: boolean
   created_at: string
   updated_at: string
+  created_by?: string
+  updated_by?: string
 }
 
 export interface Medication {

@@ -20,19 +20,20 @@ export function CatalogoFormModal({
   catalogo
 }: CatalogoFormModalProps) {
   const [formData, setFormData] = useState({
-    codigo_medicamento: '',
+    clave_cuadro: '',
+    codigo_atc: '',
     nombre_generico: '',
     nombre_comercial: '',
-    principio_activo: '',
+    laboratorio: '',
     forma_farmaceutica: '',
-    via_administracion: '',
-    concentracion: '',
+    dosis: '',
     unidad_medida: '',
-    categoria: '',
+    categoria_farmacologica: '',
     requiere_receta: false,
-    controlado: false,
+    es_controlado: false,
     temperatura_almacenamiento: '',
-    observaciones: '',
+    uso_terapeutico: '',
+    contraindicaciones: '',
     is_active: true
   })
 
@@ -41,36 +42,38 @@ export function CatalogoFormModal({
   useEffect(() => {
     if (catalogo) {
       setFormData({
-        codigo_medicamento: catalogo.codigo_medicamento,
+        clave_cuadro: catalogo.clave_cuadro || '',
+        codigo_atc: catalogo.codigo_atc || '',
         nombre_generico: catalogo.nombre_generico,
         nombre_comercial: catalogo.nombre_comercial || '',
-        principio_activo: catalogo.principio_activo || '',
+        laboratorio: catalogo.laboratorio || '',
         forma_farmaceutica: catalogo.forma_farmaceutica || '',
-        via_administracion: catalogo.via_administracion || '',
-        concentracion: catalogo.concentracion || '',
+        dosis: catalogo.dosis || '',
         unidad_medida: catalogo.unidad_medida || '',
-        categoria: catalogo.categoria || '',
+        categoria_farmacologica: catalogo.categoria_farmacologica || '',
         requiere_receta: catalogo.requiere_receta,
-        controlado: catalogo.controlado,
+        es_controlado: catalogo.es_controlado,
         temperatura_almacenamiento: catalogo.temperatura_almacenamiento || '',
-        observaciones: catalogo.observaciones || '',
+        uso_terapeutico: catalogo.uso_terapeutico || '',
+        contraindicaciones: catalogo.contraindicaciones || '',
         is_active: catalogo.is_active
       })
     } else {
       setFormData({
-        codigo_medicamento: '',
+        clave_cuadro: '',
+        codigo_atc: '',
         nombre_generico: '',
         nombre_comercial: '',
-        principio_activo: '',
+        laboratorio: '',
         forma_farmaceutica: '',
-        via_administracion: '',
-        concentracion: '',
+        dosis: '',
         unidad_medida: '',
-        categoria: '',
+        categoria_farmacologica: '',
         requiere_receta: false,
-        controlado: false,
+        es_controlado: false,
         temperatura_almacenamiento: '',
-        observaciones: '',
+        uso_terapeutico: '',
+        contraindicaciones: '',
         is_active: true
       })
     }
@@ -80,9 +83,6 @@ export function CatalogoFormModal({
   const validate = () => {
     const newErrors: Record<string, string> = {}
 
-    if (!formData.codigo_medicamento.trim()) {
-      newErrors.codigo_medicamento = 'El código es requerido'
-    }
     if (!formData.nombre_generico.trim()) {
       newErrors.nombre_generico = 'El nombre genérico es requerido'
     }
@@ -111,19 +111,17 @@ export function CatalogoFormModal({
           {/* Identificación */}
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="Código de Medicamento"
-              value={formData.codigo_medicamento}
-              onChange={(e) => setFormData({ ...formData, codigo_medicamento: e.target.value })}
-              error={errors.codigo_medicamento}
-              required
-              placeholder="MED-PAR-500"
+              label="Clave Cuadro Básico"
+              value={formData.clave_cuadro}
+              onChange={(e) => setFormData({ ...formData, clave_cuadro: e.target.value })}
+              placeholder="010.000.0001.00"
             />
 
             <Input
-              label="Categoría"
-              value={formData.categoria}
-              onChange={(e) => setFormData({ ...formData, categoria: e.target.value })}
-              placeholder="Analgésico, Antibiótico, etc."
+              label="Código ATC"
+              value={formData.codigo_atc}
+              onChange={(e) => setFormData({ ...formData, codigo_atc: e.target.value })}
+              placeholder="N02BE01"
             />
           </div>
 
@@ -146,20 +144,20 @@ export function CatalogoFormModal({
             />
           </div>
 
-          {/* Composición */}
+          {/* Laboratorio y Categoría */}
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="Principio Activo"
-              value={formData.principio_activo}
-              onChange={(e) => setFormData({ ...formData, principio_activo: e.target.value })}
-              placeholder="Acetaminofén"
+              label="Laboratorio"
+              value={formData.laboratorio}
+              onChange={(e) => setFormData({ ...formData, laboratorio: e.target.value })}
+              placeholder="Bayer, Pfizer, etc."
             />
 
             <Input
-              label="Concentración"
-              value={formData.concentracion}
-              onChange={(e) => setFormData({ ...formData, concentracion: e.target.value })}
-              placeholder="500mg, 100 UI/mL, etc."
+              label="Categoría Farmacológica"
+              value={formData.categoria_farmacologica}
+              onChange={(e) => setFormData({ ...formData, categoria_farmacologica: e.target.value })}
+              placeholder="Analgésico, Antibiótico, etc."
             />
           </div>
 
@@ -181,24 +179,15 @@ export function CatalogoFormModal({
               <option value="Gotas">Gotas</option>
               <option value="Supositorio">Supositorio</option>
               <option value="Parche">Parche</option>
+              <option value="Aerosol">Aerosol</option>
             </Select>
 
-            <Select
-              label="Vía de Administración"
-              value={formData.via_administracion}
-              onChange={(e) => setFormData({ ...formData, via_administracion: e.target.value })}
-            >
-              <option value="">Seleccionar...</option>
-              <option value="Oral">Oral</option>
-              <option value="Intravenosa">Intravenosa</option>
-              <option value="Intramuscular">Intramuscular</option>
-              <option value="Subcutánea">Subcutánea</option>
-              <option value="Tópica">Tópica</option>
-              <option value="Oftálmica">Oftálmica</option>
-              <option value="Ótica">Ótica</option>
-              <option value="Rectal">Rectal</option>
-              <option value="Inhalatoria">Inhalatoria</option>
-            </Select>
+            <Input
+              label="Dosis"
+              value={formData.dosis}
+              onChange={(e) => setFormData({ ...formData, dosis: e.target.value })}
+              placeholder="500mg, 100 UI/mL, etc."
+            />
 
             <Input
               label="Unidad de Medida"
@@ -234,12 +223,12 @@ export function CatalogoFormModal({
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"
-                id="controlado"
-                checked={formData.controlado}
-                onChange={(e) => setFormData({ ...formData, controlado: e.target.checked })}
+                id="es_controlado"
+                checked={formData.es_controlado}
+                onChange={(e) => setFormData({ ...formData, es_controlado: e.target.checked })}
                 className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
               />
-              <label htmlFor="controlado" className="text-sm font-medium text-gray-700">
+              <label htmlFor="es_controlado" className="text-sm font-medium text-gray-700">
                 Medicamento Controlado
               </label>
             </div>
@@ -255,13 +244,22 @@ export function CatalogoFormModal({
             </Select>
           </div>
 
-          {/* Observaciones */}
+          {/* Uso Terapéutico */}
           <Textarea
-            label="Observaciones"
-            value={formData.observaciones}
-            onChange={(e) => setFormData({ ...formData, observaciones: e.target.value })}
-            placeholder="Información adicional, advertencias, contraindicaciones, etc."
-            rows={3}
+            label="Uso Terapéutico"
+            value={formData.uso_terapeutico}
+            onChange={(e) => setFormData({ ...formData, uso_terapeutico: e.target.value })}
+            placeholder="Indicaciones de uso..."
+            rows={2}
+          />
+
+          {/* Contraindicaciones */}
+          <Textarea
+            label="Contraindicaciones"
+            value={formData.contraindicaciones}
+            onChange={(e) => setFormData({ ...formData, contraindicaciones: e.target.value })}
+            placeholder="Contraindicaciones y advertencias..."
+            rows={2}
           />
         </div>
 
