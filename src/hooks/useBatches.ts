@@ -44,8 +44,8 @@ export function useBatches(centroId?: string) {
         .from('lotes')
         .select(`
           *,
-          medicamento:medicamentos(id, nombre, categoria, unidad_medida),
-          centro:centros_salud(id, nombre, codigo),
+          medicamento:medicamentos(id, nombre),
+          centro:centros_salud(id, name, code),
           proveedor:proveedores(id, nombre)
         `)
         .order('created_at', { ascending: false })

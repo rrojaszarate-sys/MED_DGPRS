@@ -7,7 +7,6 @@ interface MovementWithRelations extends BatchMovement {
   medicamento?: {
     id: string
     nombre: string
-    categoria?: string
   }
   lote?: {
     id: string
@@ -15,13 +14,13 @@ interface MovementWithRelations extends BatchMovement {
   }
   centro_origen?: {
     id: string
-    nombre: string
-    codigo: string
+    name: string
+    code: string
   }
   centro_destino?: {
     id: string
-    nombre: string
-    codigo: string
+    name: string
+    code: string
   }
 }
 
@@ -62,9 +61,9 @@ export function useMovements(centroId?: string) {
         .from('movimientos_lotes')
         .select(`
           *,
-          medicamento:medicamentos(id, nombre, categoria),
-          centro_origen:centros_salud!movimientos_lotes_centro_origen_id_fkey(id, nombre, codigo),
-          centro_destino:centros_salud!movimientos_lotes_centro_destino_id_fkey(id, nombre, codigo)
+          medicamento:medicamentos(id, nombre),
+          centro_origen:centros_salud!movimientos_lotes_centro_origen_id_fkey(id, name, code),
+          centro_destino:centros_salud!movimientos_lotes_centro_destino_id_fkey(id, name, code)
         `)
         .order('created_at', { ascending: false })
 
